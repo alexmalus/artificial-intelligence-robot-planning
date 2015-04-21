@@ -1,0 +1,13 @@
+Hey guys. The code committed is setup for an IntelliJ environment on a Mac.
+In order to run this project you need to edit your run configurations.
+
+First of all you need to set the source folder to src in this project, and hopefully your IDE
+will acknowledge I have added server.jar as apart of the project. If your IDE does not recognize that
+then you need to do that manually.
+Once that is done, make sure you set the run configuration to run the main method
+in server.runner class in server.jar.
+Once that is done, then I think you only then need to paste these program arguments in as well:
+-l levels/MAsimple1.lvl -c "java -cp ../out/production/AI_Ateam client.ateam.Main" -g
+
+It is important to emphasize that you need to point to the binary directory where you
+will find the class files of your compiled project. Have fun! :-)
