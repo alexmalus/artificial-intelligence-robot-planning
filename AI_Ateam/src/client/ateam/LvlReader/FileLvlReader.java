@@ -1,7 +1,6 @@
-package client.ateam.systemIO;
+package client.ateam.LvlReader;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +8,7 @@ import java.util.Map;
 /**
  * Created by Lasse on 24-04-2015.
  */
-public class BasicSystemIO implements ISystemIO {
+public class FileLvlReader implements ILvlReader {
 
     private BufferedReader serverMessages = new BufferedReader(new InputStreamReader(System.in));
 

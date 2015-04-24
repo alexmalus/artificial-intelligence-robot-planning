@@ -11,9 +11,9 @@ public interface ILevel {
     boolean isBoxAt();
     boolean isAgentAt();
     boolean isFree();
-    boolean isBoxAtGoal();
+    boolean isGoalCompleted();
     boolean getBoxLetter();
     boolean getBoxColor();
     boolean getGoalLetter();
-    boolean
+
 }
