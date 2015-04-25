@@ -13,8 +13,16 @@ package client.ateam;
 public class Main {
 
     public static void main(String[] args) {
-	// write your code here
+        // write your code here
 
+        //load level
 
+        //task distribution
+        //planning
+        //pathfinding
+
+        while (true) {
+
+        }
     }
 }

@@ -1,9 +1,13 @@
 package client.ateam.ServerComm;
 
+import client.ateam.Level.Action;
+
+import java.util.ArrayList;
+
 /**
- * Created by Lasse on 25-04-2015.
+ * convert joint actions to string format
  */
 public interface IServerComm {
 
-    void sendJointAction();
+    void sendJointAction(ArrayList<Action> actions);
 }
