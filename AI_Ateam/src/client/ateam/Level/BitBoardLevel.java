@@ -1,13 +1,21 @@
 package client.ateam.Level;
 
+import java.util.ArrayList;
+
 /**
  * Created by Lasse on 24-04-2015.
  */
 public class BitBoardLevel implements ILevel {
+
+    public BitBoardLevel(ArrayList<String> strLevel){
+
+    }
+
     @Override
     public int getAgentID() {
         return 0;
     }
+
 
     @Override
     public boolean isNeighbor() {

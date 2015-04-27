@@ -6,8 +6,9 @@ package client.ateam.Level;
 public interface ILevel {
 
     int getAgentID();
+    /*
 
-    void createLevel(String lvlString);
+     */
 
     boolean isNeighbor();
     boolean isBoxAt();
