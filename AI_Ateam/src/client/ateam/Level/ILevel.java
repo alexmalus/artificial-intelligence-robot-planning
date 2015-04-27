@@ -7,6 +7,8 @@ public interface ILevel {
 
     int getAgentID();
 
+    void createLevel(String lvlString);
+
     boolean isNeighbor();
     boolean isBoxAt();
     boolean isAgentAt();
