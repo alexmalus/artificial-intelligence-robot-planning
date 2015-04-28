@@ -36,7 +36,7 @@ public class Main {
         // agents+colors, boxes+colors, goals
         ILevel level = new BitBoardLevel(strLevel);
         //task distribution
-        tasker.distributeTasks();
+        tasker.distributeTasks(level.getAgents,level.getBoxes,level.getGoals,level.getColors);
         //planning for each individual agent (linked lists)
 
         //pathfinding
