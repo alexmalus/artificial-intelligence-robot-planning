@@ -10,17 +10,28 @@ package client.ateam;
 * TaskDistributor
 * */
 
+import client.ateam.Level.ArrayLevel;
 import client.ateam.Level.BitBoardLevel;
 import client.ateam.Level.ILevel;
 import client.ateam.LvlReader.FileLvlReader;
 import client.ateam.LvlReader.ILvlReader;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Main {
 
+    protected ArrayLevel arraylevel = null;
+    public int[] realMap;
+
     public static void main(String[] args) throws Exception {
+
+     Main main = new Main();
+     main.run();
+
+    }
+
+    public void run() throws IOException {
         // write your code here
 
         //arg parser?
@@ -28,13 +39,15 @@ public class Main {
         TaskDistributor tasker = new TaskDistributor(); // needs interface?
         //load level
 
-        ArrayList<String> strLevel = reader.readLevel();
+        String strLevel = reader.readLevel();
 
         // should agents, colors, goals, boxes be read inside the level class or outside ?
 
         // create level format, or make level singleton object?
         // agents+colors, boxes+colors, goals
-        ILevel level = new BitBoardLevel(strLevel);
+        //ILevel level = new BitBoardLevel(strLevel);
+        this.arraylevel = ArrayLevel.getSingletonObject();
+        this.realMap = this.arraylevel.loadFromString(strLevel);
         //task distribution
         tasker.distributeTasks();
         //planning for each individual agent (linked lists)
@@ -56,5 +69,8 @@ public class Main {
             //send action
             return;
         }
+
     }
+
+
 }
