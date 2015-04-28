@@ -16,4 +16,7 @@ package client.ateam;
 
 
 public class TaskDistributor {
+    void distributeTasks(){
+
+    }
 }
