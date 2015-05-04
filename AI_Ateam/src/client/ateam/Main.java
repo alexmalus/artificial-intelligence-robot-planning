@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class Main {
 
-    protected ArrayLevel arraylevel = null;
+    protected ILevel level = null;
     public int[] realMap;
 
     public static void main(String[] args) throws Exception {
@@ -46,10 +46,11 @@ public class Main {
         // create level format, or make level singleton object?
         // agents+colors, boxes+colors, goals
         //ILevel level = new BitBoardLevel(strLevel);
-        this.arraylevel = ArrayLevel.getSingletonObject();
-        this.realMap = this.arraylevel.loadFromString(strLevel);
+        //this.level = ArrayLevel.getSingletonObject();
+        this.level = BitBoardLevel.getSingletonObject();
+        this.realMap = this.level.loadFromString(strLevel);
         //task distribution
-        tasker.distributeTasks(level.getAgents,level.getBoxes,level.getGoals,level.getColors);
+        tasker.distributeTasks(level.getAgents(),level.getBoxes(),level.getGoals(),level.getColors);
         //planning for each individual agent (linked lists)
 
         //pathfinding

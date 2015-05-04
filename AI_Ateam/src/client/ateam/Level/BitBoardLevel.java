@@ -1,5 +1,6 @@
 package client.ateam.Level;
 
+import client.ateam.projectEnum.ActionType;
 import client.ateam.projectEnum.Direction;
 
 import java.util.*;
@@ -700,8 +701,8 @@ public class BitBoardLevel implements ILevel {
                 if (!isBox(box) || !isAgent(agent)){
                     if(!silent)
                         System.err.println("PUSH: box or agent not on right position - boxpos: "
-                                + Level.coordsToString(boxPos)
-                                + " agentpos: " + Level.coordsToString(agentPos));
+                                + BitBoardLevel.coordsToString(boxPos)
+                                + " agentpos: " + BitBoardLevel.coordsToString(agentPos));
                     break;
                 }
                 //Check if agent and box is same color
@@ -759,7 +760,6 @@ public class BitBoardLevel implements ILevel {
      * @param action
      * @param agentPos - agent index
      * @param silent Set to true if you dont want console errors
-     * @param inline Set to true if you want in-place editing of map, false is out-of-place.
      * @return
      */
     public static boolean applyAction(Map map, Action action, int agentPos, boolean silent) {
@@ -797,9 +797,9 @@ public class BitBoardLevel implements ILevel {
                 map.set(boxPos, map.get(boxPos) & 0xFFFFE00D);
 
                 //If we are changing RealMap, update the boxesArrayList
-                if (Level.realMap == map.map && map.isRoot()) {
-                    int bId = Level.getBoxIdFromPosition(boxPos);
-                    Level.boxesArrayList.set(bId, agentPos);
+                if (BitBoardLevel.realMap == map.map && map.isRoot()) {
+                    int bId = BitBoardLevel.getBoxIdFromPosition(boxPos);
+                    BitBoardLevel.boxesArrayList.set(bId, agentPos);
                 }
                 break;
 
@@ -818,7 +818,7 @@ public class BitBoardLevel implements ILevel {
 
                 //If we are changing RealMap, update the boxesArrayList
                 if (BitBoardLevel.realMap == map.map && map.isRoot()) {
-                    int bId = Level.getBoxIdFromPosition(boxPos);
+                    int bId = BitBoardLevel.getBoxIdFromPosition(boxPos);
                     BitBoardLevel.boxesArrayList.set(bId, fieldPos);
                 }
 
@@ -861,10 +861,10 @@ public class BitBoardLevel implements ILevel {
                 int thisDist = distancesToGoal[next];
 
                 List<Integer> neighbors = Arrays.asList(
-                        BitBoardLevel.getPosFromPosInDirection(next, ActionDirection.EAST),
-                        BitBoardLevel.getPosFromPosInDirection(next, ActionDirection.WEST),
-                        BitBoardLevel.getPosFromPosInDirection(next, ActionDirection.NORTH),
-                        BitBoardLevel.getPosFromPosInDirection(next, ActionDirection.SOUTH));
+                        BitBoardLevel.getPosFromPosInDirection(next, Direction.EAST),
+                        BitBoardLevel.getPosFromPosInDirection(next, Direction.WEST),
+                        BitBoardLevel.getPosFromPosInDirection(next, Direction.NORTH),
+                        BitBoardLevel.getPosFromPosInDirection(next, Direction.SOUTH));
 
                 for (int i : neighbors) {
                     if (i > 0 && !BitBoardLevel.isWall(realMap[i]) && distancesToGoal[i] == 0 && i != goal) {
@@ -912,10 +912,10 @@ public class BitBoardLevel implements ILevel {
         int dist = BitBoardLevel.shortestDistanceOnMap(from, to);
 
         List<Integer> neighbors = Arrays.asList(
-                BitBoardLevel.getPosFromPosInDirection(from, ActionDirection.EAST),
-                BitBoardLevel.getPosFromPosInDirection(from, ActionDirection.WEST),
-                BitBoardLevel.getPosFromPosInDirection(from, ActionDirection.NORTH),
-                BitBoardLevel.getPosFromPosInDirection(from, ActionDirection.SOUTH));
+                BitBoardLevel.getPosFromPosInDirection(from, Direction.EAST),
+                BitBoardLevel.getPosFromPosInDirection(from, Direction.WEST),
+                BitBoardLevel.getPosFromPosInDirection(from, Direction.NORTH),
+                BitBoardLevel.getPosFromPosInDirection(from, Direction.SOUTH));
 
         for (Integer i : neighbors) {
             if (BitBoardLevel.shortestDistanceOnMap(i, to) == dist-1) {
@@ -938,14 +938,14 @@ public class BitBoardLevel implements ILevel {
     }
 
     public static boolean isObstructing(int pos, Map map, int color) {
-        int up = BitBoardLevel.getPosFromPosInDirection(pos, ActionDirection.NORTH);
-        int down = BitBoardLevel.getPosFromPosInDirection(pos, ActionDirection.SOUTH);
-        int left = BitBoardLevel.getPosFromPosInDirection(pos, ActionDirection.WEST);
-        int right = BitBoardLevel.getPosFromPosInDirection(pos, ActionDirection.EAST);
-        int upleft = BitBoardLevel.getPosFromPosInDirection(up, ActionDirection.WEST);
-        int upright = BitBoardLevel.getPosFromPosInDirection(up, ActionDirection.EAST);
-        int downleft = BitBoardLevel.getPosFromPosInDirection(down, ActionDirection.WEST);
-        int downright = BitBoardLevel.getPosFromPosInDirection(down, ActionDirection.EAST);
+        int up = BitBoardLevel.getPosFromPosInDirection(pos, Direction.NORTH);
+        int down = BitBoardLevel.getPosFromPosInDirection(pos, Direction.SOUTH);
+        int left = BitBoardLevel.getPosFromPosInDirection(pos, Direction.WEST);
+        int right = BitBoardLevel.getPosFromPosInDirection(pos, Direction.EAST);
+        int upleft = BitBoardLevel.getPosFromPosInDirection(up, Direction.WEST);
+        int upright = BitBoardLevel.getPosFromPosInDirection(up, Direction.EAST);
+        int downleft = BitBoardLevel.getPosFromPosInDirection(down, Direction.WEST);
+        int downright = BitBoardLevel.getPosFromPosInDirection(down, Direction.EAST);
 
         up = map.get(up);
         down = map.get(down);
@@ -999,10 +999,10 @@ public class BitBoardLevel implements ILevel {
     }
 
     public static boolean isBlockedIn(int pos, Map map) {
-        int up = map.get(BitBoardLevel.getPosFromPosInDirection(pos, ActionDirection.NORTH));
-        int down = map.get(BitBoardLevel.getPosFromPosInDirection(pos, ActionDirection.SOUTH));
-        int left = map.get(BitBoardLevel.getPosFromPosInDirection(pos, ActionDirection.WEST));
-        int right = map.get(BitBoardLevel.getPosFromPosInDirection(pos, ActionDirection.EAST));
+        int up = map.get(BitBoardLevel.getPosFromPosInDirection(pos, Direction.NORTH));
+        int down = map.get(BitBoardLevel.getPosFromPosInDirection(pos, Direction.SOUTH));
+        int left = map.get(BitBoardLevel.getPosFromPosInDirection(pos, Direction.WEST));
+        int right = map.get(BitBoardLevel.getPosFromPosInDirection(pos, Direction.EAST));
 
         return !BitBoardLevel.isEmpty(up) && !BitBoardLevel.isEmpty(down) && !BitBoardLevel.isEmpty(left) && !BitBoardLevel.isEmpty(right);
     }

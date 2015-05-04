@@ -1,12 +1,14 @@
 package client.ateam.Level;
 
+import client.ateam.projectEnum.Direction;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
  * Created by Lasse on 24-04-2015.
  */
-public class ArrayLevel implements ILevel {
+public class ArrayLevel { //implements ILevel {
 
     private static ArrayLevel arraylevel;
     private static int height;
@@ -54,6 +56,14 @@ public class ArrayLevel implements ILevel {
      */
     private ArrayLevel(){
 
+    }
+
+    /**
+     *
+     * @return width of level, will not be set before loadLevel
+     */
+    public static int getWidth(){
+        return arraylevel.width;
     }
 
     public int[] loadFromString(String s){
@@ -232,6 +242,28 @@ public class ArrayLevel implements ILevel {
             arraylevel = new ArrayLevel();
         }
         return arraylevel;
+    }
+
+    public static int getPosFromPosInDirection(int pos, Direction dir){
+        int position = 0;
+        switch (dir) {
+            case NORTH:
+                position = pos - width;
+                break;
+            case SOUTH:
+                position = pos + width;
+                break;
+            case EAST:
+                position = pos + 1;
+                break;
+            case WEST:
+                position = pos - 1;
+                break;
+
+            default:
+                break;
+        }
+        return 0 <= position && position < realMap.length ? position : -1;
     }
 
     @Override
