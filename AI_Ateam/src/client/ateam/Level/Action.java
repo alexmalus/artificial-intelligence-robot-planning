@@ -1,21 +1,14 @@
 package client.ateam.Level;
 
-import client.ateam.projectEnum.ActionType;
-import client.ateam.projectEnum.Direction;
-
-import java.util.ArrayList;
-
 /**
- * <p>A action performed by an agent. This action can be a part of a plan.
- * This class does not check whether or not an action of an agent is applicable.</p>
- *
- * <p>Actions can be committed or uncommitted. Committed action have been sent to the server, uncommitted action have not.
- * Committed action also have a return state, that is if the server accepted the action. (The succeeded property)</p>
- *
- * @author kristoffer
  *
  */
 public class Action {
+
+    public boolean preconditions(){
+
+        return true;
+    }
 
     /**
      * Action type definition
