@@ -22,20 +22,20 @@ public class Agent {
 
     }
 
-    /**
-     * Get the agent id from the the agent on the provided field
-     * @param field
-     * @return An integer with the agent id (not ascii or utf-8)
-     */
-    public static int getAgentId(int field) {
-        if (Level.isAgent(field)) {
-            return (int) (field >> 13) & 0xF;
-        }
-        else {
-            System.err.println("getAgentId: provided field do not contain an agent!");
-            return -1;
-        }
-    }
+//    /**
+//     * Get the agent id from the the agent on the provided field
+//     * @param field
+//     * @return An integer with the agent id (not ascii or utf-8)
+//     */
+//    public static int getAgentId(int field) {
+//        if (Level.isAgent(field)) {
+//            return (int) (field >> 13) & 0xF;
+//        }
+//        else {
+//            System.err.println("getAgentId: provided field do not contain an agent!");
+//            return -1;
+//        }
+//    }
 
 
 

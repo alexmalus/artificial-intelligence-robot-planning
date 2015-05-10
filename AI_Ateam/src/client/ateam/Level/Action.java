@@ -1,5 +1,10 @@
 package client.ateam.Level;
 
+import client.ateam.projectEnum.ActionType;
+import client.ateam.projectEnum.Direction;
+
+import java.util.ArrayList;
+
 /**
  *
  */

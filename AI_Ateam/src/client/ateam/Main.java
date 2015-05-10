@@ -10,6 +10,7 @@ package client.ateam;
 * TaskDistributor
 * */
 
+import client.ateam.Level.Action;
 import client.ateam.Level.BitBoardLevel;
 import client.ateam.Level.ILevel;
 import client.ateam.LvlReader.FileLvlReader;
@@ -17,10 +18,21 @@ import client.ateam.LvlReader.ILvlReader;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
+    protected ILevel level = null;
+    public int[] realMap;
+
     public static void main(String[] args) throws Exception {
+
+     Main main = new Main();
+     main.run();
+
+    }
+
+    public void run() throws IOException {
         // write your code here
 
         //arg parser?
@@ -28,23 +40,36 @@ public class Main {
         TaskDistributor tasker = new TaskDistributor(); // needs interface?
         //load level
 
-        ArrayList<String> strLevel = reader.readLevel();
+        String strLevel = reader.readLevel();
 
         // should agents, colors, goals, boxes be read inside the level class or outside ?
 
         // create level format, or make level singleton object?
         // agents+colors, boxes+colors, goals
-        ILevel level = new BitBoardLevel(strLevel);
+        //ILevel level = new BitBoardLevel(strLevel);
+        //this.level = ArrayLevel.getSingletonObject();
+        this.level = BitBoardLevel.getSingletonObject();
+        this.realMap = this.level.loadFromString(strLevel);
+
+        //serialize subgoals (we probably cannot do POP)
+
+
         //task distribution
-        tasker.distributeTasks(level.getAgents(),level.getBoxes(),level.getGoals(),level.getColors);
+        tasker.distributeTasks(level.getAgents(),level.getBoxes(),level.getGoals(),level.getColors());
+        //tasks are now located on each agent
+
+
+
         //planning for each individual agent (linked lists)
+        System.err.println("hej");
 
         //pathfinding
 
+        List<Action> actions;
         while (true) { // all this is possibly a jason area (along with planning) excluding pathfinding
             // find next moves
 
-            System.err.println(strLevel.get(1));
+            //System.err.println(strLevel.get(1));
             //create joint action (action merging)
 
             //check for conflicts ( use ILevel methods for literals/atoms etc )

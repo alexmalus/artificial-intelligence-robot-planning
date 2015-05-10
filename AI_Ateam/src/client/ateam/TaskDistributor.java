@@ -29,31 +29,73 @@ import java.util.stream.Collectors;
 
 public class TaskDistributor {
 
+    /*
+    Break down tasks and create high level tasks, which boxes to move where - this can be changed to be computed dynamically as well,
+    but currently working with static tasks is favorable
+     */
 
-
-    void distributeTasks(ArrayList<Agent> agents, ArrayList<Box> boxes, ArrayList<Goal> goals, HashMap<String,Character> colors){
+    void distributeTasks(ArrayList<Agent> agents, ArrayList<Box> boxes, ArrayList<Goal> goals){
         Character letter;
         Box selectedBox;
         Agent selectedAgent;
         List<Box> matchingBoxes;
         List<Agent> matchingAgents;
+        List<Integer> colors = new ArrayList<Integer>();
+        boolean identicalColorAgents = false;
+        HashMap<Integer,ArrayList<Box>> boxcolors = new HashMap<Integer,ArrayList<Box>>();
+        HashMap<Character,Box> boxletters = new HashMap<Character,Box>();
+        HashMap<Integer,ArrayList<Agent>> agentcolors = new HashMap<Integer,ArrayList<Agent>>();
+        HashMap<Character,Goal> goalletters = new HashMap<Character,Goal>();
 
-        for(Goal goal : goals) {
-            //find box to match goal along with agent
-            // filter box by letter
-            matchingBoxes = boxes.stream().filter(x -> x.letter == goal.letter).collect(Collectors.toList());
 
-            //TODO: more reliable selecting of most relevant box (distance based?) (assuming several boxes are applicable)
-            selectedBox = this.selectBox(matchingBoxes);
+        for(Agent agent : agents){
+            if(!colors.contains(agent.color)){
+                colors.add(agent.color);
+            }
+            else{
+                identicalColorAgents = true;
+                break;
+            }
+        }
 
-            //filter agents by color
-            matchingAgents = agents.stream().filter(x -> x.color == selectedBox.color).collect(Collectors.toList());
+        for(Integer color: colors){
+            boxcolors.put(color, new ArrayList<Box>());
+            agentcolors.put(color, new ArrayList<Agent>());
+        }
+        for(Box box:boxes){
+            boxcolors.get(box.color).add(box);
+            boxletters.put(box.boxLetter,box); // bad use of hashmap :b
+        }
+        for(Agent agent:agents){
+            agentcolors.get(agent.color).add(agent);
+        }
+        for(Goal goal:goals){
+            goalletters.put(goal.letter,goal);
+        }
 
-            //TODO: selecting based on distance to box
-            selectedAgent = this.selectAgent(matchingAgents);
+        Box matchingBox;
+        Agent matchingAgent;
 
-            // create class Task, to match Agent with box/goal
-            selectedAgent.tasks.add(new Task(selectedAgent.id,selectedBox,goal));
+        if(identicalColorAgents){
+            for(Goal goal : goals){
+                matchingBox = boxletters.get(goal.letter);
+                matchingAgents = agentcolors.get(matchingBox.color);
+
+                //find best matching agent
+
+                //TODO:BETTER IMPLEMENTATION AND DISTRIBUTION SELECT BEST OPTION IN MATCHING AGENTS
+                matchingAgent = matchingAgents.get(0);
+                matchingAgent.tasks.add(new Task(matchingAgent.id,matchingBox,goal));
+            }
+
+        }
+        else{
+            for(Goal goal : goals){
+                matchingBox = boxletters.get(goal.letter);
+                matchingAgent = agentcolors.get(matchingBox.color).get(0);//only one color box per agent
+                matchingAgent.tasks.add(new Task(matchingAgent.id,matchingBox,goal));
+            }
+
         }
     }
     void addGoal(Goal goal){
