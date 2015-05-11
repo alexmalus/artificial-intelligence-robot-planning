@@ -53,7 +53,6 @@ public class PathFinder extends Problem<Action,State>{			//
         this.otherPositions = otherPositions;
     }
 
-    //hører ikke til her, flyttes når der er styr på det hele.
     public boolean isFree(int field){
         return (field & 7)==0;
     }
