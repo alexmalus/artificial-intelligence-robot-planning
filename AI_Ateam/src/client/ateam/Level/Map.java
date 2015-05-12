@@ -98,7 +98,7 @@ public class Map implements Comparable<Map> {
         String mapS ="";
         int row = 0;
         for(int i = 0; i < length;i++){
-            int curRow = BitBoardLevel.getRowFromIndex(i);
+            int curRow = ArrayLevel.getRowFromIndex(i);
             if(curRow != row) {
                 mapS += "\n";
                 row = curRow;
@@ -106,14 +106,14 @@ public class Map implements Comparable<Map> {
 
             int b = (this.get(i));
 
-            if(BitBoardLevel.isWall(b))
+            if(ArrayLevel.isWall(b))
                 mapS += "+";
-            else if(BitBoardLevel.isBox(b))
-                mapS += BitBoardLevel.getBoxLetter(this.get(i));
-            else if(BitBoardLevel.isAgent(b))
-                mapS += BitBoardLevel.getAgentId(b);
-            else if(BitBoardLevel.isGoal(b))
-                mapS += (""+BitBoardLevel.getGoalLetter(b)).toLowerCase();
+            else if(ArrayLevel.isBox(b))
+                mapS += ArrayLevel.getBoxLetter(this.get(i));
+            else if(ArrayLevel.isAgent(b))
+                mapS += ArrayLevel.getAgentId(b);
+            else if(ArrayLevel.isGoal(b))
+                mapS += (""+ArrayLevel.getGoalLetter(b)).toLowerCase();
             else mapS += " ";
         }
 

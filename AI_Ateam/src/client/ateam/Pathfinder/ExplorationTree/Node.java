@@ -1,13 +1,7 @@
 package client.ateam.Pathfinder.ExplorationTree;
 
 import client.ateam.Level.State;
-
-/**
- * Created by Lasse on 25-04-2015.
- */
-    /*
-    the tree for searching through the level
-     */
+    //the tree for searching through the level
 
     public class Node<A, S extends Comparable<S>> implements Comparable<Node<A,S>> {
         public double h;
@@ -17,21 +11,12 @@ import client.ateam.Level.State;
         public S state;
         public A action;
 
-        /**
-         * Constructor.
-         * @param a Action to reach the given state
-         * @param s State
-         * @param parent Parent node
-         */
         public Node (A a, S s, Node<A,S> parent){
             this.parent=parent;
             this.action=a;
             this.state=s;
         }
 
-        /**
-         * Override
-         */
         public int compareTo(Node<A, S> other) {
             if (this.f != other.f) {
                 return Double.compare(this.f,other.f);
@@ -47,14 +32,10 @@ import client.ateam.Level.State;
         }
 
 
-        /**
-         * Override
-         */
         @Override
         public String toString(){
-            return "State " + state + " Reached by action "+ action + " parent " +
-                    parent + "cost of reaching "+ g + " h-value" + h + " complete" +
-                    " value " + f;
+            return "Node with state: " state + "which is reached by action: " + action + " having the parent: " + parent
+                    + "with a cost of reaching: " + g + "has h with value: " + h + "complete value of: " + f;
         }
 
 }

@@ -7,7 +7,6 @@ import java.util.Scanner;
  * Created by Lasse on 5/10/15.
  */
 public class ArrayLevel2 implements ILevel {
-    private static int height;
 
     @Override
     public int getAgentID() {
@@ -77,46 +76,5 @@ public class ArrayLevel2 implements ILevel {
     public ArrayList<Integer> getGoals() {
         return null;
     }
-
-
-    public static int getRowFromIndex(int index) {return index / Level.width;}
-
-    public static int getColumnFromIndex(int index) {
-        return index % Level.width;
-    }
-
-    //BFS
-    public int shortestDistanceOnMap(int from) {
-        if (from == goal)
-            return 0;
-
-        int dist = distancesToGoal[from];
-        while (dist == 0 && frontSet.size() > 0) {
-            dist = distancesToGoal[from];
-				/*if (dist != 0)
-					break;*/
-
-            int next = frontSet.poll();
-            int thisDist = distancesToGoal[next];
-
-            List<Integer> neighbors = Arrays.asList(
-                    Level.getPosFromPosInDirection(next, ActionDirection.EAST),
-                    Level.getPosFromPosInDirection(next, ActionDirection.WEST),
-                    Level.getPosFromPosInDirection(next, ActionDirection.NORTH),
-                    Level.getPosFromPosInDirection(next, ActionDirection.SOUTH));
-
-            for (int i : neighbors) {
-                if (i > 0 && !Level.isWall(realMap[i]) && distancesToGoal[i] == 0 && i != goal) {
-                    frontSet.add(i);
-                    distancesToGoal[i] = thisDist+1;
-                }
-            }
-        }
-
-        if (dist == 0)
-            System.err.print("");
-
-        return dist != 0 ? dist : Integer.MAX_VALUE;
-    }
 }
-}
+

@@ -6,12 +6,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
 
-import astar.Node;
-import astar.Problem;
-
-/**
- * Created by joh on 21/04/15.
- */
+import client.ateam.Pathfinder.ExplorationTree.Node;
+import client.ateam.Pathfinder.AstarProblem;
+import client.ateam.Level.Map;
+import client.ateam.Task;
+import client.ateam.Planning.Plan.Iplan;
+import client.ateam.projectEnum.Direction;
+import client.ateam.projectEnum.ActionType;
+import client.ateam.Level.Action;
 
 /*
 * This class is supposed to find the path from A to B for an agent
@@ -23,7 +25,7 @@ import astar.Problem;
 *
 * */
 
-public class PathFinder extends Problem<Action,State>{			//
+public class PathFinder extends AstarProblem<Action,State>{			//
     HashMap<State, HashMap<Action,State>> successor;
     Map map;
     private int curPlayerLocation;
@@ -40,7 +42,7 @@ public class PathFinder extends Problem<Action,State>{			//
     private ArrayList<Plan> otherPlans;
     private ArrayList<Integer> otherPositions;
 
-    public AstarProblem(Map m, int curPlayerLocation, int curBoxLocation, int targetPlayerLocation, int targetBoxLocation,
+    public PathFinder(Map m, int curPlayerLocation, int curBoxLocation, int targetPlayerLocation, int targetBoxLocation,
                         int goalLocation, Task task, ArrayList<Plan> otherPlans, ArrayList<Integer> otherPositions){
         this.map = m;
         this.curPlayerLocation = curPlayerLocation;
@@ -66,19 +68,19 @@ public class PathFinder extends Problem<Action,State>{			//
     public static List<Action> getActions(){
         if(actions.size()==0){
             //move actions
-            for(ActionDirection d: ActionDirection.values()){
+            for(Direction d: Direction.values()){
                 actions.add(new Action(d));
             }
             //push actions
-            for(ActionDirection d: ActionDirection.values()){
-                for(ActionDirection e: ActionDirection.values()){
+            for(Direction d: Direction.values()){
+                for(Direction e: Direction.values()){
                     if(Action.opposite(d) != e )
                         actions.add(new Action(ActionType.PUSH,d,e));
                 }
             }
             //pull actions
-            for(ActionDirection d: ActionDirection.values()){
-                for(ActionDirection e: ActionDirection.values()){
+            for(Direction d: Direction.values()){
+                for(Direction e: Direction.values()){
                     if(d !=e )
                         actions.add(new Action(ActionType.PULL,d,e));
                 }
@@ -136,8 +138,6 @@ public class PathFinder extends Problem<Action,State>{			//
         return successors;
     }
 
-
-    //can gøres mere elegant
     public void setInit(){
         Map initMap = new Map(map.map,map);
         this.init= new Node<Action,State>(null, new State(initMap,curPlayerLocation,curBoxLocation), null);
@@ -146,7 +146,6 @@ public class PathFinder extends Problem<Action,State>{			//
 
 
     public double cost(astar.Node<Action,State> n, astar.Node<Action,State> suc){
-        //return 1;
         //If a parent task is defined, we delegate the cost handling to the task
         if (this.parentTask != null)
             return (double) this.parentTask.getCost(n.state.playerLocation, n.state.map, suc.action);
@@ -179,15 +178,11 @@ public class PathFinder extends Problem<Action,State>{			//
                 break;
         }
 
-        //return 1;
         return stepCost;
     }
 
     /**
-     * Check if a field is a box on its goal
-     * @param field
-     * @return
-     */
+     * Check if a field is a box on its goal */
     protected boolean boxIsOnGoal(int field) {
         if (Level.isGoal(field)
                 && Character.toLowerCase(Level.getBoxLetter(field))
@@ -199,7 +194,6 @@ public class PathFinder extends Problem<Action,State>{			//
             return false;
     }
 
-    //arbejde med at designe en fornuftigt goal funktion
     @Override
     public boolean isGoal(Node<Action,State> n){
         //If we have a parent task, delegate the goal check to that

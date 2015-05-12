@@ -9,7 +9,7 @@ import java.util.TreeSet;
  * @param <A> Action
  * @param <S> State
  */
-public abstract class Problem<A, S extends Comparable<S>> {
+public abstract class AstarProblem<A, S extends Comparable<S>> {
 
     public Node<A,S> init;
 
