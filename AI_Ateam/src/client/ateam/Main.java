@@ -11,6 +11,7 @@ package client.ateam;
 * */
 
 import client.ateam.Level.Action;
+import client.ateam.Level.ArrayLevel;
 import client.ateam.Level.BitBoardLevel;
 import client.ateam.Level.ILevel;
 import client.ateam.Level.Models.Agent;
@@ -50,8 +51,8 @@ public class Main {
         // agents+colors, boxes+colors, goals
         //ILevel level = new BitBoardLevel(strLevel);
         //this.level = ArrayLevel.getSingletonObject();
-        this.level = BitBoardLevel.getSingletonObject();
-        this.realMap = this.level.loadFromString(strLevel);
+        this.level = ArrayLevel.getSingleton();
+        this.realMap = this.level.LoadFromString(strLevel);
 
         //serialize subgoals (we probably cannot do POP)
 

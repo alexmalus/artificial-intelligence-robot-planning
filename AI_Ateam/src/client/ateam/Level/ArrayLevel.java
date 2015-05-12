@@ -15,7 +15,7 @@ import java.util.Scanner;
 /**
  * Created by joh on 5/10/15.
  */
-public class ArrayLevel{ //implements ILevel {
+public class ArrayLevel implements ILevel {
 
     public static int MAX_ROW = 70;
     public static int MAX_COLUMN = 70;
@@ -30,7 +30,14 @@ public class ArrayLevel{ //implements ILevel {
     private static ArrayList<Agent> agentsArrayList = new ArrayList<Agent>();
     private static ArrayList<Box> boxesArrayList= new ArrayList<Box>();
     private static ArrayList<Goal> goalsArrayList= new ArrayList<Goal>();
+    private static ArrayLevel level;
 
+    public static ArrayLevel getSingleton(){
+        if(level == null){
+            level = new ArrayLevel();
+        }
+        return level;
+    }
 
     public static void error( String msg ) throws Exception {
         throw new Exception( "GSCError: " + msg );

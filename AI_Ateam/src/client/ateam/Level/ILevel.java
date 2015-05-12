@@ -1,5 +1,10 @@
 package client.ateam.Level;
 
+import client.ateam.Level.Models.Agent;
+import client.ateam.Level.Models.Box;
+import client.ateam.Level.Models.Goal;
+
+import java.io.BufferedReader;
 import java.util.ArrayList;
 
 /**
@@ -12,18 +17,18 @@ public interface ILevel {
 
      */
 
-    boolean isNeighbor();
-    boolean isBoxAt();
-    boolean isAgentAt();
-    boolean isFree();
+    boolean isNeighbor(int curRow, int curCol,int neighborRow, int neighborCol);
+    boolean isBoxAt(int row, int col);
+    boolean isAgentAt(int row, int col);
+    boolean isFree(int row, int col);
     boolean isGoalCompleted();
     boolean getBoxLetter();
     boolean getBoxColor();
     boolean getGoalLetter();
-    public int[] loadFromString(String s);
-    public ArrayList<Integer> getAgents();
-    public ArrayList<Integer> getBoxes();
-    public ArrayList<Integer> getGoals();
+    public void LoadFromString(BufferedReader serverMessages) throws Exception;
+    public ArrayList<Agent> getAgents();
+    public ArrayList<Box> getBoxes();
+    public ArrayList<Goal> getGoals();
 
 
 }
