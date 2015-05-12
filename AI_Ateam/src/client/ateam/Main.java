@@ -13,12 +13,14 @@ package client.ateam;
 import client.ateam.Level.Action;
 import client.ateam.Level.BitBoardLevel;
 import client.ateam.Level.ILevel;
+import client.ateam.Level.Models.Agent;
 import client.ateam.LvlReader.FileLvlReader;
 import client.ateam.LvlReader.ILvlReader;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 public class Main {
 
@@ -65,10 +67,29 @@ public class Main {
 
         //pathfinding
 
-        List<Action> actions;
+        ArrayList<String> str_actions = new ArrayList<>();
+        StringJoiner strJoiner = new StringJoiner(", ","[","]");
+        String act;
         while (true) { // all this is possibly a jason area (along with planning) excluding pathfinding
             // find next moves
+            for(Agent agent : level.getAgents()){
+                if(agent.getNextAction().preconditions())
+                {
+                    //simulate next moves? or simply perform them
+                    //if no next moves exist, check for goal & create next plan
 
+                }
+                else
+                {
+                    //add conflict
+
+                    // find conflicting objects/agents
+
+                    //replan
+                }
+
+
+            }
             //System.err.println(strLevel.get(1));
             //create joint action (action merging)
 
@@ -79,7 +100,31 @@ public class Main {
             //future planning, avoiding conflicts
 
             //send action
-            return;
+
+            for ( Agent agent : level.getAgents() ) {
+                str_actions.add(agent.getNextAction().toString());
+            }
+
+            for(String str : str_actions){
+                strJoiner.add(str);
+            }
+
+            act = strJoiner.toString();
+            System.out.println( act );
+            String response = serverMessages.readLine();
+            if ( response.contains( "false" ) ) {
+                System.err.format( "Server responsed with %s to the inapplicable action: %s\n", response, act );
+                //System.err.format( "%s was attempted in \n%s\n", act );
+
+                //retry or something...
+            }
+            else{
+                // execute actions on local level
+
+            }
+
+
+
         }
     }
 }
