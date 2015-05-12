@@ -11,6 +11,8 @@ public class Agent {
 
     public int id;
     public int color;
+    public int row;
+    public int column;
     //TODO: position connection with levels
     //private int pos
     public List<Task> tasks;
@@ -19,6 +21,8 @@ public class Agent {
         this.color = color;
        // this.position = Level.getIndexFromColoumnAndRow(column,row);
         this.id = id;
+        this.row = row;
+        this.column = column;
 
     }
 
