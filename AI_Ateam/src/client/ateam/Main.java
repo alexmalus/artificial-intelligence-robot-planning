@@ -67,7 +67,7 @@ public class Main {
 
         //pathfinding
 
-        ArrayList<String> str_actions = new ArrayList<>();
+
         StringJoiner strJoiner = new StringJoiner(", ","[","]");
         String act;
         while (true) { // all this is possibly a jason area (along with planning) excluding pathfinding
@@ -101,12 +101,8 @@ public class Main {
 
             //send action
 
-            for ( Agent agent : level.getAgents() ) {
-                str_actions.add(agent.getNextAction().toString());
-            }
-
-            for(String str : str_actions){
-                strJoiner.add(str);
+            for(Agent agent : level.getAgents()){
+                strJoiner.add(agent.getNextAction().toString());
             }
 
             act = strJoiner.toString();
