@@ -24,6 +24,7 @@ public class ArrayLevel{ //implements ILevel {
     public char[][] goals = new char[MAX_ROW][MAX_COLUMN];
     private static int height;
     private static int width;
+    private int agentID = 0;
     private static ArrayList<Agent> agentsArrayList = new ArrayList<Agent>();
     private static ArrayList<Box> boxesArrayList= new ArrayList<Box>();
     private static ArrayList<Goal> goalsArrayList= new ArrayList<Goal>();
@@ -173,17 +174,20 @@ public class ArrayLevel{ //implements ILevel {
             for ( int i = 0; i < line.length(); i++ ) {
                 char chr = line.charAt( i );
                 if ( '+' == chr ) { // Walls
-                    initialState.walls[levelLines][i] = true;
+                    //initialState.walls[levelLines][i] = true;
                 } else if ( '0' <= chr && chr <= '9' ) { // Agents
                     if ( agentCol != -1 || agentRow != -1 ) {
                         error( "Not a single agent level" );
                     }
-                    initialState.agentRow = levelLines;
-                    initialState.agentCol = i;
-                } else if ( 'A' <= chr && chr <= 'Z' ) { // Boxes
-                    initialState.boxes[levelLines][i] = chr;
+                    agentsArrayList.add(agentID++,color,levelLines,i);
+                    //  initialState.agentRow = levelLines;
+                   // initialState.agentCol = i;
+                } else if ( 'A' <= chr && chr <= 'Z' ) { //
+                    boxesArrayList.add(chr,levelLines,i);
+                    //initialState.boxes[levelLines][i] = chr;
                 } else if ( 'a' <= chr && chr <= 'z' ) { // Goal cells
-                    initialState.goals[levelLines][i] = chr;
+                    goalsArrayList.add(chr,levelLines,i);
+                    //initialState.goals[levelLines][i] = chr;
                 }
             }
             line = serverMessages.readLine();
