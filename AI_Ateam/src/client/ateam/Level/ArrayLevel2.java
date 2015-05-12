@@ -7,6 +7,7 @@ import java.util.Scanner;
  * Created by Lasse on 5/10/15.
  */
 public class ArrayLevel2 implements ILevel {
+
     @Override
     public int getAgentID() {
         return 0;
@@ -76,3 +77,4 @@ public class ArrayLevel2 implements ILevel {
         return null;
     }
 }
+

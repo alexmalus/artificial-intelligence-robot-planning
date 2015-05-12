@@ -1,7 +1,5 @@
 package client.ateam.Level.Models;
 
-import client.ateam.Level.ArrayLevel;
-
 /**
  * Created by Lasse on 24-04-2015.
  */
@@ -9,8 +7,19 @@ import client.ateam.Level.ArrayLevel;
 public class Box{
     public char boxLetter;
     public int color;
-    public int posx;
-    public int posy;
+    public int row;
+    public int column;
+
+    public Box(char boxLetter, int row, int column){
+        this.boxLetter = boxLetter;
+        // this.position = Level.getIndexFromColoumnAndRow(column,row);
+        this.row = row;
+        this.column = column;
+
+    }
+    
+
+
 }
 
 

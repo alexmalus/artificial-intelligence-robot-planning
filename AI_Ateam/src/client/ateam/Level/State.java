@@ -14,9 +14,7 @@ public class State implements Comparable<State> {
         this.playerLocation=playerLocation;
         this.boxPosition=boxPosition;
     }
-    public State() {
-        // TODO Auto-generated constructor stub
-    }
+    public State() {}
 
     //compare two states
     public int compareTo(State other) {
@@ -24,18 +22,17 @@ public class State implements Comparable<State> {
         return r;
     }
 
-    //converter a.newX ved lejlighed
     public State applyAction(Action a){
         Map newMap = new Map(map.map, map);
-        if (!Level.applyAction(newMap, a, playerLocation, true))
+        if (!ArrayLevel.applyAction(newMap, a, playerLocation, true))
             return null;
         int nBoxLocation= a.getBoxLocation(playerLocation);
         int oldBoxLocation = a.getOldBoxLocation(playerLocation);
         int deltaBoxesMovedFromGoal = 0;
 
         if (nBoxLocation > 0 && oldBoxLocation > 0) {
-            boolean boxOnGoalBefore = Level.boxIsOnItsGoal(map.get(oldBoxLocation));
-            boolean boxOnGoalAfter = Level.boxIsOnItsGoal(newMap.get(nBoxLocation));
+            boolean boxOnGoalBefore = ArrayLevel.boxIsOnItsGoal(map.get(oldBoxLocation));
+            boolean boxOnGoalAfter = ArrayLevel.boxIsOnItsGoal(newMap.get(nBoxLocation));
 
             if (boxOnGoalBefore && !boxOnGoalAfter)
                 deltaBoxesMovedFromGoal = 1;
@@ -47,8 +44,8 @@ public class State implements Comparable<State> {
             int oldBox = map.get(boxPosition);
             int newBox = newMap.get(nBoxLocation);
 
-            if (Level.isBox(oldBox) && Level.isBox(newBox) &&
-                    Level.getBoxLetter(oldBox) != Level.getBoxLetter(newBox))
+            if (ArrayLevel.isBox(oldBox) && ArrayLevel.isBox(newBox) &&
+                    ArrayLevel.getBoxLetter(oldBox) != ArrayLevel.getBoxLetter(newBox))
                 nBoxLocation = this.boxPosition;
         }
 
@@ -62,8 +59,8 @@ public class State implements Comparable<State> {
     }
 
     public String toString(){
-        int x = Level.getColumnFromIndex(playerLocation);
-        int y = Level.getRowFromIndex(playerLocation);
+        int x = ArrayLevel.getColumnFromIndex(playerLocation);
+        int y = ArrayLevel.getRowFromIndex(playerLocation);
         return "("+x+","+y+")";
     }
 

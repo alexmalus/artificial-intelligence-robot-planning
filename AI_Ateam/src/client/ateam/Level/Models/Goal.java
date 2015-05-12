@@ -5,8 +5,16 @@ package client.ateam.Level.Models;
  */
 public class Goal {
     public char letter;
-    public int posx;
-    public int posy;
+    public int row;
+    public int column;
+
+    public Goal(char letter, int row, int column){
+        this.letter = letter;
+        // this.position = Level.getIndexFromColoumnAndRow(column,row);
+        this.row = row;
+        this.column = column;
+
+    }
 
 //    /**
 //     * Return a goal letter from a goal position
