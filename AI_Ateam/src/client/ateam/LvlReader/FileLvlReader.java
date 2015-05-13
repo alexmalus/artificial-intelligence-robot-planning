@@ -46,6 +46,8 @@ public class FileLvlReader implements ILvlReader {
     /*
     fetches the level and returns an arraylist containing each line
      */
+
+    //TODO: this function should return a string and not an arraylist of strings
     @Override
     public ArrayList<String> readLevel() throws IOException {
         ArrayList<String> allLines = new ArrayList<String>();
