@@ -12,10 +12,10 @@ import java.util.Map;
  */
 public class FileLvlReader implements ILvlReader {
 
-    private BufferedReader serverMessages = new BufferedReader(new InputStreamReader(System.in));
+    private BufferedReader serverMessages;
 
-    public FileLvlReader(){
-
+    public FileLvlReader(BufferedReader serverMsg){
+        this.serverMessages = serverMsg;
     }
     //this is redundant
     @Override

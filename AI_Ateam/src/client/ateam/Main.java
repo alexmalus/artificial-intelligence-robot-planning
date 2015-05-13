@@ -27,7 +27,7 @@ public class Main {
 
     protected ILevel level = null;
     public int[] realMap;
-
+    private BufferedReader serverMessages = new BufferedReader(new InputStreamReader(System.in));
     public static void main(String[] args) throws Exception {
 
      Main main = new Main();
@@ -39,7 +39,7 @@ public class Main {
         // write your code here
 
         //arg parser?
-        ILvlReader reader = new FileLvlReader();
+        ILvlReader reader = new FileLvlReader(serverMessages);
         TaskDistributor tasker = new TaskDistributor(); // needs interface?
         //load level
 
@@ -116,7 +116,10 @@ public class Main {
                 //retry or something...
             }
             else{
-                // execute actions on local level
+                for(Agent agent : level.getAgents()){
+                    // execute actions on local level, if empty do next plan
+                }
+
 
             }
 
