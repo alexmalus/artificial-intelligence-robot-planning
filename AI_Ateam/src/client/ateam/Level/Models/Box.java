@@ -1,18 +1,20 @@
 package client.ateam.Level.Models;
 
+import client.ateam.projectEnum.Color;
+
 /**
  * Created by Lasse on 24-04-2015.
  */
 
 public class Box{
     public char boxLetter;
-    public int color;
+    public Color color;
     public int row;
     public int column;
 
-    public Box(char boxLetter, int row, int column){
+    public Box(char boxLetter,Color color, int row, int column){
         this.boxLetter = boxLetter;
-        // this.position = Level.getIndexFromColoumnAndRow(column,row);
+        this.color = color;
         this.row = row;
         this.column = column;
 

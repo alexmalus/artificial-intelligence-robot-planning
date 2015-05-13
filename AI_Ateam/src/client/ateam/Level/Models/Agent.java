@@ -2,6 +2,7 @@ package client.ateam.Level.Models;
 
 import client.ateam.Level.Action;
 import client.ateam.Task;
+import client.ateam.projectEnum.Color;
 
 import java.util.List;
 
@@ -11,14 +12,14 @@ import java.util.List;
 public class Agent {
 
     public int id;
-    public int color;
+    public Color color;
     public int row;
     public int column;
     //TODO: position connection with levels
     //private int pos
     public List<Task> tasks;
 
-    public Agent(int id, int color, int row, int column){
+    public Agent(int id, Color color, int row, int column){
         this.color = color;
        // this.position = Level.getIndexFromColoumnAndRow(column,row);
         this.id = id;

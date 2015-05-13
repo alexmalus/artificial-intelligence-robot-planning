@@ -3,14 +3,12 @@ package client.ateam.Level;
 import client.ateam.Level.Models.Agent;
 import client.ateam.Level.Models.Box;
 import client.ateam.Level.Models.Goal;
-import client.ateam.projectEnum.Direction;
-import client.ateam.projectEnum.ActionType;
+import client.ateam.projectEnum.Color;
 
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 /**
  * Created by joh on 5/10/15.
@@ -155,8 +153,9 @@ public class ArrayLevel implements ILevel {
 //    }
 
     public void LoadFromString( BufferedReader serverMessages ) throws Exception {
-        Map< Character, String > colors = new HashMap< Character, String >();
-        String line, color;
+        Map< Character, Color > colors = new HashMap< Character, Color >();
+        String line;
+        Color color;
 
         int agentCol = -1, agentRow = -1;
         int colorLines = 0, levelLines = 0;
@@ -165,7 +164,36 @@ public class ArrayLevel implements ILevel {
         while ( ( line = serverMessages.readLine() ).matches( "^[a-z]+:\\s*[0-9A-Z](,\\s*[0-9A-Z])*\\s*$" ) ) {
             line = line.replaceAll( "\\s", "" );
             String[] colonSplit = line.split( ":" );
-            color = colonSplit[0].trim();
+            //color = colonSplit[0].trim();
+            switch(colonSplit[0].trim()){
+                case("red"):
+                    color = Color.RED;
+                    break;
+                case("green"):
+                    color = Color.GREEN;
+                    break;
+                case("cyan"):
+                    color = Color.CYAN;
+                    break;
+                case("blue"):
+                    color = Color.BLUE;
+                    break;
+                case("magenta"):
+                    color = Color.MAGENTA;
+                    break;
+                case("orange"):
+                    color = Color.ORANGE;
+                    break;
+                case("pink"):
+                    color = Color.PINK;
+                    break;
+                case("yellow"):
+                    color = Color.YELLOW;
+                    break;
+                default:
+                    color = Color.BLUE;
+                    break;
+            }
 
             for ( String id : colonSplit[1].split( "," ) ) {
                 colors.put( id.trim().charAt( 0 ), color );
@@ -183,17 +211,20 @@ public class ArrayLevel implements ILevel {
             for ( int i = 0; i < line.length(); i++ ) {
                 char chr = line.charAt( i );
                 if ( '+' == chr ) { // Walls
-                    initialState.walls[levelLines][i] = true;
+                    walls[levelLines][i] = true;
                 } else if ( '0' <= chr && chr <= '9' ) { // Agents
                     if ( agentCol != -1 || agentRow != -1 ) {
                         error( "Not a single agent level" );
                     }
-                    initialState.agentRow = levelLines;
-                    initialState.agentCol = i;
+                    agentsArrayList.add(new Agent((int)chr,colors.get(chr),levelLines,i));
+                    //initialState.agentRow = levelLines;
+                    //initialState.agentCol = i;
                 } else if ( 'A' <= chr && chr <= 'Z' ) { // Boxes
-                    initialState.boxes[levelLines][i] = chr;
+                    boxesArrayList.add(new Box(chr,colors.get(chr),levelLines,i));
+                    //initialState.boxes[levelLines][i] = chr;
                 } else if ( 'a' <= chr && chr <= 'z' ) { // Goal cells
-                    initialState.goals[levelLines][i] = chr;
+                    goalsArrayList.add(new Goal(chr,levelLines,i));
+                    //initialState.goals[levelLines][i] = chr;
                 }
             }
             line = serverMessages.readLine();
