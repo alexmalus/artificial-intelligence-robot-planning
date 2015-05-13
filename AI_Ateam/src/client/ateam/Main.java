@@ -54,6 +54,7 @@ public class Main {
         this.level = ArrayLevel.getSingleton();
         this.realMap = this.level.LoadFromString(strLevel);
 
+        //TODO: some sort of ordering in goals, doing this at replanning may be hard, chapter 12 in the book ?
         //serialize subgoals (we probably cannot do POP)
 
 
@@ -73,6 +74,19 @@ public class Main {
         String act;
         while (true) { // all this is possibly a jason area (along with planning) excluding pathfinding
             // find next moves
+
+
+
+            //create joint action (action merging)
+
+            //check for conflicts ( use ILevel methods for literals/atoms etc )
+
+            //add list
+            //delete list
+            // current state
+
+            //resolve conflicts ( needs thinking ) + ActionHelper
+
             for(Agent agent : level.getAgents()){
                 if(agent.getNextAction().preconditions())
                 {
@@ -86,19 +100,17 @@ public class Main {
 
                     // find conflicting objects/agents
 
-                    //replan
+                    //replan (online replanning)
                 }
 
 
             }
             //System.err.println(strLevel.get(1));
-            //create joint action (action merging)
 
-            //check for conflicts ( use ILevel methods for literals/atoms etc )
-
-            //resolve conflicts ( needs thinking ) + ActionHelper
-
+            //TODO: think about future online planning
             //future planning, avoiding conflicts
+
+
 
             //send action
 
