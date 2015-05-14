@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 /**
  * Created by joh on 5/10/15.
@@ -64,11 +65,12 @@ public class ArrayLevel implements ILevel {
     public boolean isNeighbor(int curRow, int curCol,int neighborRow, int neighborCol) {
 //        if (curPos >= Level.realMap.length || curPos < 0 || neighborPos < 0 || neighborPos >= Level.realMap.length)
 //            return false; //outside bounds of map
-        if ((curRow-1 == neighborRow) && (curCol-1 == neighborCol) || (curRow+1 == neighborRow) && (curCol+1 == neighborCol)) // right left neighbor
+        // right left neighbor
+        if ((curRow-1 == neighborRow) && (curCol-1 == neighborCol) || (curRow+1 == neighborRow) && (curCol+1 == neighborCol))
             return true;
-        // if (curPos-Level.getWidth() == neighborPos || curPos+Level.getWidth() == neighborPos) // up down neighbor
-        // *************************************** TO DO - Need height and width  **************************************
-        //     return true;
+        // up down neighbor
+        if ((curRow-ArrayLevel.getWidth() == neighborRow) && (curCol-ArrayLevel.getWidth() == neighborCol) || (curRow+ArrayLevel.getWidth() == neighborRow) && (curCol+ArrayLevel.getWidth() == neighborCol))
+             return true;
 
         return false;
     }
@@ -103,15 +105,16 @@ public class ArrayLevel implements ILevel {
     }
 
     @Override
-    public boolean getBoxLetter() {
+    public boolean getBoxLetter(int row, int col) {
         return false;
-        /*if (Level.isBox(field)) {
-            return (char) (((field >> 4) & 0x1F) + 0x41);
-        }
-        else {
-            System.err.println("getBoxLetter: provided field do not contain a box!");
-            return '0';
-        }*/
+//        if (isBoxAt(row, col)) {
+//            //char boxLetter = boxesArrayList.get()
+//            //return (char) (((field >> 4) & 0x1F) + 0x41);
+//        }
+//        else {
+//            System.err.println("getBoxLetter: provided field do not contain a box!");
+//            //return '0';
+//        }
     }
 
     @Override
@@ -247,7 +250,30 @@ public class ArrayLevel implements ILevel {
         return goalsArrayList;
     }
 
-    //and it keeps going as one function relies on another..
+
+    public void setFileLength(Scanner input) {
+        String t = null;
+        ArrayLevel.width = -1;
+        while (input.hasNextLine()) {
+            t = input.nextLine();
+            if (t.equals(""))
+                continue;
+            if (t.charAt(0) != '+' && t.charAt(0) != ' ')
+                continue;
+            ArrayLevel.height++;
+            //Search width in current line
+            int tempWidth = 0;
+            Scanner tokenizer = new Scanner(t);
+            tokenizer.useDelimiter("");
+            while (tokenizer.hasNext()) {
+                tokenizer.next();
+                tempWidth++;
+            }
+            if (tempWidth > ArrayLevel.width) ArrayLevel.width = tempWidth;
+        }
+    }
+
+        //and it keeps going as one function relies on another..
 
 //    public static int getRowFromIndex(int index) {return index / ArrayLevel.width;}
 //
