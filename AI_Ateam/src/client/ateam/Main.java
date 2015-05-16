@@ -10,17 +10,16 @@ package client.ateam;
 * TaskDistributor
 * */
 
-import client.ateam.Level.Action;
 import client.ateam.Level.ArrayLevel;
-import client.ateam.Level.BitBoardLevel;
 import client.ateam.Level.ILevel;
 import client.ateam.Level.Models.Agent;
 import client.ateam.LvlReader.FileLvlReader;
 import client.ateam.LvlReader.ILvlReader;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Scanner;
 import java.util.StringJoiner;
 
 public class Main {
@@ -53,6 +52,8 @@ public class Main {
         //this.level = ArrayLevel.getSingletonObject();
         this.level = ArrayLevel.getSingleton();
         this.realMap = this.level.LoadFromString(strLevel);
+        level.setFileLength(new Scanner(strLevel));
+
 
         //TODO: some sort of ordering in goals, doing this at replanning may be hard, chapter 12 in the book ?
         //serialize subgoals (we probably cannot do POP)

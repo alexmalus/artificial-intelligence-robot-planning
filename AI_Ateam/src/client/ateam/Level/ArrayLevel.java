@@ -105,46 +105,47 @@ public class ArrayLevel implements ILevel {
     }
 
     @Override
-    public boolean getBoxLetter(int row, int col) {
-        return false;
-//        if (isBoxAt(row, col)) {
-//            //char boxLetter = boxesArrayList.get()
-//            //return (char) (((field >> 4) & 0x1F) + 0x41);
-//        }
-//        else {
-//            System.err.println("getBoxLetter: provided field do not contain a box!");
-//            //return '0';
-//        }
+    public char getBoxLetter(int row, int col) {
+        for(int i = 0; i == boxesArrayList.size(); i++)
+        {
+            Box tempbox = boxesArrayList.get(i);
+            if((tempbox.getRow() == row) && (tempbox.getColumn() == col)){
+                return tempbox.getBoxLetter();
+            }
+
+        }
+        System.err.println("ERROR: could not find any boxletters");
+        return 0;
     }
 
     @Override
-    public boolean getBoxColor() {
-        return false;
+    public Color getBoxColor(int row, int col) {
+        for(int i = 0; i == boxesArrayList.size(); i++)
+        {
+            Box tempbox = boxesArrayList.get(i);
+            if((tempbox.getRow() == row) && (tempbox.getColumn() == col)){
+                return tempbox.getBoxColor();
+            }
 
-
-        /*char boxLetter = Level.getBoxLetter(field);
-        if (boxLetter == '0') return -1;
-        return boxColors[boxLetter - 0x41];*/
+        }
+        System.err.println("ERROR: could not find any box colors");
+        return null;
     }
 
     @Override
-    public boolean getGoalLetter() {
-        return false;
+    public char getGoalLetter(int row, int col) {
+        for(int i = 0; i == goalsArrayList.size(); i++)
+        {
+            Goal tempGoal = goalsArrayList.get(i);
+            if((tempGoal.getRow() == row) && (tempGoal.getColumn() == col)){
+                return tempGoal.getGoalLetter();
+            }
 
-    /*
-        if (Level.isGoal(field)) {
-            return (char) ((field >> 21)+0x61);
         }
-        else {
-            System.err.println("getGoalLetter: provided field do not contain a goal!");
-            return '0';
-        }
+        System.err.println("ERROR: could not find any Goal letters");
+        return 0;
 
-        return false;*/
     }
-
-
-
 
 //    @Override
 //    public int[] loadFromString(String s) {

@@ -3,6 +3,7 @@ package client.ateam.Level;
 import client.ateam.Level.Models.Agent;
 import client.ateam.Level.Models.Box;
 import client.ateam.Level.Models.Goal;
+import client.ateam.projectEnum.Color;
 
 import java.io.BufferedReader;
 import java.util.ArrayList;
@@ -23,9 +24,9 @@ public interface ILevel {
     boolean isAgentAt(int row, int col);
     boolean isFree(int row, int col);
     boolean isGoalCompleted();
-    public boolean getBoxLetter(int row, int col);
-    boolean getBoxColor();
-    boolean getGoalLetter();
+    public char getBoxLetter(int row, int col);
+    public Color getBoxColor(int row, int col);
+    public char getGoalLetter(int row, int col);
     public void LoadFromString(BufferedReader serverMessages) throws Exception;
     public ArrayList<Agent> getAgents();
     public ArrayList<Box> getBoxes();

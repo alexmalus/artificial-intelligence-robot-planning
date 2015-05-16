@@ -16,6 +16,17 @@ public class Goal {
 
     }
 
+    public char getGoalLetter(){
+        return letter;
+    }
+
+    public int getRow(){
+        return row;
+    }
+
+    public int getColumn(){
+        return column;
+    }
 //    /**
 //     * Return a goal letter from a goal position
 //     * NOTE: The letter returned is lowercase!

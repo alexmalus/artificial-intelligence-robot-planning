@@ -19,7 +19,22 @@ public class Box{
         this.column = column;
 
     }
-    
+
+    public char getBoxLetter(){
+        return boxLetter;
+    }
+
+    public Color getBoxColor(){
+        return color;
+    }
+
+    public int getRow(){
+        return row;
+    }
+
+    public int getColumn(){
+    return column;
+    }
 
 
 }
