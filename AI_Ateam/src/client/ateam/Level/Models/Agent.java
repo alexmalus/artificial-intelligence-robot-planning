@@ -4,6 +4,7 @@ import client.ateam.Level.Action;
 import client.ateam.Task;
 import client.ateam.projectEnum.Color;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,7 +18,10 @@ public class Agent {
     public int column;
     //TODO: position connection with levels
     //private int pos
-    public List<Task> tasks;
+    public List<Task> tasks = new ArrayList<Task>();
+    public Task currentTask;
+    private Action currentAction;
+    public List<Action> actionList = new ArrayList<Action>();
 
     public Agent(int id, Color color, int row, int column){
         this.color = color;
@@ -29,9 +33,37 @@ public class Agent {
     }
 
     public Action getNextAction(){
-        //TODO: get correct action
-        return new Action();
+        currentAction = actionList.remove(0);
+        return currentAction;
     }
+
+    public Action getCurrentAction(){
+        return currentAction;
+    }
+
+    public void executeCurrentAction() {
+
+        //do execute
+
+        //check for goal
+        if(actionList.isEmpty())
+        {
+            if(currentTask.isComplete()){
+                //select next task
+                currentTask = tasks.remove(0);
+            }
+            else
+            {
+                //replan
+            }
+
+
+        }
+    }
+
+    public
+
+
 
 //    /**
 //     * Get the agent id from the the agent on the provided field

@@ -34,7 +34,7 @@ public class Main {
 
     }
 
-    public void run() throws IOException {
+    public void run() throws Exception {
         // write your code here
 
         //arg parser?
@@ -51,7 +51,7 @@ public class Main {
         //ILevel level = new BitBoardLevel(strLevel);
         //this.level = ArrayLevel.getSingletonObject();
         this.level = ArrayLevel.getSingleton();
-        this.realMap = this.level.LoadFromString(strLevel);
+        this.level.LoadFromString(serverMessages);
         level.setFileLength(new Scanner(strLevel));
 
 
@@ -60,7 +60,7 @@ public class Main {
 
 
         //task distribution
-        tasker.distributeTasks(level.getAgents(),level.getBoxes(),level.getGoals(),level.getColors());
+        tasker.distributeTasks(level.getAgents(),level.getBoxes(),level.getGoals());
         //tasks are now located on each agent
 
 
@@ -69,6 +69,11 @@ public class Main {
         System.err.println("hej");
 
         //pathfinding
+
+        for(Agent agent: level.getAgents()){
+            //plan the initial tasks of each agent
+
+        }
 
 
         StringJoiner strJoiner = new StringJoiner(", ","[","]");
@@ -93,15 +98,20 @@ public class Main {
                 {
                     //simulate next moves? or simply perform them
                     //if no next moves exist, check for goal & create next plan
-
+                    agent.executeCurrentAction();
                 }
                 else
                 {
+                    agent.getNextAction().getConflicts();
                     //add conflict
 
                     // find conflicting objects/agents
 
                     //replan (online replanning)
+                    agent.replanTask();
+                    if(agent.getNextAction().preconditions()){
+                        agent.executeCurrentAction()
+                    }
                 }
 
 
@@ -116,7 +126,7 @@ public class Main {
             //send action
 
             for(Agent agent : level.getAgents()){
-                strJoiner.add(agent.getNextAction().toString());
+                strJoiner.add(agent.getCurrentAction().toString());
             }
 
             act = strJoiner.toString();
@@ -129,9 +139,9 @@ public class Main {
                 //retry or something...
             }
             else{
-                for(Agent agent : level.getAgents()){
+                //for(Agent agent : level.getAgents()){
                     // execute actions on local level, if empty do next plan
-                }
+                //}
 
 
             }

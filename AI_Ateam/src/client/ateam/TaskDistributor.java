@@ -3,12 +3,11 @@ package client.ateam;
 import client.ateam.Level.Models.Agent;
 import client.ateam.Level.Models.Box;
 import client.ateam.Level.Models.Goal;
+import client.ateam.projectEnum.Color;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 //import static javafx.beans.binding.Bindings.select;
 
@@ -40,11 +39,11 @@ public class TaskDistributor {
         Agent selectedAgent;
         List<Box> matchingBoxes;
         List<Agent> matchingAgents;
-        List<Integer> colors = new ArrayList<Integer>();
+        List<Color> colors = new ArrayList<Color>();
         boolean identicalColorAgents = false;
-        HashMap<Integer,ArrayList<Box>> boxcolors = new HashMap<Integer,ArrayList<Box>>();
+        HashMap<Color, ArrayList<Box>> boxcolors = new HashMap<Color, ArrayList<Box>>();
         HashMap<Character,Box> boxletters = new HashMap<Character,Box>();
-        HashMap<Integer,ArrayList<Agent>> agentcolors = new HashMap<Integer,ArrayList<Agent>>();
+        HashMap<Color, ArrayList<Agent>> agentcolors = new HashMap<Color, ArrayList<Agent>>();
         HashMap<Character,Goal> goalletters = new HashMap<Character,Goal>();
 
 
@@ -58,7 +57,7 @@ public class TaskDistributor {
             }
         }
 
-        for(Integer color: colors){
+        for(Color color: colors){
             boxcolors.put(color, new ArrayList<Box>());
             agentcolors.put(color, new ArrayList<Agent>());
         }
@@ -74,17 +73,24 @@ public class TaskDistributor {
         }
 
         Box matchingBox;
-        Agent matchingAgent;
-
+        Agent matchingAgent = null;
+        int dist=-1;
         if(identicalColorAgents){
             for(Goal goal : goals){
                 matchingBox = boxletters.get(goal.letter);
                 matchingAgents = agentcolors.get(matchingBox.color);
 
                 //find best matching agent
+                //TODO:Round robin implementation
+                // otherwise an implementation where agents ask for next may be more feasible.
+                for(Agent agent:matchingAgents){
+                    // manhattan distance is used
+                    if(matchingAgent==null || Math.abs(agent.row-matchingBox.row)+Math.abs(agent.column-matchingBox.column) < dist){
+                        matchingAgent = agent;
+                        dist = Math.abs(agent.row-matchingBox.row)+Math.abs(agent.column-matchingBox.column);
+                    }
+                }
 
-                //TODO:BETTER IMPLEMENTATION AND DISTRIBUTION SELECT BEST OPTION IN MATCHING AGENTS
-                matchingAgent = matchingAgents.get(0);
                 matchingAgent.tasks.add(new Task(matchingAgent.id,matchingBox,goal));
             }
 
