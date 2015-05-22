@@ -7,9 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Lasse on 24-04-2015.
- */
 public class FileLvlReader implements ILvlReader {
 
     private BufferedReader serverMessages;
@@ -48,22 +45,28 @@ public class FileLvlReader implements ILvlReader {
      */
 
     //TODO: this function should return a string and not an arraylist of strings
+//    @Override
+//    public ArrayList<String> readLevel() throws IOException {
+//        ArrayList<String> allLines = new ArrayList<String>();
+//        String line;
+//        while ( ( line = serverMessages.readLine() ).matches( "^[a-z]+:\\s*[0-9A-Z](,\\s*[0-9A-Z])*\\s*$" ) ) {
+//            line = line.replaceAll("\\s", "");
+//            if(!line.equals("")) {
+//                allLines.add(line);
+//            }
+//        }
+//
+//        return allLines;
+//    }
     @Override
-    public ArrayList<String> readLevel() throws IOException {
-        ArrayList<String> allLines = new ArrayList<String>();
-        String line;
-        while ( ( line = serverMessages.readLine() ).matches( "^[a-z]+:\\s*[0-9A-Z](,\\s*[0-9A-Z])*\\s*$" ) ) {
-            line = line.replaceAll("\\s", "");
-            if(!line.equals("")) {
-                allLines.add(line);
-            }
-        }
-
-        return allLines;
+    public String readLevel() throws IOException {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
     public void sendCommand() {
 
     }
+
 }

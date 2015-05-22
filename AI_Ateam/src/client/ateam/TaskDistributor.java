@@ -9,26 +9,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-//import static javafx.beans.binding.Bindings.select;
-
-/**
- * Created by joh on 21/04/15.
- */
-
 /*
-* This is suppose to handle
-*
+* This is supposed to handle
 * Find Tasks
 * Find Boxes
 * Find Agents
 * Combine the 3 objectives above.
-*
 * */
 
-
 public class TaskDistributor {
-
-    /*
+	/*
     Break down tasks and create high level tasks, which boxes to move where - this can be changed to be computed dynamically as well,
     but currently working with static tasks is favorable
      */
@@ -62,14 +52,14 @@ public class TaskDistributor {
             agentcolors.put(color, new ArrayList<Agent>());
         }
         for(Box box:boxes){
-            boxcolors.get(box.color).add(box);
-            boxletters.put(box.boxLetter,box); // bad use of hashmap :b
+            boxcolors.get(box.getColor()).add(box);
+            boxletters.put(box.getBoxLetter(),box); // bad use of hashmap :b
         }
         for(Agent agent:agents){
             agentcolors.get(agent.color).add(agent);
         }
         for(Goal goal:goals){
-            goalletters.put(goal.letter,goal);
+            goalletters.put(goal.getGoalLetter(),goal);
         }
 
         Box matchingBox;
@@ -77,17 +67,17 @@ public class TaskDistributor {
         int dist=-1;
         if(identicalColorAgents){
             for(Goal goal : goals){
-                matchingBox = boxletters.get(goal.letter);
-                matchingAgents = agentcolors.get(matchingBox.color);
+                matchingBox = boxletters.get(goal.getGoalLetter());
+                matchingAgents = agentcolors.get(matchingBox.getColor());
 
                 //find best matching agent
                 //TODO:Round robin implementation
                 // otherwise an implementation where agents ask for next may be more feasible.
                 for(Agent agent:matchingAgents){
                     // manhattan distance is used
-                    if(matchingAgent==null || Math.abs(agent.row-matchingBox.row)+Math.abs(agent.column-matchingBox.column) < dist){
+                    if(matchingAgent==null || Math.abs(agent.row-matchingBox.getRow())+Math.abs(agent.column-matchingBox.getColumn()) < dist){
                         matchingAgent = agent;
-                        dist = Math.abs(agent.row-matchingBox.row)+Math.abs(agent.column-matchingBox.column);
+                        dist = Math.abs(agent.row-matchingBox.getRow())+Math.abs(agent.column-matchingBox.getColumn());
                     }
                 }
 
@@ -97,8 +87,8 @@ public class TaskDistributor {
         }
         else{
             for(Goal goal : goals){
-                matchingBox = boxletters.get(goal.letter);
-                matchingAgent = agentcolors.get(matchingBox.color).get(0);//only one color box per agent
+                matchingBox = boxletters.get(goal.getGoalLetter());
+                matchingAgent = agentcolors.get(matchingBox.getColor()).get(0);//only one color box per agent
                 matchingAgent.tasks.add(new Task(matchingAgent.id,matchingBox,goal));
             }
 

@@ -5,9 +5,6 @@ import client.ateam.projectEnum.Direction;
 
 import java.util.ArrayList;
 
-/**
- *
- */
 public class Action {
 
     public boolean preconditions(){
@@ -107,78 +104,78 @@ public class Action {
      * @param action2
      * @return
      */
-    public static boolean conflict(int curPosI, Action action, int curPosJ,
-                                   Action action2) {
-
-        ArrayList<Integer> positions = new ArrayList<Integer>();
-
-        //Fills the arrayList wit all the potential places the agent and its box are and will be
-        positions.addAll(action.addToArraylist(curPosI));
-        positions.addAll(action2.addToArraylist(curPosJ));
-
-        //checks if any off these places are the same
-        for(int i=0; i<positions.size();i++){
-            for(int j=i+1;j<positions.size();j++){
-                int p1 = positions.get(i);
-                int p2 = positions.get(j);
-                if(p1 == p2)
-                    return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Determine if there is a conflict between this Action-object and another
-     * given action object.
-     * @param curPosI The position this action is performed from.
-     * @param otherPos The position the other action is performed from.
-     * @param other The other action
-     * @return True if there is a conflict between this action and the other given
-     */
-    public boolean conflicts(int curPosI, int otherPos, Action other) {
-        if (other == null)
-            return false;
-        return Action.conflict(curPosI, this, otherPos, other);
-    }
-
-    /**
-     * Determine if there is a conflict between this Action-object and any action
-     * from a given list of other actions.
-     * @param curPosI The position this action is performed from.
-     * @param otherPositions The positions the other actions are performed from.
-     * @param otherActions The other actions
-     * @return True if there is a conflict between this action and any of the other given actions
-     */
-    public boolean conflicts(int curPosI, ArrayList<Integer> otherPositions, ArrayList<Action> otherActions) {
-        for (int i = 0; i < otherPositions.size(); i++) {
-            if (this.conflicts(curPosI, otherPositions.get(i), otherActions.get(i)))
-                return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * From a given list of actions and agent positions, calculate the new positions
-     * after performing the matching actions
-     * @param curPositions Current positions of the agents, such that curPositions[i] matches actions[i]
-     * @param actions Action to perform for agent i
-     * @return Updated list of positions for all agents
-     */
-    public static ArrayList<Integer> getUpdatedPositions(ArrayList<Integer> curPositions, ArrayList<Action> actions) {
-        ArrayList<Integer> newPositions = new ArrayList<Integer>(10);
-
-        for (int i = 0; i < curPositions.size(); i++) {
-            Action a = actions.get(i);
-            int pos = curPositions.get(i);
-            if (a != null && a.type() != ActionType.NOOP)
-                pos = ArrayLevel.getPosFromPosInDirection(pos, a.direction());
-            newPositions.add(pos);
-        }
-
-        return newPositions;
-    }
+//    public static boolean conflict(int curPosI, Action action, int curPosJ,
+//                                   Action action2) {
+//
+//        ArrayList<Integer> positions = new ArrayList<Integer>();
+//
+//        //Fills the arrayList wit all the potential places the agent and its box are and will be
+//        positions.addAll(action.addToArraylist(curPosI));
+//        positions.addAll(action2.addToArraylist(curPosJ));
+//
+//        //checks if any off these places are the same
+//        for(int i=0; i<positions.size();i++){
+//            for(int j=i+1;j<positions.size();j++){
+//                int p1 = positions.get(i);
+//                int p2 = positions.get(j);
+//                if(p1 == p2)
+//                    return true;
+//            }
+//        }
+//        return false;
+//    }
+//
+//    /**
+//     * Determine if there is a conflict between this Action-object and another
+//     * given action object.
+//     * @param curPosI The position this action is performed from.
+//     * @param otherPos The position the other action is performed from.
+//     * @param other The other action
+//     * @return True if there is a conflict between this action and the other given
+//     */
+//    public boolean conflicts(int curPosI, int otherPos, Action other) {
+//        if (other == null)
+//            return false;
+//        return Action.conflict(curPosI, this, otherPos, other);
+//    }
+//
+//    /**
+//     * Determine if there is a conflict between this Action-object and any action
+//     * from a given list of other actions.
+//     * @param curPosI The position this action is performed from.
+//     * @param otherPositions The positions the other actions are performed from.
+//     * @param otherActions The other actions
+//     * @return True if there is a conflict between this action and any of the other given actions
+//     */
+//    public boolean conflicts(int curPosI, ArrayList<Integer> otherPositions, ArrayList<Action> otherActions) {
+//        for (int i = 0; i < otherPositions.size(); i++) {
+//            if (this.conflicts(curPosI, otherPositions.get(i), otherActions.get(i)))
+//                return true;
+//        }
+//
+//        return false;
+//    }
+//
+//    /**
+//     * From a given list of actions and agent positions, calculate the new positions
+//     * after performing the matching actions
+//     * @param curPositions Current positions of the agents, such that curPositions[i] matches actions[i]
+//     * @param actions Action to perform for agent i
+//     * @return Updated list of positions for all agents
+//     */
+//    public static ArrayList<Integer> getUpdatedPositions(ArrayList<Integer> curPositions, ArrayList<Action> actions) {
+//        ArrayList<Integer> newPositions = new ArrayList<Integer>(10);
+//
+//        for (int i = 0; i < curPositions.size(); i++) {
+//            Action a = actions.get(i);
+//            int pos = curPositions.get(i);
+//            if (a != null && a.type() != ActionType.NOOP)
+////                pos = ArrayLevel.getPosFromPosInDirection(pos, a.direction());
+//            newPositions.add(pos);
+//        }
+//
+//        return newPositions;
+//    }
 
     /**
      * Get the target position where a agent end up if MOVE action,
@@ -187,22 +184,22 @@ public class Action {
      * @param currentPos
      * @return
      */
-    public int getTargetPositionFromPosition(int currentPos) {
-        switch (this.type) {
-            case MOVE:
-            case PULL:
-                return ArrayLevel.getPosFromPosInDirection(currentPos, this.direction);
-            case PUSH:
-                return ArrayLevel.getPosFromPosInDirection(
-                        ArrayLevel.getPosFromPosInDirection(currentPos, direction), this.boxDirection);
-            case NOOP:
-                return currentPos;
-            default:
-                return -1;
-        }
-
-
-    }
+//    public int getTargetPositionFromPosition(int currentPos) {
+//        switch (this.type) {
+//            case MOVE:
+//            case PULL:
+//                return ArrayLevel.getPosFromPosInDirection(currentPos, this.direction);
+//            case PUSH:
+//                return ArrayLevel.getPosFromPosInDirection(
+//                        ArrayLevel.getPosFromPosInDirection(currentPos, direction), this.boxDirection);
+//            case NOOP:
+//                return currentPos;
+//            default:
+//                return -1;
+//        }
+//
+//
+//    }
 
 
     /**
@@ -298,15 +295,15 @@ public class Action {
         }
     }
 
-    public int getOldBoxLocation(int agentPosition) {
-        switch (this.type) {
-            case PUSH:
-                return ArrayLevel.getPosFromPosInDirection(agentPosition, direction);
-            case PULL:
-                return ArrayLevel.getPosFromPosInDirection(agentPosition, boxDirection);
-            default: return 0;
-        }
-    }
+//    public int getOldBoxLocation(int agentPosition) {
+//        switch (this.type) {
+//            case PUSH:
+//                return ArrayLevel.getPosFromPosInDirection(agentPosition, direction);
+//            case PULL:
+//                return ArrayLevel.getPosFromPosInDirection(agentPosition, boxDirection);
+//            default: return 0;
+//        }
+//    }
 
     public int getBoxLocation(int agentPosition) {
         switch (this.type) {
@@ -322,6 +319,8 @@ public class Action {
                                 return (agentPosition-ArrayLevel.getWidth())-1;
                             case SOUTH:
                                 return (agentPosition+ArrayLevel.getWidth())-1;
+                            default:
+                                break;
                         }
                     case EAST:
                         switch(this.boxDirection) {
@@ -331,6 +330,8 @@ public class Action {
                                 return (agentPosition-ArrayLevel.getWidth())+1;
                             case SOUTH:
                                 return agentPosition+ArrayLevel.getWidth()+1;
+                            default:
+                                break;
                         }
                     case NORTH:
                         switch(this.boxDirection) {
@@ -340,6 +341,8 @@ public class Action {
                                 return (agentPosition-ArrayLevel.getWidth())-1;
                             case NORTH:
                                 return agentPosition-2*ArrayLevel.getWidth();
+                            default:
+                                break;
                         }
                     case SOUTH:
                         switch(this.boxDirection) {
@@ -349,6 +352,8 @@ public class Action {
                                 return (agentPosition+ArrayLevel.getWidth())-1;
                             case SOUTH:
                                 return agentPosition+2*ArrayLevel.getWidth();
+                            default:
+                                break;
                         }
                 }
             case PULL:
@@ -383,28 +388,28 @@ public class Action {
 	}*/
 
 
-    public ArrayList<Integer> addToArraylist(int curPosI){
-        ArrayList<Integer> positions = new ArrayList<Integer>();
-        //Add the current position of the agent
-        positions.add(curPosI);
-        switch (this.type) {
-            //Moved adds the new position of the agent
-            case MOVE:
-                positions.add(this.newAgentPosition(curPosI));
-                break;
-            //PULL Adds the new agent position and the start position of the box
-            case PULL:
-                positions.add(this.newAgentPosition(curPosI));
-                positions.add(ArrayLevel.getPosFromPosInDirection(curPosI, this.boxDirection));
-                break;
-            //PUSH Adds the new position of the agent(starting position of box) and the new position of the box
-            case PUSH:
-                positions.add(this.newAgentPosition(curPosI));
-                positions.add(this.getBoxLocation(curPosI));
-                break;
-            default:
-                break;
-        }
-        return positions;
-    }
+//    public ArrayList<Integer> addToArraylist(int curPosI){
+//        ArrayList<Integer> positions = new ArrayList<Integer>();
+//        //Add the current position of the agent
+//        positions.add(curPosI);
+//        switch (this.type) {
+//            //Moved adds the new position of the agent
+//            case MOVE:
+//                positions.add(this.newAgentPosition(curPosI));
+//                break;
+//            //PULL Adds the new agent position and the start position of the box
+//            case PULL:
+//                positions.add(this.newAgentPosition(curPosI));
+//                positions.add(ArrayLevel.getPosFromPosInDirection(curPosI, this.boxDirection));
+//                break;
+//            //PUSH Adds the new position of the agent(starting position of box) and the new position of the box
+//            case PUSH:
+//                positions.add(this.newAgentPosition(curPosI));
+//                positions.add(this.getBoxLocation(curPosI));
+//                break;
+//            default:
+//                break;
+//        }
+//        return positions;
+//    }
 }

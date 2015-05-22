@@ -70,7 +70,7 @@ public class ArrayLevel implements ILevel {
             return true;
         // up down neighbor
         if ((curRow-ArrayLevel.getWidth() == neighborRow) && (curCol-ArrayLevel.getWidth() == neighborCol) || (curRow+ArrayLevel.getWidth() == neighborRow) && (curCol+ArrayLevel.getWidth() == neighborCol))
-             return true;
+            return true;
 
         return false;
     }
@@ -124,7 +124,7 @@ public class ArrayLevel implements ILevel {
         {
             Box tempbox = boxesArrayList.get(i);
             if((tempbox.getRow() == row) && (tempbox.getColumn() == col)){
-                return tempbox.getBoxColor();
+                return tempbox.getColor();
             }
 
         }
@@ -251,7 +251,6 @@ public class ArrayLevel implements ILevel {
         return goalsArrayList;
     }
 
-
     public void setFileLength(Scanner input) {
         String t = null;
         ArrayLevel.width = -1;
@@ -270,206 +269,8 @@ public class ArrayLevel implements ILevel {
                 tokenizer.next();
                 tempWidth++;
             }
+            tokenizer.close();
             if (tempWidth > ArrayLevel.width) ArrayLevel.width = tempWidth;
         }
     }
-
-        //and it keeps going as one function relies on another..
-
-//    public static int getRowFromIndex(int index) {return index / ArrayLevel.width;}
-//
-//    public static int getColumnFromIndex(int index) {
-//        return index % ArrayLevel.width;
-//    }
-//
-//    public static int getPosFromPosInDirection(int pos, Direction dir){
-//        int position = 0;
-//        switch (dir) {
-//            case NORTH:
-//                position = pos - width;
-//                break;
-//            case SOUTH:
-//                position = pos + width;
-//                break;
-//            case EAST:
-//                position = pos + 1;
-//                break;
-//            case WEST:
-//                position = pos - 1;
-//                break;
-//
-//            default:
-//                break;
-//        }
-//        return 0 <= position && position < realMap.length ? position : -1;
-//    }
-//
-//    public static boolean isActionApplicable(int[] map, Action action, int agentPos, boolean silent) {
-//        return ArrayLevel.isActionApplicable(new Map(map,null), action, agentPos, silent);
-//    }
-//
-//    public static boolean isActionApplicable(Map map, Action action, int agentPos, boolean silent){
-//        int field;
-//        int fieldPos;
-//        int box;
-//        int agent;
-//        switch (action.type()) {
-//
-//            case MOVE:
-//                fieldPos = getPosFromPosInDirection(agentPos, action.direction());
-//                field = map.get(fieldPos);
-//                if(isEmpty(field)){
-//                    agent = map.get(agentPos);
-//                    if((agent & 0x4) != 0x4)
-//                        break;
-//
-//                    return true;
-//                }
-//                break;
-//
-//            case PULL:
-//                fieldPos = getPosFromPosInDirection(agentPos, action.direction());
-//                field = map.get(fieldPos);
-//                //Box Dir, the direction of the box
-//                //agentdirection the direction the agent moves
-//                if(isEmpty(field)){
-//                    int boxPos = getPosFromPosInDirection(agentPos, action.boxDirection());
-//
-//                    box = map.get(boxPos);
-//                    agent = map.get(agentPos);
-//
-//                    if (!isBox(box) || !isAgent(agent)){
-//                        if(!silent)
-//                            System.err.println("PULL: box or agent not on right position - boxpos: "
-//                                    + Level.coordsToString(boxPos)
-//                                    + " agentpos: " + Level.coordsToString(agentPos));
-//                        break;
-//                    }
-//
-//                    if( getBoxColor(box) != getAgentColor(getAgentId(agent))){
-//                        if(!silent)
-//                            System.err.println("agent and box not same color");
-//                        break;
-//                    }
-//
-//                    return true;
-//
-//                }
-//                break;
-//            case PUSH:
-//                //Box Dir, the direction the box moves
-//                //agten dir, the direction of the box
-//
-//                //get the boc, should be in the agnet direction
-//                int boxPos = getPosFromPosInDirection(agentPos, action.direction());
-//
-//                //Init box and agent
-//                box = map.get(boxPos);
-//                agent = map.get(agentPos);
-//
-//                //check if box and agent is what they say they are
-//                if (!isBox(box) || !isAgent(agent)){
-//                    if(!silent)
-//                        System.err.println("PUSH: box or agent not on right position - boxpos: "
-//                                + Level.coordsToString(boxPos)
-//                                + " agentpos: " + Level.coordsToString(agentPos));
-//                    break;
-//                }
-//                //Check if agent and box is same color
-//                if( getBoxColor(box) != getAgentColor(getAgentId(agent))){
-//                    if(!silent)
-//                        System.err.println("agent and box not same color");
-//                    break;
-//                }
-//
-//                fieldPos = getPosFromPosInDirection(boxPos, action.boxDirection());
-//                field = map.get(fieldPos);
-//
-//                //Check if  the field the box is moving to is empty
-//                if(!isEmpty(field)){
-//                    if(!silent)
-//                        System.err.println("try to push box to non empty field");
-//                    break;
-//                }
-//
-//                return true;
-//
-//            case NOOP:
-//                return true;
-//
-//            default:
-//                break;
-//        }
-//
-//        return false;
-//    }
-//
-//    public static boolean applyAction(Map map, Action action, int agentPos, boolean silent) {
-//        if (!ArrayLevel.isActionApplicable(map,action,agentPos,silent))
-//            return false;
-//
-//        if (action.type() == ActionType.NOOP)
-//            return true;
-//
-//        //If the action is applicable a new map is created and returned
-//        int boxPos;
-//        int fieldPos = getPosFromPosInDirection(agentPos, action.direction());
-//
-//        int box;
-//        int agent = map.get(agentPos);
-//
-//        switch (action.type()) {
-//            case MOVE:
-//
-//                //add agent to new field
-//                map.set(fieldPos, map.get(fieldPos) | (agent & 0x1FE004));
-//                map.set(agentPos, map.get(agentPos) & 0xFFE01FFB);
-//                break;
-//
-//            case PULL:
-//                boxPos = getPosFromPosInDirection(agentPos, action.boxDirection());
-//                box = map.get(boxPos);
-//
-//                //addAgent
-//                map.set(fieldPos, map.get(fieldPos) | (agent & 0x1FE004));
-//                //Remove agent and add box
-//                map.set(agentPos, map.get(agentPos) & 0xFFE01FFB);
-//                map.set(agentPos, map.get(agentPos) | (box & 0x1FF2));
-//                //remove box
-//                map.set(boxPos, map.get(boxPos) & 0xFFFFE00D);
-//
-//                //If we are changing RealMap, update the boxesArrayList
-//                if (ArrayLevel.realMap == map.map && map.isRoot()) {
-//                    int bId = ArrayLevel.getBoxIdFromPosition(boxPos);
-//                    ArrayLevel.boxesArrayList.set(bId, agentPos);
-//                }
-//                break;
-//
-//            case PUSH:
-//                boxPos = getPosFromPosInDirection(agentPos, action.direction());
-//                box = map.get(boxPos);
-//
-//                fieldPos = getPosFromPosInDirection(boxPos, action.boxDirection());
-//                //addBox
-//                map.set(fieldPos, map.get(fieldPos) | (box & 0x1FF2));
-//                //Remove box and add Agent
-//                map.set(boxPos, map.get(boxPos) & 0xFFFFE00D);
-//                map.set(boxPos, map.get(boxPos) | (agent & 0x1FE004));
-//                //remove Agent
-//                map.set(agentPos, map.get(agentPos) & 0xFFE01FFB);
-//
-//                //If we are changing RealMap, update the boxesArrayList
-//                if (ArrayLevel.realMap == map.map && map.isRoot()) {
-//                    int bId = ArrayLevel.getBoxIdFromPosition(boxPos);
-//                    ArrayLevel.boxesArrayList.set(bId, fieldPos);
-//                }
-//
-//                break;
-//
-//            default:
-//
-//                break;
-//        }
-//        return true;
-//    }
 }
