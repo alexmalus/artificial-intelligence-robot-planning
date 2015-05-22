@@ -6,6 +6,8 @@ import java.util.Scanner;
 /**
  * Created by Lasse on 5/10/15.
  */
+
+//is this still necessary?
 public class ArrayLevel2 implements ILevel {
 
     @Override
