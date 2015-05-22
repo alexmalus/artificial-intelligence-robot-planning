@@ -7,10 +7,10 @@ import client.ateam.projectEnum.Color;
  */
 
 public class Box{
-    public char boxLetter;
-    public Color color;
-    public int row;
-    public int column;
+    private char boxLetter;
+    private Color color;
+    private int row;
+    private int column;
 
     public Box(char boxLetter,Color color, int row, int column){
         this.boxLetter = boxLetter;
@@ -23,15 +23,12 @@ public class Box{
     public char getBoxLetter(){
         return boxLetter;
     }
-
     public Color getBoxColor(){
         return color;
     }
-
     public int getRow(){
         return row;
     }
-
     public int getColumn(){
     return column;
     }

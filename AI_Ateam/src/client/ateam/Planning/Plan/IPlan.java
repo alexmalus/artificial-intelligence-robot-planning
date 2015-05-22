@@ -12,10 +12,6 @@ public class IPlan extends ArrayList<Action> implements Comparable {
     create list of actions in linked list
     replanning mechanism?
      */
-    /**
-     * Eclipse needed this
-     */
-    private static final long serialVersionUID = 1L;
 
     /**
      * The agent who created this plan

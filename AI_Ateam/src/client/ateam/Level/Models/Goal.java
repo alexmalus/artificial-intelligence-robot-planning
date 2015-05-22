@@ -4,9 +4,9 @@ package client.ateam.Level.Models;
  * Created by Lasse on 24-04-2015.
  */
 public class Goal {
-    public char letter;
-    public int row;
-    public int column;
+    private char letter;
+    private int row;
+    private int column;
 
     public Goal(char letter, int row, int column){
         this.letter = letter;
@@ -19,14 +19,14 @@ public class Goal {
     public char getGoalLetter(){
         return letter;
     }
-
     public int getRow(){
         return row;
     }
-
     public int getColumn(){
         return column;
     }
+
+}
 //    /**
 //     * Return a goal letter from a goal position
 //     * NOTE: The letter returned is lowercase!
@@ -58,10 +58,5 @@ public class Goal {
 //            return '0';
 //        }
 //    }
-
-
-
-}
-
 
 

@@ -47,7 +47,7 @@ public class Agent {
 
         //check for goal
         if(actionList.isEmpty())
-        {
+        {--
             if(currentTask.isComplete()){
                 //select next task
                 currentTask = tasks.remove(0);

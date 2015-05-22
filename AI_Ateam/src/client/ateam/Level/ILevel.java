@@ -15,10 +15,6 @@ import java.util.Scanner;
 public interface ILevel {
 
     int getAgentID();
-    /*
-
-     */
-
     boolean isNeighbor(int curRow, int curCol,int neighborRow, int neighborCol);
     boolean isBoxAt(int row, int col);
     boolean isAgentAt(int row, int col);
@@ -32,6 +28,4 @@ public interface ILevel {
     public ArrayList<Box> getBoxes();
     public ArrayList<Goal> getGoals();
     public void setFileLength(Scanner input);
-
-
 }
