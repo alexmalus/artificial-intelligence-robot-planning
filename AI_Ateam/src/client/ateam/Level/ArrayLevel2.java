@@ -56,13 +56,7 @@ public class ArrayLevel2 implements ILevel {
     }
 
     @Override
-    public int[] loadFromString(String s) {
-
-        Scanner scanner = new Scanner(s);
-        //for()
-
-        return new int[0];
-    }
+    public void ReadMap(String s) {}
 
     @Override
     public ArrayList<Integer> getAgents() {

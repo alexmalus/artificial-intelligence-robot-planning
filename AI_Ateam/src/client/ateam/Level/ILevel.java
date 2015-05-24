@@ -23,9 +23,8 @@ public interface ILevel {
     public char getBoxLetter(int row, int col);
     public Color getBoxColor(int row, int col);
     public char getGoalLetter(int row, int col);
-    public void LoadFromString(BufferedReader serverMessages) throws Exception;
+    public void ReadMap() throws Exception;
     public ArrayList<Agent> getAgents();
     public ArrayList<Box> getBoxes();
     public ArrayList<Goal> getGoals();
-    public void setFileLength(Scanner input);
 }

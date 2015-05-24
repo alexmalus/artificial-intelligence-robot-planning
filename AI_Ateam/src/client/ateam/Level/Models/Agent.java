@@ -57,10 +57,6 @@ public class Agent {
         }
     }
 
-    public
-
-
-
 //    /**
 //     * Get the agent id from the the agent on the provided field
 //     * @param field
