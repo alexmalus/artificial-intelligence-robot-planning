@@ -16,6 +16,8 @@ import java.util.Scanner;
  */
 public class ArrayLevel implements ILevel {
 
+    private BufferedReader serverMessages = new BufferedReader( new InputStreamReader( System.in ) );
+
     public static int MAX_ROW = 70;
     public static int MAX_COLUMN = 70;
     public int agentRow;
@@ -41,17 +43,11 @@ public class ArrayLevel implements ILevel {
     public static void error( String msg ) throws Exception {
         throw new Exception( "GSCError: " + msg );
     }
-    /**
-     *
-     * @return height of level, will not be set before loadLevel
-     */
+
     public static int getHeight(){
         return ArrayLevel.height;
     }
-    /**
-     *
-     * @return width of level, will not be set before loadLevel
-     */
+
     public static int getWidth(){
         return ArrayLevel.width;
     }
@@ -147,16 +143,7 @@ public class ArrayLevel implements ILevel {
 
     }
 
-//    @Override
-//    public int[] loadFromString(String s) {
-//
-//        Scanner scanner = new Scanner(s);
-//        //for()
-//
-//        return new int[0];
-//    }
-
-    public void LoadFromString( BufferedReader serverMessages ) throws Exception {
+    public void ReadMap() throws Exception {
         Map< Character, Color > colors = new HashMap< Character, Color >();
         String line;
         Color color;
@@ -206,11 +193,17 @@ public class ArrayLevel implements ILevel {
         }
 
         if ( colorLines > 0 ) {
+            //which means that for the moment we are only considering SA cases
             error( "Box colors not supported" );
         }
 
         //initialState = new Node( null );
 
+        int[] widths = new int[70];
+        for (int i=0; i<70; ++i)
+        {
+            widths[i] = 0;
+        }
         while ( !line.equals( "" ) ) {
             for ( int i = 0; i < line.length(); i++ ) {
                 char chr = line.charAt( i );
@@ -230,9 +223,18 @@ public class ArrayLevel implements ILevel {
                     goalsArrayList.add(new Goal(chr,levelLines,i));
                     //initialState.goals[levelLines][i] = chr;
                 }
+                widths[height]++;
             }
             line = serverMessages.readLine();
             levelLines++;
+            height++;
+        }
+        for(int i=0; i<70; ++i)
+        {
+            if (widths[i] > width)
+            {
+                width = widths[i];
+            }
         }
     }
 
@@ -251,26 +253,4 @@ public class ArrayLevel implements ILevel {
         return goalsArrayList;
     }
 
-    public void setFileLength(Scanner input) {
-        String t = null;
-        ArrayLevel.width = -1;
-        while (input.hasNextLine()) {
-            t = input.nextLine();
-            if (t.equals(""))
-                continue;
-            if (t.charAt(0) != '+' && t.charAt(0) != ' ')
-                continue;
-            ArrayLevel.height++;
-            //Search width in current line
-            int tempWidth = 0;
-            Scanner tokenizer = new Scanner(t);
-            tokenizer.useDelimiter("");
-            while (tokenizer.hasNext()) {
-                tokenizer.next();
-                tempWidth++;
-            }
-            tokenizer.close();
-            if (tempWidth > ArrayLevel.width) ArrayLevel.width = tempWidth;
-        }
-    }
 }

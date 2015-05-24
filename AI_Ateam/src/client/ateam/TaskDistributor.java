@@ -83,7 +83,6 @@ public class TaskDistributor {
 
                 matchingAgent.tasks.add(new Task(matchingAgent.id,matchingBox,goal));
             }
-
         }
         else{
             for(Goal goal : goals){
@@ -91,7 +90,6 @@ public class TaskDistributor {
                 matchingAgent = agentcolors.get(matchingBox.getColor()).get(0);//only one color box per agent
                 matchingAgent.tasks.add(new Task(matchingAgent.id,matchingBox,goal));
             }
-
         }
     }
     void addGoal(Goal goal){

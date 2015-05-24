@@ -31,18 +31,15 @@ public class Main {
 
      Main main = new Main();
      main.run();
-
     }
 
     public void run() throws Exception {
-        // write your code here
-
         //arg parser?
         ILvlReader reader = new FileLvlReader(serverMessages);
         TaskDistributor tasker = new TaskDistributor(); // needs interface?
-        //load level
 
-        String strLevel = reader.readLevel();
+        //load level
+//        String strLevel = reader.readLevel();
 
         // should agents, colors, goals, boxes be read inside the level class or outside ?
 
@@ -51,22 +48,17 @@ public class Main {
         //ILevel level = new BitBoardLevel(strLevel);
         //this.level = ArrayLevel.getSingletonObject();
         this.level = ArrayLevel.getSingleton();
-        this.level.LoadFromString(serverMessages);
-        level.setFileLength(new Scanner(strLevel));
-
+        this.level = ArrayLevel.ReadMap(serverMessages);
 
         //TODO: some sort of ordering in goals, doing this at replanning may be hard, chapter 12 in the book ?
         //serialize subgoals (we probably cannot do POP)
 
-
         //task distribution
-        tasker.distributeTasks(level.getAgents(),level.getBoxes(),level.getGoals());
+        //tasker.distributeTasks(level.getAgents(),level.getBoxes(),level.getGoals());
         //tasks are now located on each agent
 
 
-
         //planning for each individual agent (linked lists)
-        System.err.println("hej");
 
         //pathfinding
 
@@ -75,13 +67,10 @@ public class Main {
 
         }
 
-
         StringJoiner strJoiner = new StringJoiner(", ","[","]");
         String act;
         while (true) { // all this is possibly a jason area (along with planning) excluding pathfinding
             // find next moves
-
-
 
             //create joint action (action merging)
 
@@ -118,8 +107,6 @@ public class Main {
                         agent.executeCurrentAction();
                     }
                 }
-
-
             }
 
             //TODO: get help, move boxes out of the way
@@ -128,8 +115,6 @@ public class Main {
 
             //TODO: think about future online planning
             //future planning, avoiding conflicts
-
-
 
             //send action
 
@@ -150,11 +135,7 @@ public class Main {
                 //for(Agent agent : level.getAgents()){
                     // execute actions on local level, if empty do next plan
                 //}
-
-
             }
-
-
 
         }
     }
