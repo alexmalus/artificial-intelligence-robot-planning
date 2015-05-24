@@ -93,6 +93,11 @@ public class Main {
 
             //resolve conflicts ( needs thinking ) + ActionHelper
 
+            //TODO: IDEA: run through all actions and gather add / delete lists into key-value maps (with affiliated task/agent)
+            //TODO: then run through said key-value maps to check for conflicts and replan accordingly
+
+            //TODO: alternative approach is just to keep an ordering of who gets to go first
+
             for(Agent agent : level.getAgents()){
                 if(agent.getNextAction().preconditions())
                 {
@@ -110,12 +115,15 @@ public class Main {
                     //replan (online replanning)
                     agent.replanTask();
                     if(agent.getNextAction().preconditions()){
-                        agent.executeCurrentAction()
+                        agent.executeCurrentAction();
                     }
                 }
 
 
             }
+
+            //TODO: get help, move boxes out of the way
+
             //System.err.println(strLevel.get(1));
 
             //TODO: think about future online planning
