@@ -97,6 +97,12 @@ public class Main {
             //TODO: then run through said key-value maps to check for conflicts and replan accordingly
 
             //TODO: alternative approach is just to keep an ordering of who gets to go first
+            List<>
+            for(Agent agent : level.getAgents()){
+                addEffects = agent.getNextAction().getAddEffects();
+                deleteEffects = agent.getNextAction().getDeleteEffects();
+                for
+            }
 
             for(Agent agent : level.getAgents()){
                 if(agent.getNextAction().preconditions())
