@@ -16,11 +16,11 @@ import client.ateam.Level.Models.Agent;
 import client.ateam.LvlReader.FileLvlReader;
 import client.ateam.LvlReader.ILvlReader;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Scanner;
-import java.util.StringJoiner;
+import java.util.*;
 
 public class Main {
 
@@ -86,11 +86,31 @@ public class Main {
             //TODO: then run through said key-value maps to check for conflicts and replan accordingly
 
             //TODO: alternative approach is just to keep an ordering of who gets to go first
-            List<>
+            ArrayList<Literal> addEffects = new ArrayList<Literal>();
+            ArrayList<Literal> deleteEffects = new ArrayList<Literal>();
+            ArrayList<Literal> effects = new ArrayList<Literal>();
+            Map<Point,ArrayList<Literal>> effectlist = new HashMap<Point,ArrayList<Literal>>();
+            //accumulate effects of each agent
             for(Agent agent : level.getAgents()){
-                addEffects = agent.getNextAction().getAddEffects();
-                deleteEffects = agent.getNextAction().getDeleteEffects();
-                for
+                //addEffects = agent.getNextAction().getAddEffects();
+                //deleteEffects = agent.getNextAction().getDeleteEffects();
+                action = agent/get
+                effects = agent.getNextAction().getEffects();
+                /*for(Literal addEffect : addEffects){
+                    //add effect to key value set
+                }
+                for(Literal deleteEffect : deleteEffects){
+                    //add effect to key value set
+                }*/
+                for(Literal effect : effects){
+                    //add effect to key value set
+
+                }
+            }
+            //match preconditions and effects, adding conflicts to a conflict list
+            for(Map.Entry<Point,ArrayList<Literal>> entry : effectlist.entrySet()){
+                //check add and delete lists against eachother
+
             }
 
             for(Agent agent : level.getAgents()){
