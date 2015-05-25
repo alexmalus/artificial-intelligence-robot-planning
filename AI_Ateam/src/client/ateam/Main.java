@@ -174,6 +174,7 @@ public class Main {
                     // create conflict
                     // add affiliated agents
                     //TODO: run through agent IDs in order to create conflict object, which will be resolved later
+                    // is somewhat done..
                     conflictList.add(new Conflict(entry.getKey(),agentIDs));
 
                     resolvedGhostFields.put(entry.getKey(),false);
@@ -184,7 +185,7 @@ public class Main {
                 // if
             }
 
-            //TODO:
+            //TODO: (this seems done but needs to be rechecked)
             // Agents not flagged will go through a last precondition check in order to check if any stationary boxes are in the way
             for(Agent agent : level.getAgents()){
                 if(agent.getNextAction().preconditions() && resolvedGhostFields.getOrDefault(agent.getNextAction().targetLoc, true))
@@ -198,7 +199,7 @@ public class Main {
                     //check if agent is noted in conflict list, otherwise add as conflict for replanning
                     //agent.getNextAction().getConflicts();
                     //add conflict
-                    conflictList.add(new Conflict(agent.getNextAction().targetLoc,agent.id));
+                    conflictList.add(new Conflict(agent.getNextAction().targetLoc,new ArrayList<Integer>(agent.id)));
                     // find conflicting objects/agents
 
                     //replan (online replanning)
@@ -209,7 +210,8 @@ public class Main {
                 }
             }
 
-            //TODO: resolve conflicts from conflict list
+            //TODO: resolve conflicts from conflict list -> replan w.r.t. multiple agents
+            //TODO: is feasible due to assumption of conflicts being scarce/few.
             for(Conflict conflict: conflictList){
 
             }
