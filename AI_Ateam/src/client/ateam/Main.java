@@ -89,7 +89,7 @@ public class Main {
             //check both preconditions from level and preconditions from key-value maps
 
 
-            //TODO: alternative approach is just to keep an ordering of who gets to go first
+            //TODO: alternative approach is just to keep an ordering of who gets to go first (simpler)
             //ArrayList<Literal> addEffects = new ArrayList<Literal>();
             //ArrayList<Literal> deleteEffects = new ArrayList<Literal>();
             ArrayList<Literal> effects;// = new ArrayList<Literal>();
@@ -188,7 +188,7 @@ public class Main {
             //TODO: (this seems done but needs to be rechecked)
             // Agents not flagged will go through a last precondition check in order to check if any stationary boxes are in the way
             for(Agent agent : level.getAgents()){
-                if(agent.getNextAction().preconditions() && resolvedGhostFields.getOrDefault(agent.getNextAction().targetLoc, true))
+                if(agent.getNextAction().preconditions() && resolvedGhostFields.getOrDefault(agent.getNextAction().targetLocation, true))
                 {
                     //simulate next moves? or simply perform them
                     //if no next moves exist, check for goal & create next plan
@@ -199,7 +199,7 @@ public class Main {
                     //check if agent is noted in conflict list, otherwise add as conflict for replanning
                     //agent.getNextAction().getConflicts();
                     //add conflict
-                    conflictList.add(new Conflict(agent.getNextAction().targetLoc,new ArrayList<Integer>(agent.id)));
+                    conflictList.add(new Conflict(agent.getNextAction().targetLocation,agent.id));
                     // find conflicting objects/agents
 
                     //replan (online replanning)
