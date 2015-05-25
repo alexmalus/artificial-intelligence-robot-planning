@@ -25,7 +25,6 @@ public class Agent {
         this.id = id;
         this.row = row;
         this.column = column;
-
     }
 
     public Action getNextAction(){

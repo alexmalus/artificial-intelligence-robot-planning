@@ -67,7 +67,7 @@ public class TaskDistributor {
         int dist=-1;
         if(identicalColorAgents){
             for(Goal goal : goals){
-                matchingBox = boxletters.get(goal.getGoalLetter());
+                matchingBox = boxletters.get(Character.toUpperCase(goal.getGoalLetter()));
                 matchingAgents = agentcolors.get(matchingBox.getColor());
 
                 //find best matching agent
@@ -85,8 +85,8 @@ public class TaskDistributor {
             }
         }
         else{
-            for(Goal goal : goals){
-                matchingBox = boxletters.get(goal.getGoalLetter());
+            for(Goal goal : goals) {
+                matchingBox = boxletters.get(Character.toUpperCase(goal.getGoalLetter()));
                 matchingAgent = agentcolors.get(matchingBox.getColor()).get(0);//only one color box per agent
                 matchingAgent.tasks.add(new Task(matchingAgent.id,matchingBox,goal));
             }

@@ -20,14 +20,20 @@ public class ArrayLevel implements ILevel {
 
     public static int MAX_ROW = 70;
     public static int MAX_COLUMN = 70;
+
     public int agentRow;
     public int agentCol;
+
     public boolean[][] walls = new boolean[MAX_ROW][MAX_COLUMN];
     public char[][] boxes = new char[MAX_ROW][MAX_COLUMN];
     public char[][] goals = new char[MAX_ROW][MAX_COLUMN];
+
     private static int height;
     private static int width;
     public static int[] realMap; //The current parsed map
+    // Our list of each cell in this ArrayLevel
+    private static HashMap<Point, Cell> cells = null;
+
     private static ArrayList<Agent> agentsArrayList = new ArrayList<Agent>();
     private static ArrayList<Box> boxesArrayList= new ArrayList<Box>();
     private static ArrayList<Goal> goalsArrayList= new ArrayList<Goal>();
@@ -204,6 +210,16 @@ public class ArrayLevel implements ILevel {
         {
             widths[i] = 0;
         }
+
+        //it means we are dealing with SA case where we only have on the .lvl file the map and not the declarations red: 0, etc etc
+        //so just add default case for one agent, the color blue
+        //for the moment we're considering the case for the SA to just have one box in the map called A
+        if (colors.isEmpty())
+        {
+            colors.put('0', Color.BLUE);
+            colors.put('A', Color.BLUE);
+        }
+
         while ( !line.equals( "" ) ) {
             for ( int i = 0; i < line.length(); i++ ) {
                 char chr = line.charAt( i );
@@ -236,6 +252,20 @@ public class ArrayLevel implements ILevel {
                 width = widths[i];
             }
         }
+
+        // Create our cellList
+        cells = new HashMap<Point, Cell>(width * height);
+
+        // Set the minX and minY coordinates
+        minX = (height * cellSize) / 2;
+        minY = (width * cellSize) / 2;
+
+        // Set the maxX and maxY coordinates based on arrayLevel and cell size
+        maxX = (minX + (height * cellSize));
+        maxY = (minY + (width * cellSize));
+
+        // Set clip rectangle
+        clip = new Rectangle(getMinX(), getMinY(), (height * getCellSize()) + 1, (width * getCellSize()) + 1);
     }
 
     @Override
@@ -252,5 +282,37 @@ public class ArrayLevel implements ILevel {
     public ArrayList<Goal> getGoals() {
         return goalsArrayList;
     }
+
+    // Return the cell list
+    public static HashMap<Point, Cell> getCells()
+    {
+        return cells;
+    }
+
+    // Return a cell from the ArrayLevel (Point cell)
+    public static Cell getCell(Point cell) {
+        return cells.get(cell);
+    }
+
+    // Return a cell from the ArrayLevel (int row, int column)
+    public static Cell getCell(int r, int c) {
+        return getCell(new Point(r, c));
+    }
+
+    // Return a cell from the ArrayLevel (int x, int y)
+    public static Cell getCellFromLocation(int x, int y) {
+        return getCell(cellFromLocation(x, y));
+    }
+
+    // Return a cell from the ArrayLevel (Point loc)
+    public static Cell getCellFromLocation(Point loc) {
+        return getCell(cellFromLocation(loc.x, loc.y));
+    }
+
+    // Return this ArrayLevel's cell size
+    public static int getCellSize() {
+        return cellSize;
+    }
+
 
 }
