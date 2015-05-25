@@ -10,11 +10,13 @@ package client.ateam;
 * TaskDistributor
 * */
 
+import client.ateam.Level.Action;
 import client.ateam.Level.ArrayLevel;
 import client.ateam.Level.ILevel;
 import client.ateam.Level.Models.Agent;
 import client.ateam.LvlReader.FileLvlReader;
 import client.ateam.LvlReader.ILvlReader;
+import client.ateam.conflictHandler.Conflict;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -82,20 +84,40 @@ public class Main {
 
             //resolve conflicts ( needs thinking ) + ActionHelper
 
-            //TODO: IDEA: run through all actions and gather add / delete lists into key-value maps (with affiliated task/agent)
-            //TODO: then run through said key-value maps to check for conflicts and replan accordingly
+            //IDEA: run through all actions and gather add / delete lists into key-value maps (with affiliated task/agent)
+            //then run through said key-value maps to check for conflicts and replan accordingly
+            //check both preconditions from level and preconditions from key-value maps
+
 
             //TODO: alternative approach is just to keep an ordering of who gets to go first
-            ArrayList<Literal> addEffects = new ArrayList<Literal>();
-            ArrayList<Literal> deleteEffects = new ArrayList<Literal>();
-            ArrayList<Literal> effects = new ArrayList<Literal>();
+            //ArrayList<Literal> addEffects = new ArrayList<Literal>();
+            //ArrayList<Literal> deleteEffects = new ArrayList<Literal>();
+            ArrayList<Literal> effects;// = new ArrayList<Literal>();
+            ArrayList<Integer> agentIDs;
+            ArrayList<Conflict> conflictList = new ArrayList<Conflict>();
             Map<Point,ArrayList<Literal>> effectlist = new HashMap<Point,ArrayList<Literal>>();
+            Map<Point,Boolean> resolvedGhostFields = new HashMap<Point,Boolean>();
+            Action action;
+
             //accumulate effects of each agent
             for(Agent agent : level.getAgents()){
+
+                // first we check simple preconditions
+                // these are identified as isAgent, isBox, isNeighbor and they concern the validity of agent and boxlocations
+
+
+
+
+                // this part concerns the conflict detection, this is concerned with the isFree literal
+                // The isFree literal is the main source of conflicts and limitation of movement
+                // An agent should never attempt to move into a wall due to action planning
+
+                // boxes in the way may have to be checked
+
                 //addEffects = agent.getNextAction().getAddEffects();
                 //deleteEffects = agent.getNextAction().getDeleteEffects();
-                action = agent/get
-                effects = agent.getNextAction().getEffects();
+                action = agent.getNextAction();
+                effects = action.getEffects();
                 /*for(Literal addEffect : addEffects){
                     //add effect to key value set
                 }
@@ -105,16 +127,67 @@ public class Main {
                 for(Literal effect : effects){
                     //add effect to key value set
 
+                    //check if location has already been created in map
+                    if(effectlist.containsKey(effect.location))
+                    {
+                        effectlist.get(effect.location).add(effect);
+                    }
+                    // add new location to map
+                    else
+                    {
+                        effectlist.put(effect.location,new ArrayList<Literal>());
+                        effectlist.get(effect.location).add(effect);
+                    }
+
                 }
             }
-            //match preconditions and effects, adding conflicts to a conflict list
-            for(Map.Entry<Point,ArrayList<Literal>> entry : effectlist.entrySet()){
-                //check add and delete lists against eachother
+            // now we have the current state and the 'ghost' state of the level
 
+            // we now check for conflicts in the states
+
+            // First we match preconditions and effects, adding conflicts to a conflict list - everything concerns the isFree() literal
+            // these will be flagged for replanning
+            int counter;
+            for(Map.Entry<Point,ArrayList<Literal>> entry : effectlist.entrySet()){
+                // check add and delete lists against eachother
+                // add conflict with affiliated agents all linked to the conflict
+                // conflict will be solved by replanning after other actions have been performed.
+                agentIDs = new ArrayList<Integer>();
+                counter = 0;
+                for(Literal effect : entry.getValue()){
+                    if(effect.truthvalue)
+                    {
+                        counter+=1;
+
+                        //add list of effects containing the agent IDs
+                        agentIDs.add(effect.agentID);
+                    }
+                    else
+                    {
+                        counter-=1;
+                    }
+                }
+
+                // if counter is greater than zero then a conflict will exist (more agents accessing field than leaving)
+                if(counter>0)
+                {
+                    // create conflict
+                    // add affiliated agents
+                    //TODO: run through agent IDs in order to create conflict object, which will be resolved later
+                    conflictList.add(new Conflict(entry.getKey(),agentIDs));
+
+                    resolvedGhostFields.put(entry.getKey(),false);
+                }
+                else{
+                    resolvedGhostFields.put(entry.getKey(),true);
+                }
+                // if
             }
 
+            //TODO:
+            // Agents not flagged will go through a last precondition check in order to check if any stationary boxes are in the way
             for(Agent agent : level.getAgents()){
-                if(agent.getNextAction().preconditions())
+                if(agent.getNextAction().preconditions() && resolvedGhostFields.getOrDefault(agent.getNextAction().targetLoc, true))
                 {
                     //simulate next moves? or simply perform them
                     //if no next moves exist, check for goal & create next plan
@@ -122,18 +195,25 @@ public class Main {
                 }
                 else
                 {
-                    agent.getNextAction().getConflicts();
+                    //check if agent is noted in conflict list, otherwise add as conflict for replanning
+                    //agent.getNextAction().getConflicts();
                     //add conflict
-
+                    conflictList.add(new Conflict(agent.getNextAction().targetLoc,agent.id));
                     // find conflicting objects/agents
 
                     //replan (online replanning)
-                    agent.replanTask();
-                    if(agent.getNextAction().preconditions()){
-                        agent.executeCurrentAction();
-                    }
+                    //agent.replanTask();
+                    //if(agent.getNextAction().preconditions()){
+                    //    agent.executeCurrentAction();
+                    //}
                 }
             }
+
+            //TODO: resolve conflicts from conflict list
+            for(Conflict conflict: conflictList){
+
+            }
+
 
             //TODO: get help, move boxes out of the way
 
