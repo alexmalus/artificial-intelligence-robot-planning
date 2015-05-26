@@ -63,7 +63,7 @@ public class Main {
         //planning for each individual agent (linked lists)
 
         //pathfinding
-
+        //TODO: planning and pathfinding for each agent
         for(Agent agent: level.getAgents()){
             //plan the initial tasks of each agent
 
@@ -212,6 +212,7 @@ public class Main {
 
             //TODO: resolve conflicts from conflict list -> replan w.r.t. multiple agents
             //TODO: is feasible due to assumption of conflicts being scarce/few.
+            //TODO: no. of agents is upper bounded by 4 since there are only 4 directions of movement.
             for(Conflict conflict: conflictList){
 
             }
