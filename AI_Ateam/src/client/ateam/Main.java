@@ -178,7 +178,6 @@ public class Main {
                 // if
             }
 
-            //TODO: (this seems done but needs to be rechecked)
             // Agents not flagged will go through a last precondition check in order to check if any stationary boxes are in the way
             for(Agent agent : level.getAgents()){
 
@@ -224,7 +223,7 @@ public class Main {
                 }
                 else
                 {
-
+                    //TODO: multi-agent planning has to be done by and external class handing out individual plans to each agent, if we want this
                 }
 
             }

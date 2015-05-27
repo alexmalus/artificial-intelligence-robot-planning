@@ -36,6 +36,7 @@ public class ArrayLevel implements ILevel {
     // Our list of each cell in this ArrayLevel
     private static HashMap<Point, Cell> cells = null;
 
+    //TODO: there has to be a list of all Tasks in the system, Agents remove tasks when they're done with them. Hence they must be kept here.
     private static ArrayList<Agent> agentsArrayList = new ArrayList<Agent>();
     private static ArrayList<Box> boxesArrayList= new ArrayList<Box>();
     private static ArrayList<Goal> goalsArrayList= new ArrayList<Goal>();

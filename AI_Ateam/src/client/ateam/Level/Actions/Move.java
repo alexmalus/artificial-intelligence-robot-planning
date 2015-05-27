@@ -12,6 +12,8 @@ import java.util.ArrayList;
  */
 public class Move implements IAction {
 
+    //TODO: Direction can be found from cells and thus can be calculated inside the action instead of passing it as a parameter
+
     private int agentId;
     private Direction dirAgent;
     private Point currentCell;

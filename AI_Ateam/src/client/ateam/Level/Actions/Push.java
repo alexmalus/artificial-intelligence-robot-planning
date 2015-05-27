@@ -11,6 +11,7 @@ import java.util.ArrayList;
  * Created by Lasse on 5/27/15.
  */
 public class Push implements IAction {
+    //TODO: Direction can be found from cells and thus can be calculated inside the action instead of passing it as a parameter
     private int agentId;
     private char boxLetter;
     private Direction dirAgent;
