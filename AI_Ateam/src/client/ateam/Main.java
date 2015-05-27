@@ -61,10 +61,6 @@ public class Main {
 
         //pathfinding
 
-
-
-
-        //TODO: planning and pathfinding for each agent
         for(Agent agent: level.getAgents()){
             //plan the initial tasks of each agent
             agent.planning();
@@ -174,8 +170,6 @@ public class Main {
                 {
                     // create conflict
                     // add affiliated agents
-                    //TODO: run through agent IDs in order to create conflict object, which will be resolved later
-                    // is somewhat done..
                     conflictList.add(new Conflict(entry.getKey(),agentIDs));
 
                     resolvedGhostFields.put(entry.getKey(),false);

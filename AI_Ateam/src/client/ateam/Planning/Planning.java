@@ -18,7 +18,7 @@ public class Planning {
         // NOTE: FIRST IF SHOULD NEVER BE ENTERED, BUT IT'S THERE AS A SAFETY CHECK
         if(agent.currentTask.isTaskCompleted())
         {
-            agent.StartNextTask();
+            agent.planning();
 
             //recursion stuff
             this.findPlan(agent);
