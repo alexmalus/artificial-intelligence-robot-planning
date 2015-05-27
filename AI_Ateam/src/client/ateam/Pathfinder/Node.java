@@ -1,6 +1,9 @@
 package client.ateam.Pathfinder;
 
 //import client.ateam.Level.State;
+//TODO:commented out section
+
+/*
 
 import client.ateam.Level.Cell;
 
@@ -71,3 +74,4 @@ public class Node {
         }
 }
 
+*/

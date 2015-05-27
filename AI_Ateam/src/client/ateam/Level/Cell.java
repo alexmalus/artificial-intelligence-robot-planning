@@ -2,7 +2,8 @@ package client.ateam.Level;
 
 import java.awt.Point;
 import java.awt.Rectangle;
-
+//TODO: commented out section
+/*
 // Grid cell class
 public class Cell
 {
@@ -71,4 +72,4 @@ public class Cell
         return ("I am a pretty String. Look at mee..");
     }
 
-}
+}*/

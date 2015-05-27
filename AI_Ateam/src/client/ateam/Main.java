@@ -18,7 +18,9 @@ import client.ateam.conflictHandler.Conflict;
 
 import java.awt.*;
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.util.*;
 
 public class Main {
@@ -34,10 +36,9 @@ public class Main {
 
     public void run() throws Exception {
         //arg parser?
+        //System.setErr(new PrintStream(new FileOutputStream("log.txt")));
+        System.err.format("LOLOLOLOLOL");
         TaskDistributor tasker = new TaskDistributor(); // needs interface?
-
-        //load level
-//        String strLevel = reader.readLevel();
 
         // should agents, colors, goals, boxes be read inside the level class or outside ?
 
@@ -52,7 +53,7 @@ public class Main {
         //serialize subgoals (we probably cannot do POP)
 
         //task distribution
-        //tasker.distributeTasks(level.getAgents(),level.getBoxes(),level.getGoals());
+        tasker.distributeTasks(level.getAgents(),level.getBoxes(),level.getGoals());
         //tasks are now located on each agent
 
 
@@ -63,6 +64,11 @@ public class Main {
         for(Agent agent: level.getAgents()){
             //plan the initial tasks of each agent
             agent.planning();
+            System.err.println("Agent ID: "+agent.id);
+            System.err.println("Box Letter: "+agent.tasks);
+            /*System.err.println("Box Location x: "+agent.tasks.get(0).box.getColumn()+" y: "+agent.tasks.get(0).box.getRow());
+            System.err.println("Goal Letter:"+agent.tasks.get(0).goal.getGoalLetter());
+            System.err.println("");*/
         }
 
         StringJoiner strJoiner = new StringJoiner(", ","[","]");

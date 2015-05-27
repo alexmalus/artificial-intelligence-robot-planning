@@ -47,6 +47,8 @@ public class TaskDistributor {
             }
         }
 
+
+
         for(Color color: colors){
             boxcolors.put(color, new ArrayList<Box>());
             agentcolors.put(color, new ArrayList<Agent>());
@@ -80,8 +82,7 @@ public class TaskDistributor {
                         dist = Math.abs(agent.row-matchingBox.getRow())+Math.abs(agent.column-matchingBox.getColumn());
                     }
                 }
-
-                matchingAgent.tasks.add(new Task(matchingAgent.id,matchingBox,goal));
+                matchingAgent.tasks.add(new Task(matchingAgent.id, matchingBox, goal));
             }
         }
         else{
@@ -89,6 +90,7 @@ public class TaskDistributor {
                 matchingBox = boxletters.get(Character.toUpperCase(goal.getGoalLetter()));
                 matchingAgent = agentcolors.get(matchingBox.getColor()).get(0);//only one color box per agent
                 matchingAgent.tasks.add(new Task(matchingAgent.id,matchingBox,goal));
+                System.err.println("Matching ID: "+matchingAgent.tasks.get(0).box.getBoxLetter());
             }
         }
     }

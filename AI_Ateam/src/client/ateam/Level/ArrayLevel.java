@@ -34,7 +34,8 @@ public class ArrayLevel implements ILevel {
     private static int width;
     public static int[] realMap; //The current parsed map
     // Our list of each cell in this ArrayLevel
-    private static HashMap<Point, Cell> cells = null;
+    //TODO: commented out line
+    //private static HashMap<Point, Cell> cells = null;
 
     //TODO: there has to be a list of all Tasks in the system, Agents remove tasks when they're done with them. Hence they must be kept here.
     private static ArrayList<Agent> agentsArrayList = new ArrayList<Agent>();
@@ -255,7 +256,8 @@ public class ArrayLevel implements ILevel {
                 width = widths[i];
             }
         }
-
+        //TODO: commented out section
+/*
         // Create our cellList
         cells = new HashMap<Point, Cell>(width * height);
 
@@ -269,6 +271,7 @@ public class ArrayLevel implements ILevel {
 
         // Set clip rectangle
         clip = new Rectangle(getMinX(), getMinY(), (height * getCellSize()) + 1, (width * getCellSize()) + 1);
+        */
     }
 
     @Override
@@ -300,7 +303,8 @@ public class ArrayLevel implements ILevel {
     public void executePullAction(int agentId, char boxLetter, Point currentCell, Point boxCell, Point tarCell) {
         //TODO: this
     }
-
+    //TODO: commented out section
+    /*
     // Return the cell list
     public static HashMap<Point, Cell> getCells()
     {
@@ -317,6 +321,7 @@ public class ArrayLevel implements ILevel {
         return getCell(new Point(r, c));
     }
 
+
     // Return a cell from the ArrayLevel (int x, int y)
     public static Cell getCellFromLocation(int x, int y) {
         return getCell(cellFromLocation(x, y));
@@ -331,6 +336,6 @@ public class ArrayLevel implements ILevel {
     public static int getCellSize() {
         return cellSize;
     }
-
+*/
 
 }

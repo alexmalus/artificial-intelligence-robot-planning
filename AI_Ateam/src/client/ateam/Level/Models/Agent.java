@@ -15,10 +15,11 @@ public class Agent {
     public Color color;
     public int row;
     public int column;
+    //TODO: list of tasks could be priority queue
     public List<Task> tasks = new ArrayList<Task>();
     public Task currentTask;
     private IAction currentAction;
-    public List<IAction> actionList = new ArrayList<>();
+    public List<IAction> actionList = new ArrayList<IAction>();
 
     public Agent(int id, Color color, int row, int column){
         this.color = color;
@@ -44,7 +45,13 @@ public class Agent {
     public IAction getCurrentAction(){
         if(currentAction == null)
         {
-            currentAction = actionList.remove(0);
+            //TODO: empty list checks
+            if(actionList.isEmpty()) {
+
+            }
+            else{
+                currentAction = actionList.remove(0);
+            }
         }
         return currentAction;
     }
@@ -74,10 +81,16 @@ public class Agent {
         actionList.clear();
 
         if (currentTask == null) {
-            currentTask = tasks.remove(0);
+            if(tasks.isEmpty()) {
+                return;
+            }
+            else {
+                currentTask = tasks.remove(0);
+            }
         }
         if(currentTask.isTaskCompleted())
         {
+            //TODO: empty list checks
             if(tasks.isEmpty())
             {
                 //idle or help others
