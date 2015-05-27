@@ -29,7 +29,7 @@ public class Planning {
             // find solution
             if(!findBox2Goal(agent)){
                 // if solution can't be found
-
+                //TODO: this is not done (link to pathfinding)
                 //ask for help or attempt other task
             }
         }
@@ -42,6 +42,7 @@ public class Planning {
             // recursion till solution has been found
             if (!this.findBox(agent)) {
                 // if solution can't be found -> ask for help or attempt other task
+                //TODO: this is not done (link to pathfinding)
             }
 
         }
