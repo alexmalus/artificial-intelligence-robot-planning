@@ -20,4 +20,9 @@ public class Task {
         //this can allow goals to be empty cells (helping other agents or themselves)
         return (box.getColumn()==goal.getColumn())&&(box.getRow()==goal.getRow());
     }
+
+    @Override
+    public String toString(){
+        return ("agentID: " + agentID + ",box: " + box.getBoxLetter() + ",goal: " + goal + ",taskType: " + type);
+    }
 }

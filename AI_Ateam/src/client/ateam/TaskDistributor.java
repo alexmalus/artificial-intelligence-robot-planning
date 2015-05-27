@@ -1,5 +1,6 @@
 package client.ateam;
 
+import client.ateam.Level.ArrayLevel;
 import client.ateam.Level.Models.Agent;
 import client.ateam.Level.Models.Box;
 import client.ateam.Level.Models.Goal;
@@ -93,6 +94,8 @@ public class TaskDistributor {
                 System.err.println("Matching ID: "+matchingAgent.tasks.get(0).box.getBoxLetter());
             }
         }
+        System.err.println(agents.get(0).tasks.get(0).box.getBoxLetter());
+        System.err.println(ArrayLevel.getSingleton().getAgents().get(0).tasks.isEmpty());
     }
     void addGoal(Goal goal){
 

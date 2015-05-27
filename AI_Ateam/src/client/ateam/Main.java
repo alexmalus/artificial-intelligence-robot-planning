@@ -54,6 +54,8 @@ public class Main {
 
         //task distribution
         tasker.distributeTasks(level.getAgents(),level.getBoxes(),level.getGoals());
+        System.err.println("Checking here: ");
+        System.err.println(level.getAgents());
         //tasks are now located on each agent
 
 
@@ -63,9 +65,10 @@ public class Main {
 
         for(Agent agent: level.getAgents()){
             //plan the initial tasks of each agent
-            agent.planning();
+//            agent.planning();
             System.err.println("Agent ID: "+agent.id);
-            System.err.println("Box Letter: "+agent.tasks);
+//            System.err.println("Box Letter: "+agent.tasks.isEmpty());
+            System.err.println(agent.tasks.get(0).toString());
             /*System.err.println("Box Location x: "+agent.tasks.get(0).box.getColumn()+" y: "+agent.tasks.get(0).box.getRow());
             System.err.println("Goal Letter:"+agent.tasks.get(0).goal.getGoalLetter());
             System.err.println("");*/
@@ -190,7 +193,8 @@ public class Main {
                 /*TODO: this if-loop will not work if an agent is moving out of the field another agent is trying to move into
                   TODO: since preconditions will fail but resolvedGhostFields will be true. A splitting of checks is needed
                   */
-                if(agent.getCurrentAction().preconditions() && resolvedGhostFields.getOrDefault(agent.getCurrentAction().getTargetLocation(), true))
+                if((agent.getCurrentAction().preconditions() && resolvedGhostFields.getOrDefault(agent.getCurrentAction().getTargetLocation(), true)) ||
+                        (resolvedGhostFields.getOrDefault(agent.getCurrentAction().getTargetLocation(), false)))
                 {
                     //simulate next moves? or simply perform them
                     //if no next moves exist, check for goal & create next plan

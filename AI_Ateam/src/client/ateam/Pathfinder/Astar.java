@@ -1,5 +1,5 @@
 package client.ateam.Pathfinder;
-
+/*
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Stack;
@@ -216,6 +216,7 @@ public class AStar {
      *
      **/
 
+/*
     // Returns a list of Nodes surrounding parentNode
     private ArrayList<Node> neighbors(Node parentNode)
     {
@@ -382,3 +383,4 @@ public class AStar {
         needPath 	= true;
     }
 }
+*/
