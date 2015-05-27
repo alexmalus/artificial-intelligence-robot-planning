@@ -285,6 +285,21 @@ public class ArrayLevel implements ILevel {
         return goalsArrayList;
     }
 
+    @Override
+    public void executeMoveAction(int agentId, Point currentCell, Point tarCell) {
+        //TODO: this
+    }
+
+    @Override
+    public void executePushAction(int agentId, char boxLetter, Point currentCell, Point boxCell, Point boxTarCell) {
+        //TODO: this
+    }
+
+    @Override
+    public void executePullAction(int agentId, char boxLetter, Point currentCell, Point boxCell, Point tarCell) {
+        //TODO: this
+    }
+
     // Return the cell list
     public static HashMap<Point, Cell> getCells()
     {

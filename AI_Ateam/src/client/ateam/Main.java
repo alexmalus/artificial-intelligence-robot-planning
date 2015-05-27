@@ -93,7 +93,6 @@ public class Main {
             ArrayList<Conflict> conflictList = new ArrayList<Conflict>();
             Map<Point,ArrayList<Free>> effectlist = new HashMap<Point,ArrayList<Free>>();
             Map<Point,Boolean> resolvedGhostFields = new HashMap<Point,Boolean>();
-            Action action;
 
             //accumulate effects of each agent
             for(Agent agent : level.getAgents()){
@@ -186,7 +185,7 @@ public class Main {
                 /*TODO: this if-loop will not work if an agent is moving out of the field another agent is trying to move into
                   TODO: since preconditions will fail but resolvedGhostFields will be true. A splitting of checks is needed
                   */
-                if(agent.getCurrentAction().preconditions() && resolvedGhostFields.getOrDefault(agent.getCurrentAction().targetLocation, true))
+                if(agent.getCurrentAction().preconditions() && resolvedGhostFields.getOrDefault(agent.getCurrentAction().getTargetLocation(), true))
                 {
                     //simulate next moves? or simply perform them
                     //if no next moves exist, check for goal & create next plan
@@ -197,7 +196,7 @@ public class Main {
                     //check if agent is noted in conflict list, otherwise add as conflict for replanning
                     //agent.getNextAction().getConflicts();
                     //add conflict
-                    conflictList.add(new Conflict(agent.getCurrentAction().targetLocation,agent.id));
+                    conflictList.add(new Conflict(agent.getCurrentAction().getTargetLocation(),agent.id));
                     // find conflicting objects/agents
 
                     //replan (online replanning)

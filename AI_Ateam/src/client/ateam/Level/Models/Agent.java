@@ -1,6 +1,7 @@
 package client.ateam.Level.Models;
 
 import client.ateam.Level.Action;
+import client.ateam.Level.Actions.IAction;
 import client.ateam.Task;
 import client.ateam.projectEnum.Color;
 
@@ -16,8 +17,8 @@ public class Agent {
     //private int pos
     public List<Task> tasks = new ArrayList<Task>();
     public Task currentTask;
-    private Action currentAction;
-    public List<Action> actionList = new ArrayList<Action>();
+    private IAction currentAction;
+    public List<IAction> actionList = new ArrayList<>();
 
     public Agent(int id, Color color, int row, int column){
         this.color = color;
@@ -41,7 +42,7 @@ public class Agent {
     /*
     Getter for the currentaction
      */
-    public Action getCurrentAction(){
+    public IAction getCurrentAction(){
         if(currentAction == null)
         {
             currentAction = actionList.remove(0);

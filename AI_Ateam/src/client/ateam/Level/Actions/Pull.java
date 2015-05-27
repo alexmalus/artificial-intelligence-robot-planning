@@ -54,7 +54,7 @@ public class Pull implements IAction {
 
     @Override
     public void executeAction() {
-        //TODO: this needs to be done
+        this.level.executePullAction(this.agentId,this.boxLetter,this.currentCell,this.boxCell,this.tarCell);
     }
 
     @Override

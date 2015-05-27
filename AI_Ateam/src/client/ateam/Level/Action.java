@@ -8,7 +8,9 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Action {
-
+    /*
+    Legacy class, see Actions folder.
+    */
     public Point targetLocation;
 
     public boolean preconditions(){

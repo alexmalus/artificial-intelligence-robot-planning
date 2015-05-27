@@ -5,6 +5,7 @@ import client.ateam.Level.Models.Box;
 import client.ateam.Level.Models.Goal;
 import client.ateam.projectEnum.Color;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -27,4 +28,8 @@ public interface ILevel {
     public ArrayList<Agent> getAgents();
     public ArrayList<Box> getBoxes();
     public ArrayList<Goal> getGoals();
+
+    public void executeMoveAction(int agentId, Point currentCell, Point tarCell);
+    public void executePushAction(int agentId, char boxLetter, Point currentCell, Point boxCell, Point boxTarCell);
+    public void executePullAction(int agentId, char boxLetter, Point currentCell, Point boxCell, Point tarCell);
 }
