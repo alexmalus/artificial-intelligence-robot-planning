@@ -1,6 +1,6 @@
 package client.ateam.Level;
 
-import client.ateam.Literal;
+import client.ateam.Free;
 import client.ateam.projectEnum.ActionType;
 import client.ateam.projectEnum.Direction;
 
@@ -19,9 +19,9 @@ public class Action {
     private ActionType type;
     private Direction direction;
     private Direction boxDirection;
-    private ArrayList<Literal> effects;
+    private ArrayList<Free> effects;
 
-    public ArrayList<Literal> getEffects() {
+    public ArrayList<Free> getEffects() {
         return effects;
     }
 }

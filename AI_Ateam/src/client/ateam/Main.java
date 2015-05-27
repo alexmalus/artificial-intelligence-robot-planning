@@ -18,7 +18,6 @@ import client.ateam.conflictHandler.Conflict;
 
 import java.awt.*;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
@@ -87,12 +86,12 @@ public class Main {
 
 
             //TODO: alternative approach is just to keep an ordering of who gets to go first (simpler)
-            //ArrayList<Literal> addEffects = new ArrayList<Literal>();
-            //ArrayList<Literal> deleteEffects = new ArrayList<Literal>();
-            ArrayList<Literal> effects;// = new ArrayList<Literal>();
+            //ArrayList<Free> addEffects = new ArrayList<Free>();
+            //ArrayList<Free> deleteEffects = new ArrayList<Free>();
+            ArrayList<Free> effects;// = new ArrayList<Free>();
             ArrayList<Integer> agentIDs;
             ArrayList<Conflict> conflictList = new ArrayList<Conflict>();
-            Map<Point,ArrayList<Literal>> effectlist = new HashMap<Point,ArrayList<Literal>>();
+            Map<Point,ArrayList<Free>> effectlist = new HashMap<Point,ArrayList<Free>>();
             Map<Point,Boolean> resolvedGhostFields = new HashMap<Point,Boolean>();
             Action action;
 
@@ -115,13 +114,13 @@ public class Main {
                 //deleteEffects = agent.getNextAction().getDeleteEffects();
 
 
-                /*for(Literal addEffect : addEffects){
+                /*for(Free addEffect : addEffects){
                     //add effect to key value set
                 }
-                for(Literal deleteEffect : deleteEffects){
+                for(Free deleteEffect : deleteEffects){
                     //add effect to key value set
                 }*/
-                for(Literal effect : agent.getCurrentAction().getEffects()){
+                for(Free effect : agent.getCurrentAction().getEffects()){
                     //add effect to key value set
 
                     //check if location has already been created in map
@@ -132,7 +131,7 @@ public class Main {
                     // add new location to map
                     else
                     {
-                        effectlist.put(effect.location,new ArrayList<Literal>());
+                        effectlist.put(effect.location,new ArrayList<Free>());
                         effectlist.get(effect.location).add(effect);
                     }
 
@@ -145,14 +144,14 @@ public class Main {
             // First we match preconditions and effects, adding conflicts to a conflict list - everything concerns the isFree() literal
             // these will be flagged for replanning
             int counter;
-            for(Map.Entry<Point,ArrayList<Literal>> entry : effectlist.entrySet()){
+            for(Map.Entry<Point,ArrayList<Free>> entry : effectlist.entrySet()){
                 // check add and delete lists against eachother
                 // add conflict with affiliated agents all linked to the conflict
                 // conflict will be solved by replanning after other actions have been performed.
                 agentIDs = new ArrayList<Integer>();
                 counter = 0;
-                for(Literal effect : entry.getValue()){
-                    if(effect.truthvalue)
+                for(Free effect : entry.getValue()){
+                    if(!effect.truthvalue)
                     {
                         counter+=1;
 
