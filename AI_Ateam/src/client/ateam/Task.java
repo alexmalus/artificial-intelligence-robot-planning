@@ -14,5 +14,10 @@ public class Task {
     public Goal goal;
     protected TaskType type;
 
-    Task(int agentid,Box box, Goal goal){this.agentID=agentid;this.box=box;this.goal=goal;}
+    public Task(int agentid,Box box, Goal goal){this.agentID=agentid;this.box=box;this.goal=goal;}
+
+    public boolean isTaskCompleted(){
+        //this can allow goals to be empty cells (helping other agents or themselves)
+        return (box.getColumn()==goal.getColumn())&&(box.getRow()==goal.getRow());
+    }
 }

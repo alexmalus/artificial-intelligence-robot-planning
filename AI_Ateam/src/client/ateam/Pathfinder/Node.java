@@ -2,7 +2,9 @@ package client.ateam.Pathfinder;
 
 //import client.ateam.Level.State;
 
-    public class Node {
+import client.ateam.Level.Cell;
+
+public class Node {
         private Cell cell = null;
         public Node parent;
 //        public Node<A, S> parent;

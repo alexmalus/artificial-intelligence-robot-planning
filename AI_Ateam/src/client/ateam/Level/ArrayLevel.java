@@ -5,7 +5,9 @@ import client.ateam.Level.Models.Box;
 import client.ateam.Level.Models.Goal;
 import client.ateam.projectEnum.Color;
 
+import java.awt.*;
 import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;

@@ -27,49 +27,72 @@ public class Agent {
         this.column = column;
     }
 
-    public Action getNextAction(){
-        currentAction = actionList.remove(0);
-        return currentAction;
-    }
+    /*
+    Gets next action in list and loads it to the current action
+     */
+    /*public void NextAction(){
+        if(actionList.isEmpty())
+        {
+            //do planning if list is empty
+            //but this should never occur to
+        }
 
+    }*/
+    /*
+    Getter for the currentaction
+     */
     public Action getCurrentAction(){
+        if(currentAction == null)
+        {
+            currentAction = actionList.remove(0);
+        }
         return currentAction;
     }
 
+    /*
+    Execute current action
+     */
     public void executeCurrentAction() {
 
         //do execute
+        currentAction.executeAction();
+
 
         //check for goal
         if(actionList.isEmpty())
         {
-            if(currentTask.isComplete()){
-                //select next task
-                currentTask = tasks.remove(0);
-            }
-            else
-            {
-                //replan
-            }
-
-
+            planning();
+        }
+        else{
+            currentAction = actionList.remove(0);
         }
     }
+    public void planning()
+    {
+        // clean remnants from last plan
+        currentAction = null;
+        actionList.clear();
 
-//    /**
-//     * Get the agent id from the the agent on the provided field
-//     * @param field
-//     * @return An integer with the agent id (not ascii or utf-8)
-//     */
-//    public static int getAgentId(int field) {
-//        if (Level.isAgent(field)) {
-//            return (int) (field >> 13) & 0xF;
-//        }
-//        else {
-//            System.err.println("getAgentId: provided field do not contain an agent!");
-//            return -1;
-//        }
-//    }
+        if (currentTask == null) {
+            currentTask = tasks.remove(0);
+        }
+        if(currentTask.isTaskCompleted())
+        {
+            if(tasks.isEmpty())
+            {
+                //idle or help others
+            }
+            else {
+                currentTask = tasks.remove(0);
+                // find plan (plan new task)
+
+            }
+        }
+        else
+        {
+            //find plan (first plan or replanning)
+        }
+    }
 
 
 

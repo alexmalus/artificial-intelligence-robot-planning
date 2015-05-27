@@ -14,8 +14,6 @@ import client.ateam.Level.Action;
 import client.ateam.Level.ArrayLevel;
 import client.ateam.Level.ILevel;
 import client.ateam.Level.Models.Agent;
-import client.ateam.LvlReader.FileLvlReader;
-import client.ateam.LvlReader.ILvlReader;
 import client.ateam.conflictHandler.Conflict;
 
 import java.awt.*;
@@ -37,7 +35,6 @@ public class Main {
 
     public void run() throws Exception {
         //arg parser?
-        ILvlReader reader = new FileLvlReader(serverMessages);
         TaskDistributor tasker = new TaskDistributor(); // needs interface?
 
         //load level
@@ -50,7 +47,7 @@ public class Main {
         //ILevel level = new BitBoardLevel(strLevel);
         //this.level = ArrayLevel.getSingletonObject();
         this.level = ArrayLevel.getSingleton();
-        this.level = ArrayLevel.ReadMap(serverMessages);
+        this.level.ReadMap();
 
         //TODO: some sort of ordering in goals, doing this at replanning may be hard, chapter 12 in the book ?
         //serialize subgoals (we probably cannot do POP)
@@ -63,10 +60,14 @@ public class Main {
         //planning for each individual agent (linked lists)
 
         //pathfinding
+
+
+
+
         //TODO: planning and pathfinding for each agent
         for(Agent agent: level.getAgents()){
             //plan the initial tasks of each agent
-
+            agent.planning();
         }
 
         StringJoiner strJoiner = new StringJoiner(", ","[","]");
@@ -116,15 +117,15 @@ public class Main {
 
                 //addEffects = agent.getNextAction().getAddEffects();
                 //deleteEffects = agent.getNextAction().getDeleteEffects();
-                action = agent.getNextAction();
-                effects = action.getEffects();
+
+
                 /*for(Literal addEffect : addEffects){
                     //add effect to key value set
                 }
                 for(Literal deleteEffect : deleteEffects){
                     //add effect to key value set
                 }*/
-                for(Literal effect : effects){
+                for(Literal effect : agent.getCurrentAction().getEffects()){
                     //add effect to key value set
 
                     //check if location has already been created in map
@@ -188,7 +189,11 @@ public class Main {
             //TODO: (this seems done but needs to be rechecked)
             // Agents not flagged will go through a last precondition check in order to check if any stationary boxes are in the way
             for(Agent agent : level.getAgents()){
-                if(agent.getNextAction().preconditions() && resolvedGhostFields.getOrDefault(agent.getNextAction().targetLocation, true))
+
+                /*TODO: this if-loop will not work if an agent is moving out of the field another agent is trying to move into
+                  TODO: since preconditions will fail but resolvedGhostFields will be true. A splitting of checks is needed
+                  */
+                if(agent.getCurrentAction().preconditions() && resolvedGhostFields.getOrDefault(agent.getCurrentAction().targetLocation, true))
                 {
                     //simulate next moves? or simply perform them
                     //if no next moves exist, check for goal & create next plan
@@ -199,7 +204,7 @@ public class Main {
                     //check if agent is noted in conflict list, otherwise add as conflict for replanning
                     //agent.getNextAction().getConflicts();
                     //add conflict
-                    conflictList.add(new Conflict(agent.getNextAction().targetLocation,agent.id));
+                    conflictList.add(new Conflict(agent.getCurrentAction().targetLocation,agent.id));
                     // find conflicting objects/agents
 
                     //replan (online replanning)
@@ -214,6 +219,21 @@ public class Main {
             //TODO: is feasible due to assumption of conflicts being scarce/few.
             //TODO: no. of agents is upper bounded by 4 since there are only 4 directions of movement.
             for(Conflict conflict: conflictList){
+                if(conflict.getSingleAgentConflict())
+                {
+                    for(Agent agent : level.getAgents()){
+                        if(agent.id == conflict.getAgentIDs().get(0))
+                        {
+                            agent.planning();
+                            break;
+                        }
+                    }
+
+                }
+                else
+                {
+
+                }
 
             }
 

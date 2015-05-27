@@ -24,4 +24,12 @@ public class Conflict {
         this.agentIDs = agentIDs;
         singleAgentConflict = false;
     }
+
+    public boolean getSingleAgentConflict(){
+        return singleAgentConflict;
+    }
+
+    public ArrayList<Integer> getAgentIDs(){
+        return agentIDs;
+    }
 }
