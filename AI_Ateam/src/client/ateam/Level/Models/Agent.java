@@ -8,13 +8,13 @@ import client.ateam.projectEnum.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO: might be an idea to merge Agent and Planning classes since each Agent plans its own plan.
+
 public class Agent {
     public int id;
     public Color color;
     public int row;
     public int column;
-    //TODO: position connection with levels
-    //private int pos
     public List<Task> tasks = new ArrayList<Task>();
     public Task currentTask;
     private IAction currentAction;
@@ -22,7 +22,6 @@ public class Agent {
 
     public Agent(int id, Color color, int row, int column){
         this.color = color;
-       // this.position = Level.getIndexFromColoumnAndRow(column,row);
         this.id = id;
         this.row = row;
         this.column = column;

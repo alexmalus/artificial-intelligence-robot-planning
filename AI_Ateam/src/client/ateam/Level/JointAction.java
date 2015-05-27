@@ -8,7 +8,7 @@ import java.util.List;
 public class JointAction {
 
     private List<Action> actions;
-
+    //TODO: remove this
     public JointAction(List<Action> actions){
         this.actions = actions;
 

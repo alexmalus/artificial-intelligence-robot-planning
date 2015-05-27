@@ -11,6 +11,7 @@ public class Action {
     /*
     Legacy class, see Actions folder.
     */
+    //TODO: remove legacy class
     public Point targetLocation;
 
     public boolean preconditions(){
