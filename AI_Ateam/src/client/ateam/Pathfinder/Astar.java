@@ -252,8 +252,8 @@ public class Astar {
 
                 //TODO: when reading the map, assign isPlayable false to wall locations
                 //TODO: later on, we can dynamically check in map whatever location is of interest
-                // Make sure this Cell exists and is playable
-                if ((childCell != null) && childCell.isPlayable())
+                // Make sure this Cell exists and is not occupied
+                if ((childCell != null) && !childCell.isOccupied())
                 {
                     // Attempt to grab the Node for this Cell
                     childNode = nodeList.get(childCell);

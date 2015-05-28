@@ -244,6 +244,7 @@ public class ArrayLevel implements ILevel {
                 if ( '+' == chr ) { // Walls
                     walls[levelLines][i] = true;
                     tempCell = new Cell(levelLines, i);
+                    tempCell.toggleOccupied(); //the cell is Occupied
                     cells.put(tempCell.getArrayLevelLocation(), tempCell);
                 } else if ( '0' <= chr && chr <= '9' ) { // Agents
                     if ( agentCol != -1 || agentRow != -1 ) {
@@ -251,7 +252,7 @@ public class ArrayLevel implements ILevel {
                     }
                     agentsArrayList.add(new Agent((int)chr,colors.get(chr),levelLines,i));
                     tempCell = new Cell(levelLines, i);
-                    tempCell.togglePlayable(); //the cell is playable
+                    tempCell.toggleOccupied(); //the cell is Occupied
                     cells.put(tempCell.getArrayLevelLocation(), tempCell);
 
                     //initialState.agentRow = levelLines;
@@ -259,14 +260,14 @@ public class ArrayLevel implements ILevel {
                 } else if ( 'A' <= chr && chr <= 'Z' ) { // Boxes
                     boxesArrayList.add(new Box(chr,colors.get(chr),levelLines,i));
                     tempCell = new Cell(levelLines, i);
-                    tempCell.togglePlayable(); //the cell is playable
+                    tempCell.toggleOccupied(); //the cell is Occupied
                     cells.put(tempCell.getArrayLevelLocation(), tempCell);
 
                     //initialState.boxes[levelLines][i] = chr;
                 } else if ( 'a' <= chr && chr <= 'z' ) { // Goal cells
                     goalsArrayList.add(new Goal(chr,levelLines,i));
                     tempCell = new Cell(levelLines, i);
-                    tempCell.togglePlayable(); //the cell is playable
+//                    tempCell.toggleOccupied(); //the cell is not Occupied(we have a goal)
                     cells.put(tempCell.getArrayLevelLocation(), tempCell);
 
                     //initialState.goals[levelLines][i] = chr;

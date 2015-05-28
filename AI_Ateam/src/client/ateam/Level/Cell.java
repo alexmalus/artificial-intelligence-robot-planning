@@ -10,7 +10,7 @@ public class Cell
     private Point location;					// The location of this cell; Point (x, y)
 //    private Rectangle bounds;				// The rectangle representing this cell
 
-    private boolean isPlayable 	= false;	// Whether or not entities can enter this cell
+    private boolean isOccupied 	= false;	// Whether or not agents can enter this cell
 
     // Constructor, creates a new cell for the grid
     public Cell(int r, int c)
@@ -61,15 +61,15 @@ public class Cell
     }
 
     // Returns whether or not the cell is playable
-    public boolean isPlayable() {
+    public boolean isOccupied() {
         //TODO: need a way to check if the current location is occupied or not
         //each agent,wall,box need a cell and we need to mark them as being occupied and then free them up afterwards
 //        return (walls[location.getX()][location.getY()] == true);
-        return isPlayable;
+        return isOccupied;
     }
 
-    public void togglePlayable(){
-        isPlayable = !isPlayable;
+    public void toggleOccupied(){
+        isOccupied = !isOccupied;
     }
 
     // Override toString method

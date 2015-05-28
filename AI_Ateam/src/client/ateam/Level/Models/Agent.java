@@ -135,19 +135,19 @@ public class Agent {
         Rectangle me = new Rectangle(x, y);
 
         // Check top-left corner
-        if (!ArrayLevel.getCellFromLocation(me.x, me.y).isPlayable())
+        if (!ArrayLevel.getCellFromLocation(me.x, me.y).isOccupied())
             return false;
 
         // Check top-right corner
-        if (!ArrayLevel.getCellFromLocation(me.x + me.width, me.y).isPlayable())
+        if (!ArrayLevel.getCellFromLocation(me.x + me.width, me.y).isOccupied())
             return false;
 
         // Check bottom-left corner
-        if (!ArrayLevel.getCellFromLocation(me.x, me.y + me.height).isPlayable())
+        if (!ArrayLevel.getCellFromLocation(me.x, me.y + me.height).isOccupied())
             return false;
 
         // Check bottom-right corner
-        if (!ArrayLevel.getCellFromLocation(me.x + me.width, me.y + me.height).isPlayable())
+        if (!ArrayLevel.getCellFromLocation(me.x + me.width, me.y + me.height).isOccupied())
             return false;
 
         // Entity can move
