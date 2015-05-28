@@ -196,6 +196,7 @@ public class Main {
                 {
                     //simulate next moves? or simply perform them
                     //if no next moves exist, check for goal & create next plan
+                    //TODO: executing actions may need ordering (otherwise execution will fail), maybe make queue list for every action that fails and keep re-attempting?
                     agent.executeCurrentAction();
                 }
                 else

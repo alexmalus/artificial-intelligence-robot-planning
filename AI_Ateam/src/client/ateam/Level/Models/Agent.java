@@ -1,6 +1,5 @@
 package client.ateam.Level.Models;
 
-import client.ateam.Level.Action;
 import client.ateam.Level.Actions.IAction;
 import client.ateam.Task;
 import client.ateam.projectEnum.Color;
