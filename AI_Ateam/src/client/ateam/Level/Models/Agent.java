@@ -3,9 +3,12 @@ package client.ateam.Level.Models;
 import client.ateam.Level.Actions.IAction;
 import client.ateam.Task;
 import client.ateam.projectEnum.Color;
+import client.ateam.Level.ArrayLevel;
+import client.ateam.Level.Cell;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.*;
 
 //TODO: might be an idea to merge Agent and Planning classes since each Agent plans its own plan.
 
@@ -106,6 +109,36 @@ public class Agent {
         }
     }
 
+    // Convenience method for canMove(int, int)
+    public boolean canMove(Point p)
+    {
+        return canMove(p.x, p.y);
+    }
 
+    // Check to see whether or not this entity can move
+    // FIXME
+    public boolean canMove(int x, int y)
+    {
+        // Construct a bounding box for location x, y
+        Rectangle me = new Rectangle(x, y);
 
+        // Check top-left corner
+        if (!ArrayLevel.getCellFromLocation(me.x, me.y).isPlayable())
+            return false;
+
+        // Check top-right corner
+        if (!ArrayLevel.getCellFromLocation(me.x + me.width, me.y).isPlayable())
+            return false;
+
+        // Check bottom-left corner
+        if (!ArrayLevel.getCellFromLocation(me.x, me.y + me.height).isPlayable())
+            return false;
+
+        // Check bottom-right corner
+        if (!ArrayLevel.getCellFromLocation(me.x + me.width, me.y + me.height).isPlayable())
+            return false;
+
+        // Entity can move
+        return true;
+    }
 }

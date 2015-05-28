@@ -8,12 +8,12 @@ import java.util.TreeSet;
 import java.awt.*;
 
  import client.ateam.Level.ArrayLevel;
-//import client.ateam.Level.Cell;
+import client.ateam.Level.Cell;
 import client.ateam.Level.Models.Agent;
 
 //TODO: commented out section
-/*
-public class AStar {
+
+public class Astar {
     private Agent owner;
 
     private int expanded = 0;
@@ -31,7 +31,7 @@ public class AStar {
     private ArrayList<Node> pathList = null;		// The list containing our path
     private HashMap<Cell, Node> nodeList = null;	// The list containing Cell costs
 
-    public AStar(Agent owner) {
+    public Astar(Agent owner) {
         this.owner = owner;
     }
 
@@ -204,7 +204,7 @@ public class AStar {
         // Agent is unable to move to goal (path blocked)
         if (needPath && openList.size() == 0)
         {
-            System.err.println("Agent #" + owner.getId() + ": can't move!");
+            System.err.println("Agent #" + owner.id + ": can't move!");
         }
 
         // Path is complete
@@ -220,7 +220,7 @@ public class AStar {
      *
      **/
 //TODO: commenting out section
-    /*
+
     // Returns a list of Nodes surrounding parentNode
     private ArrayList<Node> neighbors(Node parentNode)
     {
@@ -386,4 +386,4 @@ public class AStar {
         expanded 	= 0;
         needPath 	= true;
     }
-}*/
+}

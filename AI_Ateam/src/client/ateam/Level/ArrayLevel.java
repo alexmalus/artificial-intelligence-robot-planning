@@ -24,6 +24,8 @@ public class ArrayLevel implements ILevel {
     public static int MAX_ROW = 70;
     public static int MAX_COLUMN = 70;
 
+
+//    public ArrayList<ArrayList<Integer>> agentLocation = new ArrayList<>()
     public int agentRow;
     public int agentCol;
 
@@ -328,7 +330,7 @@ public class ArrayLevel implements ILevel {
     @Override
     public void executeMoveAction(int agentId, Point currentCell, Point tarCell) {
         //TODO: agentlocation on ArrayLevel is missing (no array for it)
-        if(this.isNeighbor(currentCell.y,currentCell.x,tarCell.y,tarCell.x) && this.isFree(tarCell.y,tarCell.x)){
+        if(this.isNeighbor(currentCell.y,currentCell.x,tarCell.y,tarCell.x) && this.isFree(tarCell.y, tarCell.x)){
             this.moveAgentTo(agentId,currentCell,tarCell);
         }
     }
@@ -470,5 +472,37 @@ public class ArrayLevel implements ILevel {
 
         // Otherwise, return Point(0, 0)
         return new Point();
+    }
+
+    // Returns points along a line spaced apart by int spacing length
+    public static Point[] pointsAlongLine(Point start, Point end, int spacing)
+    {
+        // Find the difference between the points
+        int xDif = (end.x - start.x);
+        int yDif = (end.y - start.y);
+
+        // Find the length of the line [sqrt(x^2 + y^2)]
+        int lineLength = (int)Math.sqrt((Math.pow(xDif, 2) + Math.pow(yDif, 2)));
+
+        // The number of steps is equal to the length of the line divided by the spacing
+        int steps = lineLength / spacing;
+
+        // The number of x and y steps is equal to the x and y difference divided by the number of steps needed
+        int xStep = xDif / steps;
+        int yStep = yDif / steps;
+
+        // Store our result in an array of points
+        Point[] result = new Point[steps];
+
+        // Return the points on a line
+        for (int i = 0; i < steps; i++)
+        {
+            int x = start.x + (xStep * i);
+            int y = start.y + (yStep * i);
+            result[i] = new Point(x, y);
+        }
+
+        // Return the points on a line
+        return result;
     }
 }
