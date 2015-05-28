@@ -18,8 +18,8 @@ public interface ILevel {
 
     int getAgentID();
     boolean isNeighbor(int curRow, int curCol,int neighborRow, int neighborCol);
-    boolean isBoxAt(int row, int col);
-    boolean isAgentAt(int row, int col);
+    boolean isBoxAt(char boxLetter, int row, int col);
+    boolean isAgentAt(int agentId, int row, int col);
     boolean isFree(int row, int col);
     boolean isGoalCompleted();
     public char getBoxLetter(int row, int col);

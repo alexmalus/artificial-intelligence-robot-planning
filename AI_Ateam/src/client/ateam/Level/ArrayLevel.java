@@ -9,10 +9,7 @@ import client.ateam.projectEnum.Color;
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Created by joh on 5/10/15.
@@ -30,14 +27,14 @@ public class ArrayLevel implements ILevel {
     public int agentCol;
 
     public boolean[][] walls = new boolean[MAX_ROW][MAX_COLUMN];
-    public char[][] boxes = new char[MAX_ROW][MAX_COLUMN];
-    public char[][] goals = new char[MAX_ROW][MAX_COLUMN];
+    private char[][] boxes = new char[MAX_ROW][MAX_COLUMN];
+    private char[][] goals = new char[MAX_ROW][MAX_COLUMN];
+    private int[][] agents = new int[MAX_ROW][MAX_COLUMN];
 
     private static int height;
     private static int width;
 //    public static int[] realMap; //The current parsed map
     // Our list of each cell in this ArrayLevel
-    //TODO: commented out line
     private static HashMap<Point, Cell> cells = null;
     // Minimum and maximum X and Y coordinates
     private static int minX, minY, maxX, maxY;
@@ -54,6 +51,7 @@ public class ArrayLevel implements ILevel {
     public static ArrayLevel getSingleton(){
         if(level == null){
             level = new ArrayLevel();
+
         }
         return level;
     }
@@ -89,22 +87,19 @@ public class ArrayLevel implements ILevel {
         return false;
     }
 
-    //TODO: will return true on agents as well
     @Override
-    public boolean isBoxAt(int row, int col) {
-        return this.boxes[row][col] > 0;
+    public boolean isBoxAt(char boxLetter, int row, int col) {
+        return this.boxes[row][col] == boxLetter;
     }
 
-    //TODO: this checks only the agentrow and agentcol located on the ArrayLevel class??
     @Override
-    public boolean isAgentAt(int row, int col) {
-        return (row == this.agentRow && col == this.agentCol);
+    public boolean isAgentAt(int agentId, int row, int col) {
+        return this.agents[row][col]==agentId;
     }
 
-    //TODO: this does not check for agents
     @Override
     public boolean isFree( int row, int col ) {
-        return ( !this.walls[row][col] && this.boxes[row][col] == 0 );
+        return ( !(this.walls[row][col]) && (this.boxes[row][col] == 0 || this.boxes[row][col]==' ') && this.agents[row][col]==-1 );
     }
 
     @Override
@@ -168,6 +163,10 @@ public class ArrayLevel implements ILevel {
         Map< Character, Color > colors = new HashMap< Character, Color >();
         String line;
         Color color;
+        Arrays.fill(this.boxes,' ');
+        Arrays.fill(this.agents, -1);
+        Arrays.fill(this.walls, false);
+        Arrays.fill(this.goals,' ');
 
         int agentCol = -1, agentRow = -1;
         int colorLines = 0, levelLines = 0;
@@ -267,7 +266,6 @@ public class ArrayLevel implements ILevel {
                 width = widths[i];
             }
         }
-        //TODO: commented out section
 
         // Create our cellList
         cells = new HashMap<Point, Cell>(width * height);
@@ -313,8 +311,10 @@ public class ArrayLevel implements ILevel {
                 break;
             }
         }
-        //TODO:change agent location on agent array
-
+        if(agents[currentCell.y][currentCell.x]==agentId) {
+            agents[currentCell.y][currentCell.x] = -1;
+            agents[tarCell.y][tarCell.x] = agentId;
+        }
     }
     private void moveBoxTo(char boxLetter, Point boxCell, Point boxTarCell){
         for(Box box : this.getBoxes()){
@@ -324,12 +324,14 @@ public class ArrayLevel implements ILevel {
                 break;
             }
         }
-        //TODO:change box location on box array
+        if(boxes[boxCell.y][boxCell.x]==boxLetter) {
+            boxes[boxCell.y][boxCell.x] = ' ';
+            boxes[boxTarCell.y][boxTarCell.x] = boxLetter;
+        }
     }
 
     @Override
     public void executeMoveAction(int agentId, Point currentCell, Point tarCell) {
-        //TODO: agentlocation on ArrayLevel is missing (no array for it)
         if(this.isNeighbor(currentCell.y,currentCell.x,tarCell.y,tarCell.x) && this.isFree(tarCell.y, tarCell.x)){
             this.moveAgentTo(agentId,currentCell,tarCell);
         }
@@ -360,7 +362,6 @@ public class ArrayLevel implements ILevel {
             this.moveBoxTo(boxLetter,boxCell,currentCell);
         }
     }
-    //TODO: commented out section
 
     // Return the cell list
     public static HashMap<Point, Cell> getCells()
