@@ -3,6 +3,7 @@ package client.ateam.Level;
 import client.ateam.Level.Models.Agent;
 import client.ateam.Level.Models.Box;
 import client.ateam.Level.Models.Goal;
+import client.ateam.Task;
 import client.ateam.projectEnum.Color;
 
 import java.awt.*;
@@ -41,6 +42,7 @@ public class ArrayLevel implements ILevel {
     private static ArrayList<Agent> agentsArrayList = new ArrayList<Agent>();
     private static ArrayList<Box> boxesArrayList= new ArrayList<Box>();
     private static ArrayList<Goal> goalsArrayList= new ArrayList<Goal>();
+    private static ArrayList<Task> taskList = new ArrayList<>();
     private static ArrayLevel level;
 
     public static ArrayLevel getSingleton(){
@@ -81,16 +83,19 @@ public class ArrayLevel implements ILevel {
         return false;
     }
 
+    //TODO: will return true on agents as well
     @Override
     public boolean isBoxAt(int row, int col) {
         return this.boxes[row][col] > 0;
     }
 
+    //TODO: this checks only the agentrow and agentcol located on the ArrayLevel class??
     @Override
     public boolean isAgentAt(int row, int col) {
         return (row == this.agentRow && col == this.agentCol);
     }
 
+    //TODO: this does not check for agents
     @Override
     public boolean isFree( int row, int col ) {
         return ( !this.walls[row][col] && this.boxes[row][col] == 0 );
@@ -290,18 +295,42 @@ public class ArrayLevel implements ILevel {
     }
 
     @Override
+    public ArrayList<Task> getTasks() {return taskList;}
+
+    @Override
     public void executeMoveAction(int agentId, Point currentCell, Point tarCell) {
-        //TODO: this
+        //TODO: agentlocation on ArrayLevel is missing (no array for it)
+        if(this.isNeighbor(currentCell.y,currentCell.x,tarCell.y,tarCell.x) && isFree(tarCell.y,tarCell.x)){
+            //change agentrow and agentcol for agent
+            for(Agent agent : this.getAgents()){
+                if(agent.id == agentId)
+                {
+                    agent.row = tarCell.y;
+                    agent.column = tarCell.x;
+                    break;
+                }
+            }
+            //change agent location on level
+
+        }
     }
 
     @Override
     public void executePushAction(int agentId, char boxLetter, Point currentCell, Point boxCell, Point boxTarCell) {
         //TODO: this
+        //change boxrow and boxcol for box
+        //move box on level
+        //change agentrow and agentcol for agent
+        // move agent on level
     }
 
     @Override
     public void executePullAction(int agentId, char boxLetter, Point currentCell, Point boxCell, Point tarCell) {
         //TODO: this
+        //change agentrow and agentcol for agent
+        // move agent on level
+        //change boxrow and boxcol for box
+        //move box on level
     }
     //TODO: commented out section
     /*
