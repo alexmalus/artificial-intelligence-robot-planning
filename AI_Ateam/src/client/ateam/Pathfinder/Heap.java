@@ -1,8 +1,7 @@
 package client.ateam.Pathfinder;
 
 import java.util.ArrayList;
-//TODO: commented out section
-/*
+
 // The Heap class
 public final class Heap
 {
@@ -145,4 +144,4 @@ public final class Heap
         // Return the node we removed (or null if node doesn't exist)
         return node;
     }
-}*/
+}

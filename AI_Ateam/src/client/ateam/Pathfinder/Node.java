@@ -1,28 +1,16 @@
 package client.ateam.Pathfinder;
 
-//import client.ateam.Level.State;
 //TODO:commented out section
-
-/*
 
 import client.ateam.Level.Cell;
 
 public class Node {
         private Cell cell = null;
         public Node parent;
-//        public Node<A, S> parent;
 
-        public double h;
-        public double g;
-        public double f;
-//        public S state;
-//        public A action;
-
-//        public Node (A a, S s, Node<A,S> parent){
-//            this.parent=parent;
-//            this.action=a;
-//            this.state=s;
-//        }
+        public int h;
+        public int g;
+        public int f;
 
         public Node(Cell cell)
         {
@@ -73,5 +61,3 @@ public class Node {
             return "I am a cute string";
         }
 }
-
-*/

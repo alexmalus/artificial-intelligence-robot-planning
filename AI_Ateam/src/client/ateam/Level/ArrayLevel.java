@@ -33,10 +33,15 @@ public class ArrayLevel implements ILevel {
 
     private static int height;
     private static int width;
-    public static int[] realMap; //The current parsed map
+//    public static int[] realMap; //The current parsed map
     // Our list of each cell in this ArrayLevel
     //TODO: commented out line
-    //private static HashMap<Point, Cell> cells = null;
+    private static HashMap<Point, Cell> cells = null;
+    // Minimum and maximum X and Y coordinates
+    private static int minX, minY, maxX, maxY;
+    private static int cellSize;
+    // The rectangular clip for the gameplay region
+    private static Rectangle clip = null;
 
     private static ArrayList<Agent> agentsArrayList = new ArrayList<Agent>();
     private static ArrayList<Box> boxesArrayList= new ArrayList<Box>();
@@ -261,7 +266,7 @@ public class ArrayLevel implements ILevel {
             }
         }
         //TODO: commented out section
-/*
+
         // Create our cellList
         cells = new HashMap<Point, Cell>(width * height);
 
@@ -275,7 +280,7 @@ public class ArrayLevel implements ILevel {
 
         // Set clip rectangle
         clip = new Rectangle(getMinX(), getMinY(), (height * getCellSize()) + 1, (width * getCellSize()) + 1);
-        */
+
     }
 
     @Override
@@ -354,7 +359,7 @@ public class ArrayLevel implements ILevel {
         }
     }
     //TODO: commented out section
-    /*
+
     // Return the cell list
     public static HashMap<Point, Cell> getCells()
     {
@@ -386,6 +391,84 @@ public class ArrayLevel implements ILevel {
     public static int getCellSize() {
         return cellSize;
     }
-*/
 
+    // Return the minX coordinate
+    public static int getMinX() {
+        return minX;
+    }
+
+    // Return the minY coordinate
+    public static int getMinY() {
+        return minY;
+    }
+
+    // Return the maxX coordinate
+    public static int getMaxX() {
+        return maxX;
+    }
+
+    // Return the maxY coordinate
+    public static int getMaxY() {
+        return maxY;
+    }
+
+    // Return x from r
+    public static int XFromRow(int r)
+    {
+        return (minX + ((r - 1) * cellSize));
+    }
+
+    // Return y from c
+    public static int YFromColumn(int c)
+    {
+        return (minY + ((c - 1) * cellSize));
+    }
+
+    // Return r from x
+    public static int rowFromX(int x)
+    {
+        return ((x - minX + cellSize) / cellSize);
+    }
+
+    // Return c from y
+    public static int columnFromY(int y)
+    {
+        return ((y - minY + cellSize) / cellSize);
+    }
+
+    // Return Point(x, y) from Point(r, c)
+    public static Point locationFromCell(Point cell) {
+        return locationFromCell(cell.x, cell.y);
+    }
+
+    // Return Point(x, y) from (r, c)
+    public static Point locationFromCell(int r, int c)
+    {
+        // Make sure this point is within our grid
+        if (r <= width && c <= height)
+        {
+            return new Point(XFromRow(r), YFromColumn(c));
+        }
+
+        // Otherwise, return Point(0, 0)
+        return new Point();
+    }
+
+    // Return Point(r, c) from Point(x, y)
+    public static Point cellFromLocation(Point loc) {
+        return cellFromLocation(loc.x, loc.y);
+    }
+
+    // Return Point(r, c) from (x, y)
+    public static Point cellFromLocation(int x, int y)
+    {
+        // Make sure this point is within our grid
+        if ((x <= maxX && x >= minX) && (y <= maxY && y >= minY))
+        {
+            return new Point(rowFromX(x), columnFromY(y));
+        }
+
+        // Otherwise, return Point(0, 0)
+        return new Point();
+    }
 }
