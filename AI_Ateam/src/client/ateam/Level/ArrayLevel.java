@@ -328,15 +328,15 @@ public class ArrayLevel implements ILevel {
     @Override
     public void executeMoveAction(int agentId, Point currentCell, Point tarCell) {
         //TODO: agentlocation on ArrayLevel is missing (no array for it)
-        if(this.isNeighbor(currentCell.y,currentCell.x,tarCell.y,tarCell.x) && isFree(tarCell.y,tarCell.x)){
+        if(this.isNeighbor(currentCell.y,currentCell.x,tarCell.y,tarCell.x) && this.isFree(tarCell.y,tarCell.x)){
             this.moveAgentTo(agentId,currentCell,tarCell);
         }
     }
 
     @Override
     public void executePushAction(int agentId, char boxLetter, Point currentCell, Point boxCell, Point boxTarCell) {
-        //TODO: preconditions in if loop
-        if(true) {
+        if(this.isNeighbor(currentCell.y,currentCell.x,boxCell.y,boxCell.x) && this.isNeighbor(boxCell.y,boxCell.x,boxTarCell.y,boxTarCell.x)
+                && this.isFree(boxTarCell.y,boxTarCell.x)) {
             //change boxrow and boxcol for box
             //move box on level
             this.moveBoxTo(boxLetter, boxCell, boxTarCell);
@@ -348,8 +348,8 @@ public class ArrayLevel implements ILevel {
 
     @Override
     public void executePullAction(int agentId, char boxLetter, Point currentCell, Point boxCell, Point tarCell) {
-        //TODO: preconditions in if loop
-        if(true) {
+        if(this.isNeighbor(currentCell.y,currentCell.x,tarCell.y,tarCell.x) && this.isNeighbor(boxCell.y,boxCell.x,currentCell.y,currentCell.x)
+                && this.isFree(tarCell.y,tarCell.x)){
             //change agentrow and agentcol for agent
             // move agent on level
             this.moveAgentTo(agentId,currentCell,tarCell);

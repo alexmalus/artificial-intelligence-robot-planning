@@ -11,7 +11,6 @@ import java.util.ArrayList;
  * Created by Lasse on 5/27/15.
  */
 public class Push implements IAction {
-    //TODO: Direction can be found from cells and thus can be calculated inside the action instead of passing it as a parameter
     private int agentId;
     private char boxLetter;
     private Direction dirAgent;
@@ -23,10 +22,10 @@ public class Push implements IAction {
     private ArrayList<Free> effects = new ArrayList<Free>();
     private ArrayLevel level = ArrayLevel.getSingleton();
 
-    public Push(int agentId, Direction dirAgent, Direction dirBox, char boxLetter, Point currentCell, Point boxCell, Point boxTarCell){
+    public Push(int agentId, char boxLetter, Point currentCell, Point boxCell, Point boxTarCell){
         this.agentId = agentId;
-        this.dirAgent = dirAgent;
-        this.dirBox = dirBox;
+        this.dirAgent = this.calculateDirection(currentCell,boxCell);
+        this.dirBox = this.calculateDirection(boxCell,boxTarCell);
         this.boxLetter = boxLetter;
         this.currentCell = currentCell;
         this.boxCell = boxCell;
@@ -46,6 +45,26 @@ public class Push implements IAction {
         return currentCell;
     }
 
+    @Override
+    public Direction calculateDirection(Point sourceCell, Point tarCell) {
+        if(tarCell.y-sourceCell.y == 1)
+        {
+            return Direction.NORTH;
+        }
+        else if(tarCell.y-sourceCell.y == -1){
+            return Direction.SOUTH;
+        }
+        else if(tarCell.x-sourceCell.x == 1){
+            return Direction.WEST;
+        }
+        else if(tarCell.x-sourceCell.x == -1){
+            return Direction.EAST;
+        }
+        else{
+            System.err.println("Coordinates do not generate direction");
+            return Direction.WEST;
+        }
+    }
     @Override
     public boolean preconditions() {
         return (level.isNeighbor(currentCell.y,currentCell.x,boxCell.y,boxCell.x) && level.isNeighbor(boxCell.y, boxCell.x,boxTarCell.y,boxTarCell.x) && level.isFree(boxTarCell.y,boxTarCell.x));

@@ -11,9 +11,6 @@ import java.util.ArrayList;
  * Created by Lasse on 5/27/15.
  */
 public class Move implements IAction {
-
-    //TODO: Direction can be found from cells and thus can be calculated inside the action instead of passing it as a parameter
-
     private int agentId;
     private Direction dirAgent;
     private Point currentCell;
@@ -22,10 +19,10 @@ public class Move implements IAction {
     private ArrayList<Free> effects = new ArrayList<Free>();
     private ArrayLevel level = ArrayLevel.getSingleton();
 
-    public Move(int agentId, Direction dirAgent, Point currentCell, Point tarCell )
+    public Move(int agentId, Point currentCell, Point tarCell )
     {
         this.agentId = agentId;
-        this.dirAgent = dirAgent;
+        this.dirAgent = calculateDirection(currentCell, tarCell);
         this.currentCell = currentCell;
         this.tarCell = tarCell;
         effects.add(new Free(currentCell,true,agentId));
@@ -35,6 +32,27 @@ public class Move implements IAction {
     @Override
     public Point getTargetLocation() {
         return this.tarCell;
+    }
+
+    @Override
+    public Direction calculateDirection(Point sourceCell, Point tarCell) {
+        if(tarCell.y-sourceCell.y == 1)
+        {
+            return Direction.NORTH;
+        }
+        else if(tarCell.y-sourceCell.y == -1){
+            return Direction.SOUTH;
+        }
+        else if(tarCell.x-sourceCell.x == 1){
+            return Direction.WEST;
+        }
+        else if(tarCell.x-sourceCell.x == -1){
+            return Direction.EAST;
+        }
+        else{
+            System.err.println("Coordinates do not generate direction");
+            return Direction.WEST;
+        }
     }
 
     @Override

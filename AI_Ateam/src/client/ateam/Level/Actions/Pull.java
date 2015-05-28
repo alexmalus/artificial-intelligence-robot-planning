@@ -11,7 +11,6 @@ import java.util.ArrayList;
  * Created by Lasse on 5/27/15.
  */
 public class Pull implements IAction {
-    //TODO: Direction can be found from cells and thus can be calculated inside the action instead of passing it as a parameter
     private int agentId;
     private char boxLetter;
     private Direction dirAgent;
@@ -23,17 +22,18 @@ public class Pull implements IAction {
     private ArrayList<Free> effects = new ArrayList<Free>();
     private ArrayLevel level = ArrayLevel.getSingleton();
 
-    public Pull(int agentId, Direction dirAgent, Direction dirBox, char boxLetter, Point currentCell, Point tarCell, Point boxCell){
+    public Pull(int agentId, char boxLetter, Point currentCell, Point tarCell, Point boxCell){
         this.agentId = agentId;
-        this.dirAgent = dirAgent;
-        this.dirBox = dirBox;
         this.boxLetter = boxLetter;
         this.currentCell = currentCell;
         this.boxCell = boxCell;
         this.tarCell = tarCell;
+        this.dirAgent = this.calculateDirection(currentCell,tarCell);
+        this.dirBox = this.calculateDirection(boxCell,currentCell);
 
         effects.add(new Free(boxCell,true,agentId));
         effects.add(new Free(tarCell,false,agentId));
+
     }
     //TODO: naming might be bad here, adding extra methods may be needed.
     @Override
@@ -41,6 +41,26 @@ public class Pull implements IAction {
         return tarCell;
     }
 
+    @Override
+    public Direction calculateDirection(Point sourceCell, Point tarCell) {
+        if(tarCell.y-sourceCell.y == 1)
+        {
+            return Direction.NORTH;
+        }
+        else if(tarCell.y-sourceCell.y == -1){
+            return Direction.SOUTH;
+        }
+        else if(tarCell.x-sourceCell.x == 1){
+            return Direction.WEST;
+        }
+        else if(tarCell.x-sourceCell.x == -1){
+            return Direction.EAST;
+        }
+        else{
+            System.err.println("Coordinates do not generate direction");
+            return Direction.WEST;
+        }
+    }
 
     //TODO: again, technically this one should return the box location as origin....
     @Override
