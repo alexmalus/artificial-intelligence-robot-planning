@@ -62,6 +62,9 @@ public class Cell
 
     // Returns whether or not the cell is playable
     public boolean isPlayable() {
+        //TODO: need a way to check if the current location is occupied or not
+        //each agent,wall,box need a cell and we need to mark them as being occupied and then free them up afterwards
+//        return (walls[location.getX()][location.getY()] == true);
         return isPlayable;
     }
 

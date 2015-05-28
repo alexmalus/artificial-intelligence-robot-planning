@@ -33,25 +33,20 @@ public class ArrayLevel implements ILevel {
 
     private static int height;
     private static int width;
-//    public static int[] realMap; //The current parsed map
     // Our list of each cell in this ArrayLevel
     private static HashMap<Point, Cell> cells = null;
-    // Minimum and maximum X and Y coordinates
-//    private static int minX, minY, maxX, maxY;
     private static int cellSize = 1;
-    // The rectangular clip for the gameplay region
-//    private static Rectangle clip = null;
 
     private static ArrayList<Agent> agentsArrayList = new ArrayList<Agent>();
     private static ArrayList<Box> boxesArrayList= new ArrayList<Box>();
     private static ArrayList<Goal> goalsArrayList= new ArrayList<Goal>();
+
     private static ArrayList<Task> taskList = new ArrayList<>();
     private static ArrayLevel level;
 
     public static ArrayLevel getSingleton(){
         if(level == null){
             level = new ArrayLevel();
-
         }
         return level;
     }
@@ -163,23 +158,15 @@ public class ArrayLevel implements ILevel {
         Map< Character, Color > colors = new HashMap< Character, Color >();
         String line;
         Color color;
-//        Arrays.fill(this.boxes,' ');
-//        Arrays.fill(this.agents, -1);
-//        Arrays.fill(this.walls, false);
-//        Arrays.fill(this.goals,' ');
-        for(int x=0;x<boxes.length;x++)
-            for(int y=0;y<boxes[x].length;y++)
-                boxes[x][y] = ' ';
         for(int x=0;x<agents.length;x++)
             for(int y=0;y<agents[x].length;y++)
                 agents[x][y] = -1;
+        for(int x=0;x<walls.length;x++)
+            for(int y=0;y<walls[x].length;y++)
+                walls[x][y] = false;
         for(int x=0;x<goals.length;x++)
             for(int y=0;y<goals[x].length;y++)
                 goals[x][y] = ' ';
-
-        for(int x=0;x<boxes.length;x++)
-            for(int y=0;y<boxes[x].length;y++)
-                boxes[x][y] = ' ';
 
         int agentCol = -1, agentRow = -1;
         int colorLines = 0, levelLines = 0;

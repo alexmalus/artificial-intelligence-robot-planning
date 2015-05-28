@@ -133,8 +133,12 @@ public class Astar {
             closedList.add(currentNode);
 
             // If we have found the goal, notify AStar that we no longer need a path
-            if (currentNode == goalNode) foundGoal();
+            if (currentNode == goalNode)
+            {
+                foundGoal();
+                System.err.println("Found Goal");
                 // Otherwise, continue to search for next best move
+            }
             else
             {
                 // Gather a list of neighbors to the currentNode
@@ -203,7 +207,7 @@ public class Astar {
             }
         }
 
-        System.err.println(getPathSize());
+//        System.err.println(getPathSize());
         // Agent is unable to move to goal (path blocked)
         if (needPath && openList.size() == 0)
         {
@@ -234,6 +238,8 @@ public class Astar {
 
         // Cell reference for parentNode
         parentCell = parentNode.getCell();
+        System.err.println(parentCell.toString());
+        System.err.println("It's r and C are: " + parentCell.getR() + " " + parentCell.getC());
 
         // Search the surrounding 8 nodes for possible places to go
         for (r = (parentCell.getR() - 1); r <= (parentCell.getR() + 1); r++)
@@ -242,7 +248,10 @@ public class Astar {
             {
                 // Grab the Cell at location (r, c)
                 childCell = ArrayLevel.getCell(r, c);
+                System.err.println(childCell.toString());
 
+                //TODO: when reading the map, assign isPlayable false to wall locations
+                //TODO: later on, we can dynamically check in map whatever location is of interest
                 // Make sure this Cell exists and is playable
                 if ((childCell != null) && childCell.isPlayable())
                 {
@@ -292,12 +301,17 @@ public class Astar {
     private int estimate(Node start, Node goal)
     {
         int straightCost = 10; // The movement cost for going straight (horizontal/vertical)
+        //IT'S OVER 9000! (joke, placed this value as to never choose the ones diagonally, maybe change later the implementation)
+        int diagonalCost = 9001; // The movement cost for going diagonally (approx. sqrt(2) * sc)
 
         // The Manhattan Distance from the start node to the goal node (horizontal/vertical)
         int straightSteps = (Math.abs(start.getCell().getR() - goal.getCell().getR()) + Math.abs(start.getCell().getC() - goal.getCell().getC()));
 
-        // The actual heuristic for moving horizontally or vertically
-        int estimate = straightCost * straightSteps;
+        // The number of steps we would take going diagonally
+        int diagonalSteps = Math.min(Math.abs(start.getCell().getR() - goal.getCell().getR()), Math.abs(start.getCell().getC() - goal.getCell().getC()));
+
+        // The actual heuristic for moving horizontally, vertically, or diagonally
+        int estimate = (diagonalCost * diagonalSteps) + (straightCost * (straightSteps - (2 * diagonalSteps)));
 
         // Return our estimate
         return estimate;
