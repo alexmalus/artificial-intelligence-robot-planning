@@ -158,6 +158,10 @@ public class ArrayLevel implements ILevel {
         Map< Character, Color > colors = new HashMap< Character, Color >();
         String line;
         Color color;
+        // Create our cellList
+        cells = new HashMap<Point, Cell>(width * height);
+        Cell tempCell = null;
+
         for(int x=0;x<agents.length;x++)
             for(int y=0;y<agents[x].length;y++)
                 agents[x][y] = -1;
@@ -239,18 +243,32 @@ public class ArrayLevel implements ILevel {
                 char chr = line.charAt( i );
                 if ( '+' == chr ) { // Walls
                     walls[levelLines][i] = true;
+                    tempCell = new Cell(levelLines, i);
+                    cells.put(tempCell.getArrayLevelLocation(), tempCell);
                 } else if ( '0' <= chr && chr <= '9' ) { // Agents
                     if ( agentCol != -1 || agentRow != -1 ) {
                         error( "Not a single agent level" );
                     }
                     agentsArrayList.add(new Agent((int)chr,colors.get(chr),levelLines,i));
+                    tempCell = new Cell(levelLines, i);
+                    tempCell.togglePlayable(); //the cell is playable
+                    cells.put(tempCell.getArrayLevelLocation(), tempCell);
+
                     //initialState.agentRow = levelLines;
                     //initialState.agentCol = i;
                 } else if ( 'A' <= chr && chr <= 'Z' ) { // Boxes
                     boxesArrayList.add(new Box(chr,colors.get(chr),levelLines,i));
+                    tempCell = new Cell(levelLines, i);
+                    tempCell.togglePlayable(); //the cell is playable
+                    cells.put(tempCell.getArrayLevelLocation(), tempCell);
+
                     //initialState.boxes[levelLines][i] = chr;
                 } else if ( 'a' <= chr && chr <= 'z' ) { // Goal cells
                     goalsArrayList.add(new Goal(chr,levelLines,i));
+                    tempCell = new Cell(levelLines, i);
+                    tempCell.togglePlayable(); //the cell is playable
+                    cells.put(tempCell.getArrayLevelLocation(), tempCell);
+
                     //initialState.goals[levelLines][i] = chr;
                 }
                 widths[height]++;
@@ -266,21 +284,9 @@ public class ArrayLevel implements ILevel {
                 width = widths[i];
             }
         }
-
-        // Create our cellList
-        cells = new HashMap<Point, Cell>(width * height);
-
-//        // Set the minX and minY coordinates
-//        minX = (height * cellSize) / 2;
-//        minY = (width * cellSize) / 2;
-//
-//        // Set the maxX and maxY coordinates based on arrayLevel and cell size
-//        maxX = (minX + (height * cellSize));
-//        maxY = (minY + (width * cellSize));
-
-        // Set clip rectangle
-//        clip = new Rectangle(getMinX(), getMinY(), (height * getCellSize()) + 1, (width * getCellSize()) + 1);
-
+        //TODO: take a look here, how can the cell size be only 44 when we have the combo 5 13?
+        System.err.println("Height and width: " + height + " " +  width);
+        System.err.println(getCells().size());
     }
 
     @Override
@@ -391,28 +397,8 @@ public class ArrayLevel implements ILevel {
     }
 
 //    // Return this ArrayLevel's cell size
-    public static int getCellSize() {
-        return cellSize;
-    }
-
-//    // Return the minX coordinate
-//    public static int getMinX() {
-//        return minX;
-//    }
-//
-//    // Return the minY coordinate
-//    public static int getMinY() {
-//        return minY;
-//    }
-//
-//    // Return the maxX coordinate
-//    public static int getMaxX() {
-//        return maxX;
-//    }
-//
-//    // Return the maxY coordinate
-//    public static int getMaxY() {
-//        return maxY;
+//    public static int getCellSize() {
+//        return cellSize;
 //    }
 
     // Return x from r

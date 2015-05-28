@@ -248,7 +248,7 @@ public class Astar {
             {
                 // Grab the Cell at location (r, c)
                 childCell = ArrayLevel.getCell(r, c);
-                System.err.println(childCell.toString());
+//                System.err.println(childCell.toString());
 
                 //TODO: when reading the map, assign isPlayable false to wall locations
                 //TODO: later on, we can dynamically check in map whatever location is of interest
@@ -354,7 +354,7 @@ public class Astar {
     private boolean walkable(Cell a, Cell b)
     {
         // We are using half cell width, anything smaller than 1/4 cell width results in error
-        Point[] points = ArrayLevel.pointsAlongLine(a.getLocation(), b.getLocation(), (ArrayLevel.getCellSize() / 2));
+        Point[] points = ArrayLevel.pointsAlongLine(a.getLocation(), b.getLocation(), 1);
 
         // Sample points along a line from Cell a to Cell b using on-fifth cell width
         for (Point p : points)

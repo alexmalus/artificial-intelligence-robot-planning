@@ -68,6 +68,10 @@ public class Cell
         return isPlayable;
     }
 
+    public void togglePlayable(){
+        isPlayable = !isPlayable;
+    }
+
     // Override toString method
     public String toString()
     {
