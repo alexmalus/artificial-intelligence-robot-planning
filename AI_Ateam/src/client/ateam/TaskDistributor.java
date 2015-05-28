@@ -23,6 +23,7 @@ public class TaskDistributor {
     Break down tasks and create high level tasks, which boxes to move where - this can be changed to be computed dynamically as well,
     but currently working with static tasks is favorable
      */
+    private ArrayLevel level = ArrayLevel.getSingleton();
 
     void distributeTasks(ArrayList<Agent> agents, ArrayList<Box> boxes, ArrayList<Goal> goals){
         Character letter;
@@ -84,6 +85,7 @@ public class TaskDistributor {
                     }
                 }
                 matchingAgent.tasks.add(new Task(matchingAgent.id, matchingBox, goal));
+                level.getTasks().add(new Task(matchingAgent.id, matchingBox, goal));
             }
         }
         else{
@@ -92,6 +94,7 @@ public class TaskDistributor {
                 matchingAgent = agentcolors.get(matchingBox.getColor()).get(0);//only one color box per agent
                 matchingAgent.tasks.add(new Task(matchingAgent.id,matchingBox,goal));
                 System.err.println("Matching ID: "+matchingAgent.tasks.get(0).box.getBoxLetter());
+                level.getTasks().add(new Task(matchingAgent.id, matchingBox, goal));
             }
         }
         System.err.println(agents.get(0).tasks.get(0).box.getBoxLetter());
