@@ -1,5 +1,5 @@
 package client.ateam.Pathfinder;
-/*
+
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Stack;
@@ -8,7 +8,11 @@ import java.util.TreeSet;
 import java.awt.*;
 
  import client.ateam.Level.ArrayLevel;
+//import client.ateam.Level.Cell;
+import client.ateam.Level.Models.Agent;
 
+//TODO: commented out section
+/*
 public class AStar {
     private Agent owner;
 
@@ -215,8 +219,8 @@ public class AStar {
      * Private Functions
      *
      **/
-
-/*
+//TODO: commenting out section
+    /*
     // Returns a list of Nodes surrounding parentNode
     private ArrayList<Node> neighbors(Node parentNode)
     {
@@ -382,5 +386,4 @@ public class AStar {
         expanded 	= 0;
         needPath 	= true;
     }
-}
-*/
+}*/
