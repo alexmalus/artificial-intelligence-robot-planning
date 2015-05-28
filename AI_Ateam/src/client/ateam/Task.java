@@ -21,6 +21,9 @@ public class Task {
         return (box.getColumn()==goal.getColumn())&&(box.getRow()==goal.getRow());
     }
 
+    public TaskType getTaskType(){
+        return type;
+    }
     @Override
     public String toString(){
         return ("agentID: " + agentID + ",box: " + box.getBoxLetter() + ",goal: " + goal + ",taskType: " + type);

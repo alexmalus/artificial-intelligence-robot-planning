@@ -2,14 +2,13 @@ package client.ateam.Level;
 
 import java.awt.Point;
 import java.awt.Rectangle;
-//TODO: commented out section
 
 // Grid cell class
 public class Cell
 {
     private Point cell;						// The location of this cell; Point (r, c)
     private Point location;					// The location of this cell; Point (x, y)
-    private Rectangle bounds;				// The rectangle representing this cell
+//    private Rectangle bounds;				// The rectangle representing this cell
 
     private boolean isPlayable 	= false;	// Whether or not entities can enter this cell
 
@@ -23,13 +22,13 @@ public class Cell
         this.location = ArrayLevel.locationFromCell(cell);
 
         // Creates a rectangle that represents the cell
-        this.bounds = new Rectangle(location.x, location.y, ArrayLevel.getCellSize(), ArrayLevel.getCellSize());
+//        this.bounds = new Rectangle(location.x, location.y, ArrayLevel.getCellSize(), ArrayLevel.getCellSize());
     }
 
     // Returns rectangular bounds
-    public Rectangle getBounds() {
-        return bounds;
-    }
+//    public Rectangle getBounds() {
+//        return bounds;
+//    }
 
     // Returns Point(x, y)
     public Point getLocation() {
@@ -69,7 +68,7 @@ public class Cell
     // Override toString method
     public String toString()
     {
-        return ("I am a pretty String. Look at mee..");
+        return "Loc:" + location;
     }
 
 }

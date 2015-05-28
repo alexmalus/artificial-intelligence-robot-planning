@@ -93,12 +93,12 @@ public class TaskDistributor {
                 matchingBox = boxletters.get(Character.toUpperCase(goal.getGoalLetter()));
                 matchingAgent = agentcolors.get(matchingBox.getColor()).get(0);//only one color box per agent
                 matchingAgent.tasks.add(new Task(matchingAgent.id,matchingBox,goal));
-                System.err.println("Matching ID: "+matchingAgent.tasks.get(0).box.getBoxLetter());
+//                System.err.println("Matching ID: "+matchingAgent.tasks.get(0).box.getBoxLetter());
                 level.getTasks().add(new Task(matchingAgent.id, matchingBox, goal));
             }
         }
-        System.err.println(agents.get(0).tasks.get(0).box.getBoxLetter());
-        System.err.println(ArrayLevel.getSingleton().getAgents().get(0).tasks.isEmpty());
+//        System.err.println(agents.get(0).tasks.get(0).box.getBoxLetter());
+//        System.err.println(ArrayLevel.getSingleton().getAgents().get(0).tasks.isEmpty());
     }
     void addGoal(Goal goal){
 

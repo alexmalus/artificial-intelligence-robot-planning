@@ -5,6 +5,7 @@ import client.ateam.Task;
 import client.ateam.projectEnum.Color;
 import client.ateam.Level.ArrayLevel;
 import client.ateam.Level.Cell;
+import client.ateam.Pathfinder.Astar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,8 @@ public class Agent {
     public Task currentTask;
     private IAction currentAction;
     public List<IAction> actionList = new ArrayList<IAction>();
+
+    private Astar astar = new Astar(this);
 
     public Agent(int id, Color color, int row, int column){
         this.color = color;
@@ -105,6 +108,18 @@ public class Agent {
         }
         else
         {
+            System.err.println("Task which I took is not completed. Need to do planning");
+//            System.err.println("My task now is to: " + currentTask.box.toString());
+            Cell temp1 = new Cell(row, column);
+            System.err.println("Temp 1: " + temp1.toString());
+//            System.err.println("Current Task's Box: " + currentTask.box.toString());
+//            System.err.println("Box's row: " + currentTask.box.getRow() + "Box' Column: " + currentTask.box.getColumn());
+            Cell temp2 = new Cell(currentTask.box.getRow(), currentTask.box.getColumn());
+            System.err.println("Temp 2: " + temp2.toString());
+
+            astar.newPath(temp1,temp2);
+//            System.err.println(astar.getPathSize());
+            astar.findPath();
             //find plan (first plan or replanning)
         }
     }

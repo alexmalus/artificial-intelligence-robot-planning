@@ -1,7 +1,5 @@
 package client.ateam.Pathfinder;
 
-//TODO:commented out section
-
 import client.ateam.Level.Cell;
 
 public class Node {

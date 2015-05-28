@@ -11,8 +11,6 @@ import java.awt.*;
 import client.ateam.Level.Cell;
 import client.ateam.Level.Models.Agent;
 
-//TODO: commented out section
-
 public class Astar {
     private Agent owner;
 
@@ -78,6 +76,7 @@ public class Astar {
     // Store the starting point of the path and add it to openList
     public void setStart(Cell start)
     {
+        System.err.println("Here's the start node: " + start.toString());
         // Create a Node for this Cell
         this.startNode = new Node(start);
 
@@ -91,6 +90,7 @@ public class Astar {
     // Store the goal point of the path
     public void setGoal(Cell goal)
     {
+        System.err.println("Here's the goal node: " + goal.toString());
         // Create a Node for this Cell
         this.goalNode = new Node(goal);
 
@@ -121,11 +121,13 @@ public class Astar {
         Node currentNode     		= null; // the node we are currently working on
         ArrayList<Node> neighbors 	= null; // currentNode's neighbors
 
+        System.err.println("First print inside Astar; openlist size: " + openList.size());
         // Loop through all possible nodes and find the best path to the goal
         while (openList.size() > 0)
         {
             // Set our currentNode to the node with the lowest totalCost
             currentNode = openList.pop();
+            System.err.println("Current Node is:  " + currentNode.getCell().toString());
 
             // Add currentNode to closedList (since we will be examining it)
             closedList.add(currentNode);
@@ -201,6 +203,7 @@ public class Astar {
             }
         }
 
+        System.err.println(getPathSize());
         // Agent is unable to move to goal (path blocked)
         if (needPath && openList.size() == 0)
         {
@@ -219,7 +222,6 @@ public class Astar {
      * Private Functions
      *
      **/
-//TODO: commenting out section
 
     // Returns a list of Nodes surrounding parentNode
     private ArrayList<Node> neighbors(Node parentNode)
@@ -386,4 +388,5 @@ public class Astar {
         expanded 	= 0;
         needPath 	= true;
     }
+
 }

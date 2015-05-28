@@ -35,7 +35,7 @@ public class Main {
     public void run() throws Exception {
         //arg parser?
         //System.setErr(new PrintStream(new FileOutputStream("log.txt")));
-        System.err.format("LOLOLOLOLOL");
+//        System.err.format("LOLOLOLOLOL");
         TaskDistributor tasker = new TaskDistributor(); // needs interface?
 
         // should agents, colors, goals, boxes be read inside the level class or outside ?
@@ -52,9 +52,10 @@ public class Main {
 
         //task distribution
         tasker.distributeTasks(level.getAgents(),level.getBoxes(),level.getGoals());
-        System.err.println("Checking here: ");
-        System.err.println(level.getAgents());
         //tasks are now located on each agent
+
+//        System.err.println("Checking here: ");
+//        System.err.println(level.getAgents());
 
 
         //planning for each individual agent (linked lists)
@@ -63,13 +64,13 @@ public class Main {
 
         for(Agent agent: level.getAgents()){
             //plan the initial tasks of each agent
-//            agent.planning();
-            System.err.println("Agent ID: "+agent.id);
+            agent.planning();
+//            System.err.println("Agent ID: "+agent.id);
 //            System.err.println("Box Letter: "+agent.tasks.isEmpty());
-            System.err.println(agent.tasks.get(0).toString());
-            /*System.err.println("Box Location x: "+agent.tasks.get(0).box.getColumn()+" y: "+agent.tasks.get(0).box.getRow());
-            System.err.println("Goal Letter:"+agent.tasks.get(0).goal.getGoalLetter());
-            System.err.println("");*/
+//            System.err.println(agent.tasks.get(0).toString());
+//            /*System.err.println("Box Location x: "+agent.tasks.get(0).box.getColumn()+" y: "+agent.tasks.get(0).box.getRow());
+//            System.err.println("Goal Letter:"+agent.tasks.get(0).goal.getGoalLetter());
+            System.err.println("");
         }
 
         StringJoiner strJoiner = new StringJoiner(", ","[","]");
