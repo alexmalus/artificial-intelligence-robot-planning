@@ -127,10 +127,11 @@ public class Astar {
         {
             // Set our currentNode to the node with the lowest totalCost
             currentNode = openList.pop();
-            System.err.println("Current Node is:  " + currentNode.getCell().toString());
+//            System.err.println("Current Node is:  " + currentNode.getCell().toString());
 
             // Add currentNode to closedList (since we will be examining it)
             closedList.add(currentNode);
+//            System.err.println("Closed List size: " + closedList.size());
 
             // If we have found the goal, notify AStar that we no longer need a path
             if (currentNode == goalNode)
@@ -183,6 +184,7 @@ public class Astar {
 
                         // And add it to openList for future searching
                         openList.push(neighbor);
+                        System.err.println("Neighbor added: " + neighbor.getCell().toString());
                     }
 
                     // Reset needUpdate
@@ -238,8 +240,8 @@ public class Astar {
 
         // Cell reference for parentNode
         parentCell = parentNode.getCell();
-        System.err.println(parentCell.toString());
-        System.err.println("It's r and C are: " + parentCell.getR() + " " + parentCell.getC());
+        System.err.println("Parent cell: " + parentCell.toString());
+//        System.err.println("It's r and C are: " + parentCell.getR() + " " + parentCell.getC());
 
         // Search the surrounding 8 nodes for possible places to go
         for (r = (parentCell.getR() - 1); r <= (parentCell.getR() + 1); r++)
@@ -248,13 +250,13 @@ public class Astar {
             {
                 // Grab the Cell at location (r, c)
                 childCell = ArrayLevel.getCell(r, c);
-//                System.err.println(childCell.toString());
 
-                //TODO: when reading the map, assign isPlayable false to wall locations
                 //TODO: later on, we can dynamically check in map whatever location is of interest
                 // Make sure this Cell exists and is not occupied
                 if ((childCell != null) && !childCell.isOccupied())
                 {
+//                    System.err.println("child node: " + childCell.toString());
+
                     // Attempt to grab the Node for this Cell
                     childNode = nodeList.get(childCell);
 

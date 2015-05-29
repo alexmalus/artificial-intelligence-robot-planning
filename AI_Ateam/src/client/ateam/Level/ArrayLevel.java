@@ -272,6 +272,10 @@ public class ArrayLevel implements ILevel {
 
                     //initialState.goals[levelLines][i] = chr;
                 }
+                else{ //it means this is an empty cell
+                    tempCell = new Cell(levelLines, i);
+                    cells.put(tempCell.getArrayLevelLocation(), tempCell);
+                }
                 widths[height]++;
             }
             line = serverMessages.readLine();
@@ -285,9 +289,10 @@ public class ArrayLevel implements ILevel {
                 width = widths[i];
             }
         }
-        //TODO: take a look here, how can the cell size be only 44 when we have the combo 5 13?
         System.err.println("Height and width: " + height + " " +  width);
-        System.err.println(getCells().size());
+        for(Map.Entry<Point, Cell> temp_Cell : cells.entrySet()){
+           temp_Cell.getValue().setLocation();
+        }
     }
 
     @Override
@@ -378,6 +383,8 @@ public class ArrayLevel implements ILevel {
 
     // Return a cell from the ArrayLevel (Point cell)
     public static Cell getCell(Point cell) {
+        System.err.println("Look what cell i'm fetching to be a childCell: " + cell.toString());
+        System.err.println("trying to get from cells hashmap: " + cells.get(cell).toString());
         return cells.get(cell);
     }
 
@@ -435,7 +442,6 @@ public class ArrayLevel implements ILevel {
     public static Point locationFromCell(int r, int c)
     {
 //        System.err.println("R: " + r + " C: " + c);
-//        System.err.println("width: " + width + " Height: " + height);
         // Make sure this point is within our grid
         if (r <= height && c <= width)
         {

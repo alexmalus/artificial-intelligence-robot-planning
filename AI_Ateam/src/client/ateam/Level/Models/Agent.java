@@ -110,8 +110,10 @@ public class Agent {
         {
 //            System.err.println("My task now is to: " + currentTask.box.toString());
             Cell agentLocation = new Cell(row, column);
+            agentLocation.setLocation();
 //            System.err.println("Temp 1: " + temp1.toString());
             Cell goalLocation = new Cell(currentTask.box.getRow(), currentTask.box.getColumn());
+            goalLocation.setLocation();
 //            System.err.println("Temp 2: " + temp2.toString());
 
             astar.newPath(agentLocation,goalLocation);

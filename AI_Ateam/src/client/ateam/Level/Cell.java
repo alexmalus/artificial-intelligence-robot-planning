@@ -18,9 +18,6 @@ public class Cell
         // Row and column numbers for this cell
         this.cell = new Point(r, c);
 
-        // The top-left (x, y) coordinates of the cell in pixels
-        this.location = ArrayLevel.locationFromCell(cell);
-
         // Creates a rectangle that represents the cell
 //        this.bounds = new Rectangle(location.x, location.y, ArrayLevel.getCellSize(), ArrayLevel.getCellSize());
     }
@@ -33,6 +30,10 @@ public class Cell
     // Returns Point(x, y)
     public Point getLocation() {
         return location;
+    }
+
+    public void setLocation(){
+        this.location = ArrayLevel.locationFromCell(cell);
     }
 
     // Returns Point(r, c)
