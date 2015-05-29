@@ -108,9 +108,6 @@ public class Main {
                 // first we check simple preconditions
                 // these are identified as isAgent, isBox, isNeighbor and they concern the validity of agent and boxlocations
 
-
-
-
                 // this part concerns the conflict detection, this is concerned with the isFree literal
                 // The isFree literal is the main source of conflicts and limitation of movement
                 // An agent should never attempt to move into a wall due to action planning

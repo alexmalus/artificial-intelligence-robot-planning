@@ -35,7 +35,6 @@ public class ArrayLevel implements ILevel {
     private static int width;
     // Our list of each cell in this ArrayLevel
     private static HashMap<Point, Cell> cells = null;
-    private static int cellSize = 1;
 
     private static ArrayList<Agent> agentsArrayList = new ArrayList<Agent>();
     private static ArrayList<Box> boxesArrayList= new ArrayList<Box>();
@@ -158,9 +157,9 @@ public class ArrayLevel implements ILevel {
         Map< Character, Color > colors = new HashMap< Character, Color >();
         String line;
         Color color;
+        Cell tempCell;
         // Create our cellList
-        cells = new HashMap<Point, Cell>(width * height);
-        Cell tempCell = null;
+        cells = new HashMap<Point, Cell>();
 
         for(int x=0;x<agents.length;x++)
             for(int y=0;y<agents[x].length;y++)
@@ -221,8 +220,6 @@ public class ArrayLevel implements ILevel {
             error( "Box colors not supported" );
         }
 
-        //initialState = new Node( null );
-
         int[] widths = new int[70];
         for (int i=0; i<70; ++i)
         {
@@ -255,22 +252,16 @@ public class ArrayLevel implements ILevel {
                     tempCell.toggleOccupied(); //the cell is Occupied
                     cells.put(tempCell.getArrayLevelLocation(), tempCell);
 
-                    //initialState.agentRow = levelLines;
-                    //initialState.agentCol = i;
                 } else if ( 'A' <= chr && chr <= 'Z' ) { // Boxes
                     boxesArrayList.add(new Box(chr,colors.get(chr),levelLines,i));
                     tempCell = new Cell(levelLines, i);
                     tempCell.toggleOccupied(); //the cell is Occupied
                     cells.put(tempCell.getArrayLevelLocation(), tempCell);
 
-                    //initialState.boxes[levelLines][i] = chr;
                 } else if ( 'a' <= chr && chr <= 'z' ) { // Goal cells
                     goalsArrayList.add(new Goal(chr,levelLines,i));
                     tempCell = new Cell(levelLines, i);
-//                    tempCell.toggleOccupied(); //the cell is not Occupied(we have a goal)
                     cells.put(tempCell.getArrayLevelLocation(), tempCell);
-
-                    //initialState.goals[levelLines][i] = chr;
                 }
                 else{ //it means this is an empty cell
                     tempCell = new Cell(levelLines, i);
@@ -289,7 +280,7 @@ public class ArrayLevel implements ILevel {
                 width = widths[i];
             }
         }
-        System.err.println("Height and width: " + height + " " +  width);
+//        System.err.println("Height and width: " + height + " " +  width);
         for(Map.Entry<Point, Cell> temp_Cell : cells.entrySet()){
            temp_Cell.getValue().setLocation();
         }
@@ -375,12 +366,6 @@ public class ArrayLevel implements ILevel {
         }
     }
 
-    // Return the cell list
-    public static HashMap<Point, Cell> getCells()
-    {
-        return cells;
-    }
-
     // Return a cell from the ArrayLevel (Point cell)
     public static Cell getCell(Point cell) {
 //        System.err.println("Look what cell i'm fetching to be a childCell: " + cell.toString());
@@ -393,15 +378,9 @@ public class ArrayLevel implements ILevel {
         return getCell(new Point(r, c));
     }
 
-
     // Return a cell from the ArrayLevel (int x, int y)
     public static Cell getCellFromLocation(int x, int y) {
         return getCell(cellFromLocation(x, y));
-    }
-
-    // Return a cell from the ArrayLevel (Point loc)
-    public static Cell getCellFromLocation(Point loc) {
-        return getCell(cellFromLocation(loc.x, loc.y));
     }
 
 //    // Return Point(x, y) from Point(r, c)
@@ -416,19 +395,12 @@ public class ArrayLevel implements ILevel {
         // Make sure this point is within our grid
         if (r <= height && c <= width)
         {
-//            System.err.println("Correctly made new point");
             return new Point(r, c);
         }
 
-//        System.err.println("Sorry Bro, you only get new point");
         // Otherwise, return Point(0, 0)
         return new Point();
     }
-
-    // Return Point(r, c) from Point(x, y)
-//    public static Point cellFromLocation(Point loc) {
-//        return cellFromLocation(loc.x, loc.y);
-//    }
 
     // Return Point(r, c) from (x, y)
     public static Point cellFromLocation(int x, int y)

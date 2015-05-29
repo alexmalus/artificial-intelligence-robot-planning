@@ -26,9 +26,6 @@ public class Agent {
     public Task currentTask;
     private IAction currentAction;
     public List<IAction> actionList = new ArrayList<IAction>();
-    //helps when we break down goal to move a box to a goal into:
-    //1: first move next to the box
-    //2: then move box till it reaches the goal
     public boolean hasBox = false;
 
     private Astar astar = new Astar(this);
@@ -100,30 +97,28 @@ public class Agent {
                 currentTask = tasks.remove(0);
             }
         }
+
         if(currentTask.isTaskCompleted())
         {
             //TODO: empty list checks
             if(tasks.isEmpty())
             {
                 //idle or help others
+
             }
             else {
                 currentTask = tasks.remove(0);
-                // find plan (plan new task)
-
+                planning();
             }
         }
         else
         {
-//            System.err.println("My task now is to: " + currentTask.box.toString());
             Cell agentLocation = new Cell(row, column);
             agentLocation.setLocation();
-//            System.err.println("Temp 1: " + temp1.toString());
 
-            //when finding out the pathfinding from the agent to a goal, it takes the neighbours of that goal in an unordored way
-            //TODO: maybe an improvement
+            //need a switch here based on task type
+
             Cell goalLocation = new Cell(currentTask.box.getRow(), currentTask.box.getColumn());
-//            goalLocation.setLocation();
             ArrayList<Cell> goal_neighbours = new ArrayList<>(4);
             goal_neighbours.add(new Cell(goalLocation.getR()-1, goalLocation.getC()));
             goal_neighbours.add(new Cell(goalLocation.getR()+1, goalLocation.getC()));
@@ -186,18 +181,20 @@ public class Agent {
 //            System.err.println(astar.getPath().get(i));
 //        }
 
-        //moved the agent next to the box
         if(!hasBox)
+        //move the agent next to the box
         {
             while(astar_path.size() != 0){
                 path_node = astar_path.remove(0);
                 IAction new_action = new Move(id, new Point(row, column), path_node.getCell().getLocation());
                 actionList.add(new_action);
             }
+            hasBox = true;
         }
         else
         {
-
+            //move with box to the goal
+            hasBox = false;
         }
 
     }

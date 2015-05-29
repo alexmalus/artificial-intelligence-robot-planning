@@ -44,14 +44,6 @@ public class Astar {
         return pathList.size();
     }
 
-    // Return Node at location n on pathList
-    public Node getNode(int n)
-    {
-        // Since we follow the list from back to front, the index is reversed
-        // IE: if getSize() = 25 and n = 5, we are really getting Node 20 (not 5)
-        return pathList.get(getPathSize() - n);
-    }
-
     // Whether or not we have a path to move along
     public boolean pathExists()
     {
@@ -59,19 +51,19 @@ public class Astar {
         return ((pathList.size() > 0) ? true : false);
     }
 
-    // Whether or not AStar is building a path
-    public boolean buildingPath() {
-        return needPath;
-    }
-
-    public boolean pathIsFinished() {
-        return isFinished;
-    }
+//    // Whether or not AStar is building a path
+//    public boolean buildingPath() {
+//        return needPath;
+//    }
+//
+//    public boolean pathIsFinished() {
+//        return isFinished;
+//    }
 
     // Number of steps to take per loop
-    public void setStepLimit(int steps) {
-        limit = steps;
-    }
+//    public void setStepLimit(int steps) {
+//        limit = steps;
+//    }
 
     // Store the starting point of the path and add it to openList
     public void setStart(Cell start)
@@ -210,8 +202,6 @@ public class Astar {
             }
         }
 
-//        System.err.println(getPathSize());
-        // Agent is unable to move to goal (path blocked)
         if (needPath && openList.size() == 0)
         {
             System.err.println("Agent #" + owner.id + ": can't move!");
