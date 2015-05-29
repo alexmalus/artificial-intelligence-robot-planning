@@ -5,6 +5,7 @@ import client.ateam.Level.Models.Agent;
 import client.ateam.Level.Models.Box;
 import client.ateam.Level.Models.Goal;
 import client.ateam.projectEnum.Color;
+import client.ateam.projectEnum.TaskType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +39,6 @@ public class TaskDistributor {
         HashMap<Color, ArrayList<Agent>> agentcolors = new HashMap<Color, ArrayList<Agent>>();
         HashMap<Character,Goal> goalletters = new HashMap<Character,Goal>();
 
-
         for(Agent agent : agents){
             if(!colors.contains(agent.color)){
                 colors.add(agent.color);
@@ -48,9 +48,6 @@ public class TaskDistributor {
                 break;
             }
         }
-
-
-
         for(Color color: colors){
             boxcolors.put(color, new ArrayList<Box>());
             agentcolors.put(color, new ArrayList<Agent>());
@@ -84,20 +81,19 @@ public class TaskDistributor {
                         dist = Math.abs(agent.row-matchingBox.getRow())+Math.abs(agent.column-matchingBox.getColumn());
                     }
                 }
-                matchingAgent.tasks.add(new Task(matchingAgent.id, matchingBox, goal));
-                level.getTasks().add(new Task(matchingAgent.id, matchingBox, goal));
+                matchingAgent.tasks.add(new Task(matchingAgent.id, matchingBox, goal, TaskType.GOAL));
+                level.getTasks().add(new Task(matchingAgent.id, matchingBox, goal, TaskType.GOAL));
             }
         }
         else{
             for(Goal goal : goals) {
                 matchingBox = boxletters.get(Character.toUpperCase(goal.getGoalLetter()));
                 matchingAgent = agentcolors.get(matchingBox.getColor()).get(0);//only one color box per agent
-                matchingAgent.tasks.add(new Task(matchingAgent.id,matchingBox,goal));
-//                System.err.println("Matching ID: "+matchingAgent.tasks.get(0).box.getBoxLetter());
-                level.getTasks().add(new Task(matchingAgent.id, matchingBox, goal));
+                matchingAgent.tasks.add(new Task(matchingAgent.id,matchingBox,goal, TaskType.GOAL));
+                level.getTasks().add(new Task(matchingAgent.id, matchingBox, goal, TaskType.GOAL));
             }
         }
-//        System.err.println(agents.get(0).tasks.get(0).box.getBoxLetter());
+//        System.err.println(agents.get(0).tasks.get(0).getTaskType());
 //        System.err.println(ArrayLevel.getSingleton().getAgents().get(0).tasks.isEmpty());
     }
     void addGoal(Goal goal){

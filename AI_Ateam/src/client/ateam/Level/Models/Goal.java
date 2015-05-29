@@ -5,6 +5,11 @@ public class Goal {
     private int row;
     private int column;
 
+    public Goal(){
+        letter = ' ';
+        row = 0;
+        column = 0;
+    }
     public Goal(char letter, int row, int column){
         this.letter = letter;
         // this.position = Level.getIndexFromColoumnAndRow(column,row);

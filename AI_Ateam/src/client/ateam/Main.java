@@ -34,16 +34,9 @@ public class Main {
 
     public void run() throws Exception {
         //arg parser?
-        //System.setErr(new PrintStream(new FileOutputStream("log.txt")));
-//        System.err.format("LOLOLOLOLOL");
         TaskDistributor tasker = new TaskDistributor(); // needs interface?
 
-        // should agents, colors, goals, boxes be read inside the level class or outside ?
-
-        // create level format, or make level singleton object?
         // agents+colors, boxes+colors, goals
-        //ILevel level = new BitBoardLevel(strLevel);
-        //this.level = ArrayLevel.getSingletonObject();
         this.level = ArrayLevel.getSingleton();
         this.level.ReadMap();
 
@@ -54,24 +47,13 @@ public class Main {
         tasker.distributeTasks(level.getAgents(),level.getBoxes(),level.getGoals());
         //tasks are now located on each agent
 
-//        System.err.println("Checking here: ");
-//        System.err.println(level.getAgents());
-
-
         //planning for each individual agent (linked lists)
-
         //pathfinding
-
         for(Agent agent: level.getAgents()){
             //plan the initial tasks of each agent
             agent.planning();
-//            System.err.println("Agent ID: "+agent.id);
-//            System.err.println("Box Letter: "+agent.tasks.isEmpty());
-//            System.err.println(agent.tasks.get(0).toString());
-//            /*System.err.println("Box Location x: "+agent.tasks.get(0).box.getColumn()+" y: "+agent.tasks.get(0).box.getRow());
-//            System.err.println("Goal Letter:"+agent.tasks.get(0).goal.getGoalLetter());
-//            System.err.println("");
         }
+        System.err.println("After converting path to actions, let's see how 0 should move: " + level.getAgents().get(0).actionList);
 
         StringJoiner strJoiner = new StringJoiner(", ","[","]");
         String act;
@@ -253,7 +235,7 @@ public class Main {
             System.out.println( act );
             String response = serverMessages.readLine();
             if ( response.contains( "false" ) ) {
-                System.err.format( "Server responsed with %s to the inapplicable action: %s\n", response, act );
+                System.err.format( "Server responded with %s to the inapplicable action: %s\n", response, act );
                 //System.err.format( "%s was attempted in \n%s\n", act );
 
                 //retry or something...

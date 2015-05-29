@@ -2,9 +2,6 @@ package client.ateam.Pathfinder;
 
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.Stack;
-import java.util.TreeMap;
-import java.util.TreeSet;
 import java.awt.*;
 
  import client.ateam.Level.ArrayLevel;
@@ -40,15 +37,15 @@ public class Astar {
     }
 
     // Return the size of the path
-    public int getPathSize() {
-        return pathList.size();
-    }
+//    public int getPathSize() {
+//        return pathList.size();
+//    }
 
     // Whether or not we have a path to move along
     public boolean pathExists()
     {
         if (pathList == null) return false;
-        return ((pathList.size() > 0) ? true : false);
+        else return (pathList.size() > 0);
     }
 
 //    // Whether or not AStar is building a path
@@ -121,9 +118,6 @@ public class Astar {
 
             // Add currentNode to closedList (since we will be examining it)
             closedList.add(currentNode);
-//            System.err.println("Closed List size: " + closedList.size());
-//            System.err.println("Current Node is:  " + currentNode.getCell().toString());
-//            System.err.println("Goal node: " + goalNode.getCell().toString());
             // If we have found the goal, notify AStar that we no longer need a path
             if (currentNode.getCell().getX() == goalNode.getCell().getX() && currentNode.getCell().getY() == goalNode.getCell().getY())
             {
@@ -189,7 +183,6 @@ public class Astar {
             // If we are finished or have reached our limit for this loop, build best path to this point and exit
             if (!needPath || ((limit > 0) && (steps > 0) && (steps % limit == 0)))
             {
-//                System.err.println("Reached end or limit for this loop, need to build best path");
                 // Set the new capacity of our pathList
                 pathList.ensureCapacity(pathList.size() + steps);
 
@@ -231,7 +224,7 @@ public class Astar {
 
         // Cell reference for parentNode
         parentCell = parentNode.getCell();
-        System.err.println("Parent cell: " + parentCell.toString());
+//        System.err.println("Parent cell: " + parentCell.toString());
 //        System.err.println("It's r and C are: " + parentCell.getR() + " " + parentCell.getC());
 
         // Search the surrounding 8 nodes for possible places to go
@@ -334,17 +327,14 @@ public class Astar {
             //means we reached agent's location
             if (!walkable(start.getCell(), next.getCell()))
             {
-//                System.err.println("Not walkable bro..");
 //                tempList.add(start = current);
             }
             if (next != startNode) tempList.add(next);
+
             // Proceed to next point
             current = next;
 //            System.err.println("Next node: " + current.getCell().toString());
         }
-
-        // Add the last point to our list
-//        tempList.add(current);
 
         // Return our smoothed path
         return tempList;
@@ -355,10 +345,9 @@ public class Astar {
     // This function returns true if it encounters no blocked tiles and false otherwise.
     private boolean walkable(Cell a, Cell b)
     {
-        // We are using half cell width, anything smaller than 1/4 cell width results in error
         Point[] points = ArrayLevel.pointsAlongLine(a.getLocation(), b.getLocation(), 1);
 
-        // Sample points along a line from Cell a to Cell b using on-fifth cell width
+        // Sample points along a line from Cell a to Cell b
         for (Point p : points)
         {
             // Check to see if the unit would overlap into an unplayable cell

@@ -54,6 +54,7 @@ public class Node {
 
         @Override
         public String toString(){
-            return "this node has the following cell: " + cell;
+//            return "this node has the following cell: " + cell;
+            return " " + cell;
         }
 }
