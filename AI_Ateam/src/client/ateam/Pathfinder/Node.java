@@ -54,8 +54,6 @@ public class Node {
 
         @Override
         public String toString(){
-//            return "Node with state: " state + "which is reached by action: " + action + " having the parent: " + parent
-//                    + "with a cost of reaching: " + g + "has h with value: " + h + "complete value of: " + f;
-            return "I am a cute string";
+            return "this node has the following cell: " + cell;
         }
 }

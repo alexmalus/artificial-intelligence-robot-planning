@@ -70,7 +70,7 @@ public class Main {
 //            System.err.println(agent.tasks.get(0).toString());
 //            /*System.err.println("Box Location x: "+agent.tasks.get(0).box.getColumn()+" y: "+agent.tasks.get(0).box.getRow());
 //            System.err.println("Goal Letter:"+agent.tasks.get(0).goal.getGoalLetter());
-            System.err.println("");
+//            System.err.println("");
         }
 
         StringJoiner strJoiner = new StringJoiner(", ","[","]");

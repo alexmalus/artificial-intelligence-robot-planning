@@ -383,8 +383,8 @@ public class ArrayLevel implements ILevel {
 
     // Return a cell from the ArrayLevel (Point cell)
     public static Cell getCell(Point cell) {
-        System.err.println("Look what cell i'm fetching to be a childCell: " + cell.toString());
-        System.err.println("trying to get from cells hashmap: " + cells.get(cell).toString());
+//        System.err.println("Look what cell i'm fetching to be a childCell: " + cell.toString());
+//        System.err.println("trying to get from cells hashmap: " + cells.get(cell).toString());
         return cells.get(cell);
     }
 
@@ -404,35 +404,6 @@ public class ArrayLevel implements ILevel {
         return getCell(cellFromLocation(loc.x, loc.y));
     }
 
-//    // Return this ArrayLevel's cell size
-//    public static int getCellSize() {
-//        return cellSize;
-//    }
-
-    // Return x from r
-//    public static int XFromRow(int r)
-//    {
-//        return (minX + ((r - 1) * cellSize));
-//    }
-
-//    // Return y from c
-//    public static int YFromColumn(int c)
-//    {
-//        return (minY + ((c - 1) * cellSize));
-//    }
-//
-//    // Return r from x
-//    public static int rowFromX(int x)
-//    {
-//        return ((x - minX + cellSize) / cellSize);
-//    }
-//
-//    // Return c from y
-//    public static int columnFromY(int y)
-//    {
-//        return ((y - minY + cellSize) / cellSize);
-//    }
-//
 //    // Return Point(x, y) from Point(r, c)
     public static Point locationFromCell(Point cell) {
         return locationFromCell(cell.x, cell.y);

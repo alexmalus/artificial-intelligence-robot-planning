@@ -7,6 +7,7 @@ public class Box {
     private Color color;
     private int row;
     private int column;
+    private boolean isTaken = false;
 
     public Box(char boxLetter,Color color, int row, int column){
         this.boxLetter = boxLetter;

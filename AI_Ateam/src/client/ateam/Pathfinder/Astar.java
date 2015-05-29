@@ -76,7 +76,7 @@ public class Astar {
     // Store the starting point of the path and add it to openList
     public void setStart(Cell start)
     {
-        System.err.println("Here's the start node: " + start.toString());
+//        System.err.println("Here's the start node: " + start.toString());
         // Create a Node for this Cell
         this.startNode = new Node(start);
 
@@ -121,20 +121,19 @@ public class Astar {
         Node currentNode     		= null; // the node we are currently working on
         ArrayList<Node> neighbors 	= null; // currentNode's neighbors
 
-        System.err.println("First print inside Astar; openlist size: " + openList.size());
         // Loop through all possible nodes and find the best path to the goal
         while (openList.size() > 0)
         {
             // Set our currentNode to the node with the lowest totalCost
             currentNode = openList.pop();
-//            System.err.println("Current Node is:  " + currentNode.getCell().toString());
 
             // Add currentNode to closedList (since we will be examining it)
             closedList.add(currentNode);
 //            System.err.println("Closed List size: " + closedList.size());
-
+//            System.err.println("Current Node is:  " + currentNode.getCell().toString());
+//            System.err.println("Goal node: " + goalNode.getCell().toString());
             // If we have found the goal, notify AStar that we no longer need a path
-            if (currentNode == goalNode)
+            if (currentNode.getCell().getX() == goalNode.getCell().getX() && currentNode.getCell().getY() == goalNode.getCell().getY())
             {
                 foundGoal();
                 System.err.println("Found Goal");
@@ -184,7 +183,7 @@ public class Astar {
 
                         // And add it to openList for future searching
                         openList.push(neighbor);
-                        System.err.println("Neighbor added: " + neighbor.getCell().toString());
+//                        System.err.println("Neighbor added: " + neighbor.getCell().toString());
                     }
 
                     // Reset needUpdate
@@ -198,9 +197,11 @@ public class Astar {
             // If we are finished or have reached our limit for this loop, build best path to this point and exit
             if (!needPath || ((limit > 0) && (steps > 0) && (steps % limit == 0)))
             {
+//                System.err.println("Reached end or limit for this loop, need to build best path");
                 // Set the new capacity of our pathList
                 pathList.ensureCapacity(pathList.size() + steps);
 
+//                System.err.println("Current node from which we build our path: " + currentNode.getCell().toString());
                 // Store our best path up to this point in our pathList
                 pathList = buildPath(currentNode);
 
@@ -327,24 +328,33 @@ public class Astar {
 
         // Add the first point to our list
         tempList.add(start);
-
+//        System.err.println("Start cell: " + start.getCell().toString());
+//        System.err.println("Parent node of the start node: " + start.getParent().getCell().toString());
         // Grab the next point in line
         current = start.getParent();
-
+        if (current != null){
+            tempList.add(current);
+        }
         // Loop through our generated path and add only the necessary points
         while ((next = current.getParent()) != null)
         {
             // If we can't skip the point, add it to our list and
             // set our new starting point to our current location
-            if (!walkable(start.getCell(), next.getCell()))
-                tempList.add(start = current);
 
+            //means we reached agent's location
+            if (!walkable(start.getCell(), next.getCell()))
+            {
+//                System.err.println("Not walkable bro..");
+//                tempList.add(start = current);
+            }
+            if (next != startNode) tempList.add(next);
             // Proceed to next point
             current = next;
+//            System.err.println("Next node: " + current.getCell().toString());
         }
 
         // Add the last point to our list
-        tempList.add(current);
+//        tempList.add(current);
 
         // Return our smoothed path
         return tempList;

@@ -1,15 +1,18 @@
 package client.ateam.Level.Models;
 
 import client.ateam.Level.Actions.IAction;
+import client.ateam.Level.Actions.Move;
 import client.ateam.Task;
 import client.ateam.projectEnum.Color;
 import client.ateam.Level.ArrayLevel;
 import client.ateam.Level.Cell;
 import client.ateam.Pathfinder.Astar;
+import client.ateam.Pathfinder.Node;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.*;
+import java.util.Collections;
 
 //TODO: might be an idea to merge Agent and Planning classes since each Agent plans its own plan.
 
@@ -23,6 +26,10 @@ public class Agent {
     public Task currentTask;
     private IAction currentAction;
     public List<IAction> actionList = new ArrayList<IAction>();
+    //helps when we break down goal to move a box to a goal into:
+    //1: first move next to the box
+    //2: then move box till it reaches the goal
+    public boolean hasBox = false;
 
     private Astar astar = new Astar(this);
 
@@ -112,14 +119,28 @@ public class Agent {
             Cell agentLocation = new Cell(row, column);
             agentLocation.setLocation();
 //            System.err.println("Temp 1: " + temp1.toString());
-            Cell goalLocation = new Cell(currentTask.box.getRow(), currentTask.box.getColumn());
-            goalLocation.setLocation();
-//            System.err.println("Temp 2: " + temp2.toString());
 
-            astar.newPath(agentLocation,goalLocation);
-//            System.err.println(astar.getPathSize());
-            astar.findPath();
+            //when finding out the pathfinding from the agent to a goal, it takes the neighbours of that goal in an unordored way
+            //TODO: maybe an improvement
+            Cell goalLocation = new Cell(currentTask.box.getRow(), currentTask.box.getColumn());
+//            goalLocation.setLocation();
+            ArrayList<Cell> goal_neighbours = new ArrayList<>(4);
+            goal_neighbours.add(new Cell(goalLocation.getR()-1, goalLocation.getC()));
+            goal_neighbours.add(new Cell(goalLocation.getR()+1, goalLocation.getC()));
+            goal_neighbours.add(new Cell(goalLocation.getR(), goalLocation.getC()-1));
+            goal_neighbours.add(new Cell(goalLocation.getR(), goalLocation.getC()+1));
+            Cell goal_neighbour;
+            for(int i = 0; i < 4; ++i)
+            {
+                goal_neighbour = goal_neighbours.remove(i);
+                goal_neighbour.setLocation();
+                astar.newPath(agentLocation, goal_neighbour);
+                astar.findPath();
+                if(astar.pathExists()) break;
+            }
+
             //find plan (first plan or replanning)
+            convert_path_to_actions();
         }
     }
 
@@ -154,5 +175,34 @@ public class Agent {
 
         // Entity can move
         return true;
+    }
+
+    public void convert_path_to_actions(){
+        ArrayList<Node> astar_path = astar.getPath();
+        Node path_node;
+        //first step is to reverse points from the pathlist to make the actions which the agent do ordered
+        Collections.reverse(astar_path);
+//        for (int i = 0; i < astar.getPath().size(); i++) {
+//            System.err.println(astar.getPath().get(i));
+//        }
+
+        //moved the agent next to the box
+        if(!hasBox)
+        {
+            while(astar_path.size() != 0){
+                path_node = astar_path.remove(0);
+                IAction new_action = new Move(id, new Point(row, column), path_node.getCell().getLocation());
+                actionList.add(new_action);
+            }
+        }
+        else
+        {
+
+        }
+
+    }
+
+    public Astar get_astar(){
+        return astar;
     }
 }
