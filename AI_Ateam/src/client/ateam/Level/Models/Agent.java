@@ -41,14 +41,18 @@ public class Agent {
     /*
     Gets next action in list and loads it to the current action
      */
-    /*public void NextAction(){
+    public void NextAction(){
         if(actionList.isEmpty())
         {
             //do planning if list is empty
             //but this should never occur to
+            planning();
         }
-
-    }*/
+        else
+        {
+            currentAction = actionList.remove(0);
+        }
+    }
     /*
     Getter for the currentaction
      */
@@ -74,15 +78,7 @@ public class Agent {
         //do execute
         currentAction.executeAction();
 
-
-        //check for goal
-        if(actionList.isEmpty())
-        {
-            planning();
-        }
-        else{
-            currentAction = actionList.remove(0);
-        }
+        NextAction();
     }
     public void planning()
     {
@@ -211,7 +207,6 @@ public class Agent {
 
     public void convert_path_to_actions(){
         ArrayList<Node> astar_path = astar.getPath();
-        Node path_node;
         //first step is to reverse points from the pathlist to make the actions which the agent do ordered
         Collections.reverse(astar_path);
 //        for (int i = 0; i < astar.getPath().size(); i++) {
@@ -222,11 +217,18 @@ public class Agent {
         //move the agent next to the box
         {
             System.err.println("Before converting path to actions, let's see agent 0 path list: "+ astar.getPath());
-            while(astar_path.size() != 0){
-                path_node = astar_path.remove(0);
-                IAction new_action = new Move(id, new Point(row, column), path_node.getCell().getLocation());
+            Point current =  new Point(row, column);
+            Point next = astar_path.remove(0).getCell().getLocation();
+            do{
+//                System.err.println("Current R AND C: " + current.getX() + " " + current.getY());
+//                System.err.println("Next R AND C: " + next.getX() + " " + next.getY());
+                IAction new_action = new Move(id, current, next);
                 actionList.add(new_action);
-            }
+                current = next;
+                if(astar_path.size() == 0) break;
+                next = astar_path.remove(0).getCell().getLocation();
+
+            }while(astar_path.size() >= 0);
             hasBox = true;
         }
         else

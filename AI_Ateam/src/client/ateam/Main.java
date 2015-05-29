@@ -74,7 +74,6 @@ public class Main {
             //then run through said key-value maps to check for conflicts and replan accordingly
             //check both preconditions from level and preconditions from key-value maps
 
-
             //TODO: alternative approach is just to keep an ordering of who gets to go first (simpler)
             //ArrayList<Free> addEffects = new ArrayList<Free>();
             //ArrayList<Free> deleteEffects = new ArrayList<Free>();
@@ -198,24 +197,24 @@ public class Main {
             //TODO: resolve conflicts from conflict list -> replan w.r.t. multiple agents
             //TODO: is feasible due to assumption of conflicts being scarce/few.
             //TODO: no. of agents is upper bounded by 4 since there are only 4 directions of movement.
-            for(Conflict conflict: conflictList){
-                if(conflict.getSingleAgentConflict())
-                {
-                    for(Agent agent : level.getAgents()){
-                        if(agent.id == conflict.getAgentIDs().get(0))
-                        {
-                            agent.planning();
-                            break;
-                        }
-                    }
-
-                }
-                else
-                {
-                    //TODO: multi-agent planning has to be done by and external class handing out individual plans to each agent, if we want this
-                }
-
-            }
+//            for(Conflict conflict: conflictList){
+//                if(conflict.getSingleAgentConflict())
+//                {
+//                    for(Agent agent : level.getAgents()){
+//                        if(agent.id == conflict.getAgentIDs().get(0))
+//                        {
+//                            agent.planning();
+//                            break;
+//                        }
+//                    }
+//
+//                }
+//                else
+//                {
+//                    //TODO: multi-agent planning has to be done by and external class handing out individual plans to each agent, if we want this
+//                }
+//
+//            }
 
 
             //TODO: get help, move boxes out of the way
@@ -228,6 +227,7 @@ public class Main {
             //send action
 
             for(Agent agent : level.getAgents()){
+                System.err.println("Reached Str Joiner step, currentAction for 0 is: " + agent.getCurrentAction().toString());
                 strJoiner.add(agent.getCurrentAction().toString());
             }
 
@@ -235,15 +235,18 @@ public class Main {
             System.out.println( act );
             String response = serverMessages.readLine();
             if ( response.contains( "false" ) ) {
-                System.err.format( "Server responded with %s to the inapplicable action: %s\n", response, act );
+                System.err.println("Server responded with false");
+//                System.err.format( "Server responded with %s to the inapplicable action: %s\n", response, act );
                 //System.err.format( "%s was attempted in \n%s\n", act );
 
                 //retry or something...
             }
             else{
-                //for(Agent agent : level.getAgents()){
+                System.err.println("Server responded with true, let's try to execute action");
+                for(Agent agent : level.getAgents()){
                     // execute actions on local level, if empty do next plan
-                //}
+                    agent.executeCurrentAction();
+                }
             }
 
         }

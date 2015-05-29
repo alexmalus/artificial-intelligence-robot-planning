@@ -1,14 +1,12 @@
 package client.ateam.Level;
 
 import java.awt.Point;
-import java.awt.Rectangle;
 
 // Grid cell class
 public class Cell
 {
     private Point cell;						// The location of this cell; Point (r, c)
     private Point location;					// The location of this cell; Point (x, y)
-//    private Rectangle bounds;				// The rectangle representing this cell
 
     private boolean isOccupied 	= false;	// Whether or not agents can enter this cell
 
@@ -17,15 +15,7 @@ public class Cell
     {
         // Row and column numbers for this cell
         this.cell = new Point(r, c);
-
-        // Creates a rectangle that represents the cell
-//        this.bounds = new Rectangle(location.x, location.y, ArrayLevel.getCellSize(), ArrayLevel.getCellSize());
     }
-
-    // Returns rectangular bounds
-//    public Rectangle getBounds() {
-//        return bounds;
-//    }
 
     // Returns Point(x, y)
     public Point getLocation() {

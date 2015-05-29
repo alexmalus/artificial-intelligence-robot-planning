@@ -36,18 +36,20 @@ public class Move implements IAction {
 
     @Override
     public Direction calculateDirection(Point sourceCell, Point tarCell) {
+        //TODO: shouldn't x represent column..and y the row according to math's x and y axis?
+        //modified accordingly, remove these comments after approval/changing back the code based on the case
         if(tarCell.y-sourceCell.y == 1)
         {
-            return Direction.NORTH;
+            return Direction.EAST;
         }
         else if(tarCell.y-sourceCell.y == -1){
-            return Direction.SOUTH;
-        }
-        else if(tarCell.x-sourceCell.x == 1){
             return Direction.WEST;
         }
+        else if(tarCell.x-sourceCell.x == 1){
+            return Direction.NORTH;
+        }
         else if(tarCell.x-sourceCell.x == -1){
-            return Direction.EAST;
+            return Direction.SOUTH;
         }
         else{
             System.err.println("Coordinates do not generate direction");
@@ -68,7 +70,7 @@ public class Move implements IAction {
 
     @Override
     public void executeAction() {
-        level.executeMoveAction(this.agentId, this.currentCell,this.tarCell);
+        level.executeMoveAction(this.agentId, this.currentCell, this.tarCell);
     }
 
     @Override
