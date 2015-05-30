@@ -72,12 +72,13 @@ public class ArrayLevel implements ILevel {
 //        if (curPos >= Level.realMap.length || curPos < 0 || neighborPos < 0 || neighborPos >= Level.realMap.length)
 //            return false; //outside bounds of map
         // right left neighbor
-        System.err.println("CUR: Row and Column: " + cury + " " + curx + " Neighbor: " + neighbory + " " + neighborx);
-        if ((cury-1 == neighbory) && (curx-1 == neighborx) || (cury+1 == neighbory) && (curx+1 == neighborx))
+        System.err.println("CUR: Y and X: " + cury + " " + curx + " Neighbor: " + neighbory + " " + neighborx);
+        if (((cury-1 == neighbory) && (curx == neighborx)) || ((cury+1 == neighbory) && (curx == neighborx))||
+        ((cury==neighbory)&&(curx+1==neighborx)) || ((cury==neighbory)&&(curx-1==neighborx)))
             return true;
         // up down neighbor
-        if ((cury-ArrayLevel.getWidth() == neighbory) && (curx-ArrayLevel.getWidth() == neighborx) || (cury+ArrayLevel.getWidth() == neighbory) && (curx+ArrayLevel.getWidth() == neighborx))
-            return true;
+//        if ((cury-ArrayLevel.getWidth() == neighbory) && (curx-ArrayLevel.getWidth() == neighborx) || (cury+ArrayLevel.getWidth() == neighbory) && (curx+ArrayLevel.getWidth() == neighborx))
+//            return true;
 
         return false;
     }
@@ -94,6 +95,11 @@ public class ArrayLevel implements ILevel {
 
     @Override
     public boolean isFree( int y, int x ) {
+        System.err.println("X: "+x+" Y: "+y);
+        System.err.println("Walls: "+this.walls[y][x]);
+        System.err.println("Boxes: "+this.boxes[y][x]);
+        System.err.println("Boxes inverted: "+this.walls[x][y]);
+        System.err.println("Agents: "+this.agents[y][x]);
         return ( !(this.walls[y][x]) && (this.boxes[y][x] == 0 || this.boxes[y][x]==' ') && this.agents[y][x]==-1 );
     }
 
@@ -162,15 +168,25 @@ public class ArrayLevel implements ILevel {
         // Create our cellList
         cells = new HashMap<Point, Cell>();
 
-        for(int x=0;x<agents.length;x++)
-            for(int y=0;y<agents[x].length;y++)
-                agents[x][y] = -1;
-        for(int x=0;x<walls.length;x++)
-            for(int y=0;y<walls[x].length;y++)
-                walls[x][y] = false;
-        for(int x=0;x<goals.length;x++)
-            for(int y=0;y<goals[x].length;y++)
-                goals[x][y] = ' ';
+        for(int y=0;y<agents.length;y++)
+            for(int x=0;x<agents[y].length;x++)
+                agents[y][x] = -1;
+        for(int y=0;y<walls.length;y++)
+            for(int x=0;x<walls[y].length;x++)
+                walls[y][x] = false;
+        for(int y=0;y<goals.length;y++)
+            for(int x=0;y<goals[y].length;x++)
+                goals[y][x] = ' ';
+
+//        for(int x=0;x<agents.length;x++)
+//            for(int y=0;y<agents[x].length;y++)
+//                agents[x][y] = -1;
+//        for(int x=0;x<walls.length;x++)
+//            for(int y=0;y<walls[x].length;y++)
+//                walls[x][y] = false;
+//        for(int x=0;x<goals.length;x++)
+//            for(int y=0;y<goals[x].length;y++)
+//                goals[x][y] = ' ';
 
         int agentx = -1, agenty = -1;
         int colorLines = 0, levelLines = 0;
@@ -240,29 +256,36 @@ public class ArrayLevel implements ILevel {
             for ( int i = 0; i < line.length(); i++ ) {
                 char chr = line.charAt( i );
                 if ( '+' == chr ) { // Walls
-                    walls[levelLines][i] = true;
+                    walls[i][levelLines] = true;
                     tempCell = new Cell(levelLines, i);
                     tempCell.toggleOccupied(); //the cell is Occupied
                     cells.put(tempCell.getArrayLevelLocation(), tempCell);
                 } else if ( '0' <= chr && chr <= '9' ) { // Agents
-                    if ( agentx != -1 || agenty != -1 ) {
+                    if ( agentx != -1 || agenty != -1) {
                         error( "Not a single agent level" );
                     }
                     agentsArrayList.add(new Agent((int)chr,colors.get(chr),levelLines,i));
                     tempCell = new Cell(levelLines, i);
                     tempCell.toggleOccupied(); //the cell is Occupied
                     cells.put(tempCell.getArrayLevelLocation(), tempCell);
+                    agents[i][levelLines] = (int)chr;
+                    System.err.println("int chr" + (int)chr);
+                    System.err.println("Agent location Y: "+levelLines+", X: "+i+", value: "+agents[levelLines][i]);
+
 
                 } else if ( 'A' <= chr && chr <= 'Z' ) { // Boxes
                     boxesArrayList.add(new Box(chr,colors.get(chr),levelLines,i));
                     tempCell = new Cell(levelLines, i);
                     tempCell.toggleOccupied(); //the cell is Occupied
                     cells.put(tempCell.getArrayLevelLocation(), tempCell);
+                    boxes[i][levelLines]=chr;
+                    System.err.println("Box coords: "+levelLines+","+i);
 
                 } else if ( 'a' <= chr && chr <= 'z' ) { // Goal cells
                     goalsArrayList.add(new Goal(chr,levelLines,i));
                     tempCell = new Cell(levelLines, i);
                     cells.put(tempCell.getArrayLevelLocation(), tempCell);
+                    goals[levelLines][i] = chr;
                 }
                 else{ //it means this is an empty cell
                     tempCell = new Cell(levelLines, i);
@@ -307,6 +330,8 @@ public class ArrayLevel implements ILevel {
 
     private void moveAgentTo(int agentId, Point currentCell, Point tarCell){
         //change agenty and agentx for agent
+        System.err.println("Curr Cell: " + currentCell.toString());
+        System.err.println("TArget Cell: " + tarCell.toString());
         for(Agent agent : this.getAgents()){
             if(agent.id == agentId)
             {
@@ -315,10 +340,13 @@ public class ArrayLevel implements ILevel {
                 break;
             }
         }
+        System.err.println("moveAgentTo - currentCell: "+agents[currentCell.y][currentCell.x]);
         if(agents[currentCell.y][currentCell.x]==agentId) {
             agents[currentCell.y][currentCell.x] = -1;
             agents[tarCell.y][tarCell.x] = agentId;
         }
+        System.err.println("moveAgentTo - agentlist after move: "+agents[tarCell.y][tarCell.x]);
+        System.err.println("moveAgentTo - agentID: " + agentId);
     }
     private void moveBoxTo(char boxLetter, Point boxCell, Point boxTarCell){
         for(Box box : this.getBoxes()){
@@ -336,6 +364,8 @@ public class ArrayLevel implements ILevel {
 
     @Override
     public void executeMoveAction(int agentId, Point currentCell, Point tarCell) {
+        System.err.println("executeMoveAction - isNeighor: "+this.isNeighbor(currentCell.y,currentCell.x,tarCell.y,tarCell.x));
+        System.err.println("executeMoveAction - isFree: "+this.isFree(tarCell.y, tarCell.x));
         if(this.isNeighbor(currentCell.y,currentCell.x,tarCell.y,tarCell.x) && this.isFree(tarCell.y, tarCell.x)){
             this.moveAgentTo(agentId,currentCell,tarCell);
         }

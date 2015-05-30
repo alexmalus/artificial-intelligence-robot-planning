@@ -130,10 +130,13 @@ public class Main {
             // First we match preconditions and effects, adding conflicts to a conflict list - everything concerns the isFree() literal
             // these will be flagged for replanning
             int counter;
+            //System.err.println("EntrySet size: "+effectlist.entrySet().size());
             for(Map.Entry<Point,ArrayList<Free>> entry : effectlist.entrySet()){
                 // check add and delete lists against eachother
                 // add conflict with affiliated agents all linked to the conflict
                 // conflict will be solved by replanning after other actions have been performed.
+                //System.err.println("Entry: "+ entry.getKey());
+                //System.err.println("Value:" + entry.getValue().get(0).truthvalue);
                 agentIDs = new ArrayList<Integer>();
                 counter = 0;
                 for(Free effect : entry.getValue()){
@@ -143,6 +146,7 @@ public class Main {
 
                         //add list of effects containing the agent IDs
                         agentIDs.add(effect.agentID);
+
                     }
                     else
                     {
@@ -151,7 +155,7 @@ public class Main {
                 }
 
                 // if counter is greater than zero then a conflict will exist (more agents accessing field than leaving)
-                if(counter>0)
+                if(counter>1)
                 {
                     // create conflict
                     // add affiliated agents
@@ -171,8 +175,7 @@ public class Main {
                 /*TODO: this if-loop will not work if an agent is moving out of the field another agent is trying to move into
                   TODO: since preconditions will fail but resolvedGhostFields will be true. A splitting of checks is needed
                   */
-                if((agent.getCurrentAction().preconditions() && resolvedGhostFields.getOrDefault(agent.getCurrentAction().getTargetLocation(), true)) ||
-                        (resolvedGhostFields.getOrDefault(agent.getCurrentAction().getTargetLocation(), false)))
+                if((agent.getCurrentAction().preconditions() && resolvedGhostFields.getOrDefault(agent.getCurrentAction().getTargetLocation(), false)))
                 {
                     //simulate next moves? or simply perform them
                     //if no next moves exist, check for goal & create next plan
@@ -192,7 +195,7 @@ public class Main {
                     // find conflicting objects/agents
                     System.err.println("Conflict found");
                     System.err.println("Preconditions:"+agent.getCurrentAction().preconditions());
-                    System.err.println("Resolvedfields: "+ resolvedGhostFields.getOrDefault(agent.getCurrentAction().getTargetLocation(),false));
+                    System.err.println("Resolvedfields: "+ resolvedGhostFields.getOrDefault(agent.getCurrentAction().getTargetLocation(),true));
                     //replan (online replanning)
                     //agent.replanTask();
                     //if(agent.getNextAction().preconditions()){
@@ -255,13 +258,14 @@ public class Main {
             else if(response.contains("true"))
             {
                 System.err.println("Server responded with true");
-            }
-            else{
-                System.err.println("Server responded with true, let's try to execute action");
                 for(Agent agent : level.getAgents()){
                     // execute actions on local level, if empty do next plan
                     agent.executeCurrentAction();
                 }
+            }
+            else{
+                System.err.println("something went wrong..");
+
             }
 
         }

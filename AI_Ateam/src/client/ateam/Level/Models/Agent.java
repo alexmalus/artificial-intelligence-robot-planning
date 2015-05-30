@@ -49,6 +49,7 @@ public class Agent {
             //but this should never occur to
             System.err.println("List is empty now. What'cha gonna do now son?");
 //            planning();
+//            currentAction = null;
         }
         else
         {
