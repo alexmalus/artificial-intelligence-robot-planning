@@ -25,6 +25,7 @@ public class Agent {
     //TODO: list of tasks could be priority queue
     public List<Task> tasks = new ArrayList<Task>();
     public Task currentTask;
+    public Cell assigned_goal_neighbour = new Cell();
     private IAction currentAction;
     public List<IAction> actionList = new ArrayList<IAction>();
     public boolean hasBox = false;
@@ -46,11 +47,13 @@ public class Agent {
         {
             //do planning if list is empty
             //but this should never occur to
-            planning();
+            System.err.println("List is empty now. What'cha gonna do now son?");
+//            planning();
         }
         else
         {
             currentAction = actionList.remove(0);
+            System.err.println("Removed action from actionlist. Actionlist size now is : " + actionList.size());
         }
     }
     /*
@@ -76,8 +79,9 @@ public class Agent {
     public void executeCurrentAction() {
 
         //do execute
+        System.err.println("Executing action..");
         currentAction.executeAction();
-
+        System.err.println("Must see next action..");
         NextAction();
     }
     public void planning()
@@ -114,16 +118,16 @@ public class Agent {
             agentLocation.setLocation();
 
             switch (currentTask.getTaskType()) {
-                case GOAL:
-                    System.err.println("Case where agent needs first move near box and then move box into goal");
+                case MoveBoxToGoal:
+                    System.err.println("Case MoveBoxToGoal");
                     if(hasBox)
                     {
                         System.err.println("move the box to the goal wise ass");
                     }
                     else
                     {
-                        tasks.add(0, new Task(id, currentTask.box, new Goal(), TaskType.BOX));
-                        tasks.add(1, currentTask);
+                        tasks.add(0, new Task(this, currentTask.box, new Goal(), TaskType.FindBox));
+                        tasks.add(1, new Task(this, currentTask.box, currentTask.goal, TaskType.MoveBoxToGoal));
                         currentTask = null;
 //                        for (int i = 0; i < tasks.size(); i++) {
 //                            System.err.println(tasks.get(i).toString());
@@ -131,8 +135,8 @@ public class Agent {
                         planning();
                     }
                     break;
-                case BOX:
-                    System.err.println("Case where agent needs to move towards box");
+                case FindBox:
+                    System.err.println("Case FindBox");
                     Cell goalLocation = new Cell(currentTask.box.getRow(), currentTask.box.getColumn());
                     ArrayList<Cell> goal_neighbours = new ArrayList<>(4);
                     goal_neighbours.add(new Cell(goalLocation.getR()-1, goalLocation.getC()));
@@ -146,23 +150,30 @@ public class Agent {
                         goal_neighbour.setLocation();
                         astar.newPath(agentLocation, goal_neighbour);
                         astar.findPath();
-                        if(astar.pathExists()) break;
+                        if(astar.pathExists())
+                        {
+                            assigned_goal_neighbour = goal_neighbour;
+                            break;
+                        }
                     }
 //                    hasBox = true;
                     //find plan (first plan or replan)
                     convert_path_to_actions();
                     break;
-                case AGENT:
-                    System.err.println("Case where agent needs to help other agent");
+                case Idle:
+                    System.err.println("Case where agent needs to stay put");
                     break;
-                case AGENTAPPROX:
-                    System.err.println("Do not know what this is");
-                    break;
-                case NONOBSTRUCTING:
+                case NonObstructing:
                     System.err.println("Case where agent needs to move out of the way");
                     break;
-                case REMOVEBOX:
+                case RemoveBox:
                     System.err.println("Case where agent needs to remove box");
+                    break;
+                case AskForHelp:
+                    System.err.println("Case where agent asks for help");
+                    break;
+                case HelpOther:
+                    System.err.println("Case where agent needs to help other agent");
                     break;
                 default:
                     System.err.println("No Task Type assigned..be careful!");
@@ -216,7 +227,7 @@ public class Agent {
         if(!hasBox)
         //move the agent next to the box
         {
-            System.err.println("Before converting path to actions, let's see agent 0 path list: "+ astar.getPath());
+//            System.err.println("Before converting path to actions, let's see agent 0 path list: "+ astar.getPath());
             Point current =  new Point(row, column);
             Point next = astar_path.remove(0).getCell().getLocation();
             do{

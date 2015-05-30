@@ -53,11 +53,12 @@ public class Main {
             //plan the initial tasks of each agent
             agent.planning();
         }
-        System.err.println("After converting path to actions, let's see how 0 should move: " + level.getAgents().get(0).actionList);
+//        System.err.println("After converting path to actions, let's see how 0 should move: " + level.getAgents().get(0).actionList);
 
-        StringJoiner strJoiner = new StringJoiner(", ","[","]");
+        StringJoiner strJoiner;
         String act;
         while (true) { // all this is possibly a jason area (along with planning) excluding pathfinding
+            strJoiner = new StringJoiner(", ","[","]");
             // find next moves
 
             //create joint action (action merging)
@@ -176,7 +177,11 @@ public class Main {
                     //simulate next moves? or simply perform them
                     //if no next moves exist, check for goal & create next plan
                     //TODO: executing actions may need ordering (otherwise execution will fail), maybe make queue list for every action that fails and keep re-attempting?
-                    agent.executeCurrentAction();
+                    //only if the agent's task is not completed. we only checked in the planning phase
+                    if(!agent.currentTask.isTaskCompleted()){
+                        System.err.println("I execute this here inside the main's for");
+                        agent.executeCurrentAction();
+                    }
                 }
                 else
                 {
@@ -227,11 +232,14 @@ public class Main {
             //send action
 
             for(Agent agent : level.getAgents()){
-                System.err.println("Reached Str Joiner step, currentAction for 0 is: " + agent.getCurrentAction().toString());
+//                System.err.println("Reached Str Joiner step, currentAction for 0 is: " + agent.getCurrentAction().toString());
                 strJoiner.add(agent.getCurrentAction().toString());
             }
 
             act = strJoiner.toString();
+//            strJoiner = null;
+//            System.err.println("This is strjoiner's elements:" + act);
+            System.err.println("Agent 0' tasks are: " + "size : " + level.getAgents().get(0).tasks.size() + " " + level.getAgents().get(0).tasks.toString());
             System.out.println( act );
             String response = serverMessages.readLine();
             if ( response.contains( "false" ) ) {
@@ -241,11 +249,15 @@ public class Main {
 
                 //retry or something...
             }
+            else if(response.contains("true"))
+            {
+                System.err.println("Server responded with true");
+            }
             else{
                 System.err.println("Server responded with true, let's try to execute action");
                 for(Agent agent : level.getAgents()){
                     // execute actions on local level, if empty do next plan
-                    agent.executeCurrentAction();
+//                    agent.executeCurrentAction();
                 }
             }
 

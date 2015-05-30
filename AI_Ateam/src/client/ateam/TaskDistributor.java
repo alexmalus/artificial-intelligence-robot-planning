@@ -81,16 +81,16 @@ public class TaskDistributor {
                         dist = Math.abs(agent.row-matchingBox.getRow())+Math.abs(agent.column-matchingBox.getColumn());
                     }
                 }
-                matchingAgent.tasks.add(new Task(matchingAgent.id, matchingBox, goal, TaskType.GOAL));
-                level.getTasks().add(new Task(matchingAgent.id, matchingBox, goal, TaskType.GOAL));
+                matchingAgent.tasks.add(new Task(matchingAgent, matchingBox, goal, TaskType.MoveBoxToGoal));
+                level.getTasks().add(new Task(matchingAgent, matchingBox, goal, TaskType.MoveBoxToGoal));
             }
         }
         else{
             for(Goal goal : goals) {
                 matchingBox = boxletters.get(Character.toUpperCase(goal.getGoalLetter()));
                 matchingAgent = agentcolors.get(matchingBox.getColor()).get(0);//only one color box per agent
-                matchingAgent.tasks.add(new Task(matchingAgent.id,matchingBox,goal, TaskType.GOAL));
-                level.getTasks().add(new Task(matchingAgent.id, matchingBox, goal, TaskType.GOAL));
+                matchingAgent.tasks.add(new Task(matchingAgent, matchingBox,goal, TaskType.MoveBoxToGoal));
+                level.getTasks().add(new Task(matchingAgent, matchingBox, goal, TaskType.MoveBoxToGoal));
             }
         }
 //        System.err.println(agents.get(0).tasks.get(0).getTaskType());
