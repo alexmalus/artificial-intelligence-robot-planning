@@ -5,28 +5,29 @@ import client.ateam.projectEnum.Color;
 public class Box {
     private char boxLetter;
     private Color color;
-    private int row;
-    private int column;
+    //row = y, x = column
+    private int x;
+    private int y;
     private boolean isTaken = false;
 
-    public Box(char boxLetter,Color color, int row, int column){
+    public Box(char boxLetter,Color color, int y, int x){
         this.boxLetter = boxLetter;
         this.setColor(color);
-        this.row = row;
-        this.column = column;
+        this.x = x;
+        this.y = y;
     }
 
     public char getBoxLetter(){
         return boxLetter;
     }
-    public int getRow(){
-        return row;
+    public int gety(){
+        return y;
     }
-    public int getColumn(){
-        return column;
+    public int getx(){
+        return x;
     }
-    public void setRow(int row) {this.row=row;}
-    public void setColumn(int column){this.column=column;}
+    public void sety(int y) {this.y=y;}
+    public void setx(int x){this.x=x;}
     public Color getColor() {
         return color;
     }
@@ -35,6 +36,6 @@ public class Box {
     }
     @Override
     public String toString(){
-        return "row: " + row + " column: " + column;
+        return "row: " + y + " column: " + x;
     }
 }

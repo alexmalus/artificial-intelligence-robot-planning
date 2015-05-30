@@ -20,7 +20,7 @@ import java.util.List;
 * */
 
 public class TaskDistributor {
-	/*
+    /*
     Break down tasks and create high level tasks, which boxes to move where - this can be changed to be computed dynamically as well,
     but currently working with static tasks is favorable
      */
@@ -76,9 +76,9 @@ public class TaskDistributor {
                 // otherwise an implementation where agents ask for next may be more feasible.
                 for(Agent agent:matchingAgents){
                     // manhattan distance is used
-                    if(matchingAgent==null || Math.abs(agent.row-matchingBox.getRow())+Math.abs(agent.column-matchingBox.getColumn()) < dist){
+                    if(matchingAgent==null || Math.abs(agent.y-matchingBox.gety())+Math.abs(agent.x-matchingBox.getx()) < dist){
                         matchingAgent = agent;
-                        dist = Math.abs(agent.row-matchingBox.getRow())+Math.abs(agent.column-matchingBox.getColumn());
+                        dist = Math.abs(agent.y-matchingBox.gety())+Math.abs(agent.x-matchingBox.getx());
                     }
                 }
                 matchingAgent.tasks.add(new Task(matchingAgent, matchingBox, goal, TaskType.MoveBoxToGoal));

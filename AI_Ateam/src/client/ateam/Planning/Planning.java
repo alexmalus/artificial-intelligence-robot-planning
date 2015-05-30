@@ -48,7 +48,7 @@ public class Planning {
         }
     }
     private boolean isBoxNeighbor(Agent agent){
-        return ((Math.abs(agent.currentTask.box.getRow()-agent.row)+Math.abs(agent.currentTask.box.getColumn()-agent.column))== 2);
+        return ((Math.abs(agent.currentTask.box.gety()-agent.y)+Math.abs(agent.currentTask.box.getx()-agent.x))== 2);
     }
 
     // NOTE THAT THESE CAN BE USED WITH HELPING OTHER AGENTS AS WELL BY SETTING GOAL TO EMPTY CELL

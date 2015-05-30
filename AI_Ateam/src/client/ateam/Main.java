@@ -178,10 +178,10 @@ public class Main {
                     //if no next moves exist, check for goal & create next plan
                     //TODO: executing actions may need ordering (otherwise execution will fail), maybe make queue list for every action that fails and keep re-attempting?
                     //only if the agent's task is not completed. we only checked in the planning phase
-                    if(!agent.currentTask.isTaskCompleted()){
-                        System.err.println("I execute this here inside the main's for");
-                        agent.executeCurrentAction();
-                    }
+//                    if(!agent.currentTask.isTaskCompleted()){
+//                        System.err.println("I execute this here inside the main's for");
+//                        agent.executeCurrentAction();
+//                    }
                 }
                 else
                 {
@@ -190,7 +190,9 @@ public class Main {
                     //add conflict
                     conflictList.add(new Conflict(agent.getCurrentAction().getTargetLocation(),agent.id));
                     // find conflicting objects/agents
-
+                    System.err.println("Conflict found");
+                    System.err.println("Preconditions:"+agent.getCurrentAction().preconditions());
+                    System.err.println("Resolvedfields: "+ resolvedGhostFields.getOrDefault(agent.getCurrentAction().getTargetLocation(),false));
                     //replan (online replanning)
                     //agent.replanTask();
                     //if(agent.getNextAction().preconditions()){
@@ -234,6 +236,7 @@ public class Main {
             for(Agent agent : level.getAgents()){
 //                System.err.println("Reached Str Joiner step, currentAction for 0 is: " + agent.getCurrentAction().toString());
                 strJoiner.add(agent.getCurrentAction().toString());
+//                System.err.println
             }
 
             act = strJoiner.toString();
@@ -257,7 +260,7 @@ public class Main {
                 System.err.println("Server responded with true, let's try to execute action");
                 for(Agent agent : level.getAgents()){
                     // execute actions on local level, if empty do next plan
-//                    agent.executeCurrentAction();
+                    agent.executeCurrentAction();
                 }
             }
 

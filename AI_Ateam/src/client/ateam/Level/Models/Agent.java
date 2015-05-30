@@ -20,8 +20,8 @@ import java.util.Collections;
 public class Agent {
     public int id;
     public Color color;
-    public int row;
-    public int column;
+    public int y;
+    public int x;
     //TODO: list of tasks could be priority queue
     public List<Task> tasks = new ArrayList<Task>();
     public Task currentTask;
@@ -32,11 +32,11 @@ public class Agent {
 
     private Astar astar = new Astar(this);
 
-    public Agent(int id, Color color, int row, int column){
+    public Agent(int id, Color color, int y, int x){
         this.color = color;
         this.id = id;
-        this.row = row;
-        this.column = column;
+        this.y = y;
+        this.x = x;
     }
 
     /*
@@ -114,7 +114,7 @@ public class Agent {
         }
         else
         {
-            Cell agentLocation = new Cell(row, column);
+            Cell agentLocation = new Cell(y, x);
             agentLocation.setLocation();
 
             switch (currentTask.getTaskType()) {
@@ -137,7 +137,7 @@ public class Agent {
                     break;
                 case FindBox:
                     System.err.println("Case FindBox");
-                    Cell goalLocation = new Cell(currentTask.box.getRow(), currentTask.box.getColumn());
+                    Cell goalLocation = new Cell(currentTask.box.gety(), currentTask.box.getx());
                     ArrayList<Cell> goal_neighbours = new ArrayList<>(4);
                     goal_neighbours.add(new Cell(goalLocation.getR()-1, goalLocation.getC()));
                     goal_neighbours.add(new Cell(goalLocation.getR()+1, goalLocation.getC()));
@@ -228,7 +228,7 @@ public class Agent {
         //move the agent next to the box
         {
 //            System.err.println("Before converting path to actions, let's see agent 0 path list: "+ astar.getPath());
-            Point current =  new Point(row, column);
+            Point current =  new Point(y, x);
             Point next = astar_path.remove(0).getCell().getLocation();
             do{
 //                System.err.println("Current R AND C: " + current.getX() + " " + current.getY());
