@@ -168,25 +168,21 @@ public class ArrayLevel implements ILevel {
         // Create our cellList
         cells = new HashMap<Point, Cell>();
 
+//        System.err.println(walls.length);
+//        System.err.println(goals.length);
         for(int y=0;y<agents.length;y++)
-            for(int x=0;x<agents[y].length;x++)
+        for(int x=0;x<agents[y].length;x++)
                 agents[y][x] = -1;
         for(int y=0;y<walls.length;y++)
             for(int x=0;x<walls[y].length;x++)
                 walls[y][x] = false;
-        for(int y=0;y<goals.length;y++)
-            for(int x=0;y<goals[y].length;x++)
+        for(int y=0;y<goals.length;y++) {
+//            System.err.println(goals[y].length);
+            for(int x=0;x<goals[y].length;x++)
+            {
                 goals[y][x] = ' ';
-
-//        for(int x=0;x<agents.length;x++)
-//            for(int y=0;y<agents[x].length;y++)
-//                agents[x][y] = -1;
-//        for(int x=0;x<walls.length;x++)
-//            for(int y=0;y<walls[x].length;y++)
-//                walls[x][y] = false;
-//        for(int x=0;x<goals.length;x++)
-//            for(int y=0;y<goals[x].length;y++)
-//                goals[x][y] = ' ';
+            }
+        }
 
         int agentx = -1, agenty = -1;
         int colorLines = 0, levelLines = 0;
