@@ -9,6 +9,8 @@ import client.ateam.Level.Cell;
 import client.ateam.Pathfinder.Astar;
 import client.ateam.Pathfinder.Node;
 import client.ateam.projectEnum.TaskType;
+import client.ateam.Level.Actions.Push;
+import client.ateam.Level.Actions.Pull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +27,10 @@ public class Agent {
     //TODO: list of tasks could be priority queue
     public List<Task> tasks = new ArrayList<Task>();
     public Task currentTask;
-    public Cell assigned_goal_neighbour = new Cell();
+//    public Cell assigned_goal_neighbour = new Cell();
     private IAction currentAction;
     public List<IAction> actionList = new ArrayList<IAction>();
-    public boolean hasBox = false;
+    public boolean hasBox;
 
     private Astar astar = new Astar(this);
 
@@ -37,6 +39,7 @@ public class Agent {
         this.id = id;
         this.row = row;
         this.column = column;
+        hasBox = false;
     }
 
     /*
@@ -68,6 +71,7 @@ public class Agent {
             }
             else{
                 currentAction = actionList.remove(0);
+                System.err.println("I just removed action from action list. It is: " + currentAction.toString());
             }
         }
         return currentAction;
@@ -107,7 +111,6 @@ public class Agent {
                 tasks.add(new Task(this, new Box(), new Goal(), TaskType.Idle));
             }
             else {
-                currentTask = tasks.remove(0);
                 switch (currentTask.getTaskType()) {
                     case MoveBoxToGoal:
                         break;
@@ -126,6 +129,7 @@ public class Agent {
                         System.err.println("I should not see this print on the console!");
                         break;
                 }
+                currentTask = tasks.remove(0);
                 planning();
             }
         }
@@ -136,19 +140,21 @@ public class Agent {
 
             switch (currentTask.getTaskType()) {
                 case MoveBoxToGoal:
-                    System.err.println("Case MoveBoxToGoal");
+                    System.err.println("Case MoveBoxToGoal with hasBox: " + hasBox);
                     if(hasBox)
                     {
+//                        System.err.println("Current Task box and goal: " + currentTask.box.toString() + " , " +currentTask.goal.toString());
                         System.err.println("Plan so you move box to goal");
+                        //no need to find a path because you are already there, you just have to push or pull based on where the goal is compared to the box.
+                        convert_path_to_actions();
+                        currentAction = actionList.remove(0);
+                        System.err.println("this is a push or pull: " + currentAction.toString());
                     }
                     else
                     {
                         tasks.add(0, new Task(this, currentTask.box, new Goal(), TaskType.FindBox));
                         tasks.add(1, new Task(this, currentTask.box, currentTask.goal, TaskType.MoveBoxToGoal));
                         currentTask = null;
-//                        for (int i = 0; i < tasks.size(); i++) {
-//                            System.err.println(tasks.get(i).toString());
-//                        }
                         planning();
                     }
                     break;
@@ -177,12 +183,19 @@ public class Agent {
 //                    hasBox = true;
                     //find plan (first plan or replan)
                     convert_path_to_actions();
+                    System.err.println("Just converted the Pathfinding path to actions. Has Box? " + hasBox);
                     break;
                 case Idle:
                     System.err.println("Case where agent needs to stay put");
                     break;
                 case NonObstructing:
                     System.err.println("Case where agent needs to move out of the way");
+//                    Cell startLocation = new Cell(currentTask.box.getRow(), currentTask.box.getColumn());
+//                    Cell goalLocation = new Cell(currentTask.goal.getRow(), currentTask.goal.getColumn());
+//                    startLocation.setLocation();
+//                    goalLocation.setLocation();
+//                    System.err.println(startLocation.toString() + " " + goalLocation.toString());
+//                    System.err.println("astar: " + astar.getPath());
                     break;
                 case RemoveBox:
                     System.err.println("Case where agent needs to remove box");
@@ -197,7 +210,6 @@ public class Agent {
                     System.err.println("No Task Type assigned..be careful!");
                     break;
             }
-
         }
     }
 
@@ -208,7 +220,6 @@ public class Agent {
     }
 
     // Check to see whether or not this entity can move
-    // FIXME
     public boolean canMove(int x, int y)
     {
         // Construct a bounding box for location x, y
@@ -234,16 +245,12 @@ public class Agent {
         return true;
     }
 
+    //TODO: figure out better naming for function
     public void convert_path_to_actions(){
         ArrayList<Node> astar_path = astar.getPath();
-        //first step is to reverse points from the pathlist to make the actions which the agent do ordered
-        Collections.reverse(astar_path);
-//        for (int i = 0; i < astar.getPath().size(); i++) {
-//            System.err.println(astar.getPath().get(i));
-//        }
+        Collections.reverse(astar_path); //to make it ordered
 
-        if(!hasBox)
-        //move the agent next to the box
+        if(!hasBox) //agent needs to move next to the box
         {
 //            System.err.println("Before converting path to actions, let's see agent 0 path list: "+ astar.getPath());
             Point current =  new Point(row, column);
@@ -256,16 +263,26 @@ public class Agent {
                 current = next;
                 if(astar_path.size() == 0) break;
                 next = astar_path.remove(0).getCell().getLocation();
-
             }while(astar_path.size() >= 0);
-            hasBox = true;
         }
-        else
+        else //agent has to get the box in the goal
         {
-            //move with box to the goal
-            hasBox = false;
-        }
+            IAction new_action;
 
+            new_action = new Push(id, currentTask.box.getBoxLetter(), new Point(row, column),
+                    new Point(currentTask.box.getRow(), currentTask.box.getColumn()), new Point(currentTask.goal.getRow(), currentTask.goal.getColumn()));
+            if (new_action.preconditions()) //try to see if you can push the box
+            {
+                actionList.add(0, new_action);
+            }
+            else // then it means you need to pull it
+            {
+                new_action = new Pull(id, currentTask.box.getBoxLetter(), new Point(row, column), new Point(currentTask.goal.getRow(), currentTask.goal.getColumn()),
+                        new Point(currentTask.box.getRow(), currentTask.box.getColumn()));
+                actionList.add(0, new_action);
+            }
+            System.err.println("look at the action list after I've tried adding push or pull to it: " + actionList.get(0));
+        }
     }
 
     public Astar get_astar(){

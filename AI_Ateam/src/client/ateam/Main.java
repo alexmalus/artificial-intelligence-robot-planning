@@ -236,10 +236,13 @@ public class Main {
 //                System.err.println("Reached Str Joiner step, currentAction for 0 is: " + agent.getCurrentAction().toString());
                 if (!agent.currentTask.isTaskCompleted()){
                     System.err.println("Current Task is not completed");
+                    System.err.println("action list size: " + agent.actionList.size());
+                    System.err.println("Current action: " + agent.getCurrentAction().toString());
                     strJoiner.add(agent.getCurrentAction().toString());
                 } else {
                     System.err.println("Current Task is completed");
                     agent.planning();
+                    strJoiner.add(agent.getCurrentAction().toString());
                 }
             }
 

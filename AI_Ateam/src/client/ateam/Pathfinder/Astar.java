@@ -110,6 +110,7 @@ public class Astar {
         Node currentNode     		= null; // the node we are currently working on
         ArrayList<Node> neighbors 	= null; // currentNode's neighbors
 
+        System.err.println("Openlist" + openList.size());
         // Loop through all possible nodes and find the best path to the goal
         while (openList.size() > 0)
         {
@@ -119,6 +120,7 @@ public class Astar {
             // Add currentNode to closedList (since we will be examining it)
             closedList.add(currentNode);
             // If we have found the goal, notify AStar that we no longer need a path
+            System.err.println(currentNode.toString() + " " + goalNode.toString());
             if (currentNode.getCell().getX() == goalNode.getCell().getX() && currentNode.getCell().getY() == goalNode.getCell().getY())
             {
                 foundGoal();

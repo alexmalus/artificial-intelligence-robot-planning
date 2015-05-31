@@ -27,5 +27,9 @@ public class Goal {
     public int getColumn(){
         return column;
     }
+    @Override
+    public String toString(){
+        return "row: " + row + " column: " + column;
+    }
 }
 
