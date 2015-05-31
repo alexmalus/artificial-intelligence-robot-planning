@@ -67,7 +67,7 @@ public class Push implements IAction {
     }
     @Override
     public boolean preconditions() {
-        return (level.isNeighbor(currentCell.y,currentCell.x,boxCell.y,boxCell.x) && level.isNeighbor(boxCell.y, boxCell.x,boxTarCell.y,boxTarCell.x) && level.isFree(boxTarCell.y,boxTarCell.x));
+        return (level.isNeighbor(currentCell.x,currentCell.y,boxCell.x,boxCell.y) && level.isNeighbor(boxCell.x, boxCell.y,boxTarCell.x,boxTarCell.y) && level.isFree(boxTarCell.x,boxTarCell.y));
     }
 
     @Override

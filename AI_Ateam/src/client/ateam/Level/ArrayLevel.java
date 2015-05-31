@@ -90,7 +90,7 @@ public class ArrayLevel implements ILevel {
         System.err.println("Row: "+row+" Column: "+col);
         System.err.println("Walls: "+this.walls[row][col]);
         System.err.println("Boxes: "+this.boxes[row][col]);
-        System.err.println("Boxes inverted: "+this.walls[row][col]);
+        //System.err.println("Boxes inverted: "+this.walls[row][col]);
         System.err.println("Agents: "+this.agents[row][col]);
         return ( !(this.walls[row][col]) && (this.boxes[row][col] == 0 || this.boxes[row][col]==' ') && this.agents[row][col]==-1 );
     }
@@ -252,7 +252,7 @@ public class ArrayLevel implements ILevel {
                     cells.put(tempCell.getArrayLevelLocation(), tempCell);
                     agents[levelLines][i] = (int)chr;
                     System.err.println("int chr" + (int)chr);
-                    System.err.println("Agent location Y: "+levelLines+", X: "+i+", value: "+agents[levelLines][i]);
+                    System.err.println("Agent location row: "+levelLines+", col: "+i+", value: "+agents[levelLines][i]);
                 } else if ( 'A' <= chr && chr <= 'Z' ) { // Boxes
                     boxesArrayList.add(new Box(chr,colors.get(chr),levelLines,i));
                     tempCell = new Cell(levelLines, i);
@@ -312,6 +312,7 @@ public class ArrayLevel implements ILevel {
         //change agentrow and agentcol for agent
         System.err.println("Curr Cell: " + currentCell.toString());
         System.err.println("Target Cell: " + tarCell.toString());
+        System.err.println("Current location agents array: "+agents[currentCell.x][currentCell.y]);
         for(Agent agent : this.getAgents()){
             if(agent.id == agentId)
             {
@@ -326,7 +327,7 @@ public class ArrayLevel implements ILevel {
             agents[currentCell.x][currentCell.y] = -1;
             agents[tarCell.x][tarCell.y] = agentId;
         }
-        System.err.println("moveAgentTo - agentlist after move: "+agents[tarCell.y][tarCell.x]);
+        System.err.println("moveAgentTo - agentlist after move: "+agents[tarCell.x][tarCell.y]);
         System.err.println("moveAgentTo - agentID: " + agentId);
     }
     private void moveBoxTo(char boxLetter, Point boxCell, Point boxTarCell){
@@ -345,8 +346,8 @@ public class ArrayLevel implements ILevel {
 
     @Override
     public void executeMoveAction(int agentId, Point currentCell, Point tarCell) {
-        System.err.println("executeMoveAction - isNeighor: "+this.isNeighbor(currentCell.y,currentCell.x,tarCell.y,tarCell.x));
-        System.err.println("executeMoveAction - isFree: "+this.isFree(tarCell.y, tarCell.x));
+        System.err.println("executeMoveAction - isNeighor: "+this.isNeighbor(currentCell.x,currentCell.y,tarCell.x,tarCell.y));
+        System.err.println("executeMoveAction - isFree: "+this.isFree(tarCell.x, tarCell.y));
         if(this.isNeighbor(currentCell.x,currentCell.y,tarCell.x,tarCell.y) && this.isFree(tarCell.x, tarCell.y)){
             this.moveAgentTo(agentId,currentCell,tarCell);
         }
