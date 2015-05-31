@@ -9,6 +9,12 @@ public class Box {
     private int column;
     private boolean isTaken = false;
 
+    public Box(){
+        color = null;
+        row = -1;
+        column = -1;
+    }
+
     public Box(char boxLetter,Color color, int row, int column){
         this.boxLetter = boxLetter;
         this.setColor(color);

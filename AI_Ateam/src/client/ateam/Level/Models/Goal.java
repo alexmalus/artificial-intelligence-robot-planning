@@ -7,8 +7,8 @@ public class Goal {
 
     public Goal(){
         letter = ' ';
-        row = 0;
-        column = 0;
+        row = -1;
+        column = -1;
     }
     public Goal(char letter, int row, int column){
         this.letter = letter;

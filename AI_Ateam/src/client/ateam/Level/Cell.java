@@ -11,7 +11,8 @@ public class Cell
     private boolean isOccupied 	= false;	// Whether or not agents can enter this cell
 
     public Cell(){
-        this.cell = new Point(0,0);
+        this.cell = new Point(-1,-1);
+        this.location = new Point(-1,-1);
     }
     // Constructor, creates a new cell for the grid
     public Cell(int r, int c)

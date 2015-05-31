@@ -79,9 +79,9 @@ public class Agent {
     public void executeCurrentAction() {
 
         //do execute
-        System.err.println("Executing action..");
+        System.err.println("Calling ExecuteAction()");
         currentAction.executeAction();
-        System.err.println("Must see next action..");
+        System.err.println("Calling NextAction()");
         NextAction();
     }
     public void planning()
@@ -101,15 +101,32 @@ public class Agent {
 
         if(currentTask.isTaskCompleted())
         {
-            //TODO: empty list checks
             if(tasks.isEmpty())
             {
-                //idle or help others
-
+                System.err.println("Do not have any tasks assigned to me. I can help somebody");
+                tasks.add(new Task(this, new Box(), new Goal(), TaskType.Idle));
             }
             else {
                 currentTask = tasks.remove(0);
-//                planning();
+                switch (currentTask.getTaskType()) {
+                    case MoveBoxToGoal:
+                        break;
+                    case FindBox:
+                        hasBox = true;
+                        break;
+                    case NonObstructing:
+                        break;
+                    case RemoveBox:
+                        break;
+                    case AskForHelp:
+                        break;
+                    case HelpOther:
+                        break;
+                    default:
+                        System.err.println("I should not see this print on the console!");
+                        break;
+                }
+                planning();
             }
         }
         else
@@ -122,7 +139,7 @@ public class Agent {
                     System.err.println("Case MoveBoxToGoal");
                     if(hasBox)
                     {
-                        System.err.println("move the box to the goal wise ass");
+                        System.err.println("Plan so you move box to goal");
                     }
                     else
                     {
@@ -152,7 +169,8 @@ public class Agent {
                         astar.findPath();
                         if(astar.pathExists())
                         {
-                            assigned_goal_neighbour = goal_neighbour;
+//                            assigned_goal_neighbour = goal_neighbour;
+//                            assigned_goal_neighbour.setLocation();
                             break;
                         }
                     }
@@ -252,5 +270,10 @@ public class Agent {
 
     public Astar get_astar(){
         return astar;
+    }
+
+    @Override
+    public String toString(){
+        return "row: " + row + " column: " + column;
     }
 }

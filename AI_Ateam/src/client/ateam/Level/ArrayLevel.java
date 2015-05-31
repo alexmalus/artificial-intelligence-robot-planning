@@ -87,11 +87,12 @@ public class ArrayLevel implements ILevel {
 
     @Override
     public boolean isFree( int row, int col ) {
-        System.err.println("Row: "+row+" Column: "+col);
-        System.err.println("Walls: "+this.walls[row][col]);
-        System.err.println("Boxes: "+this.boxes[row][col]);
+//        System.err.println("Checking is free variables like..:");
+//        System.err.println("Row: "+row+" Column: "+col);
+//        System.err.println("Walls: "+this.walls[row][col]);
+//        System.err.println("Boxes: "+this.boxes[row][col]);
         //System.err.println("Boxes inverted: "+this.walls[row][col]);
-        System.err.println("Agents: "+this.agents[row][col]);
+//        System.err.println("Agents: "+this.agents[row][col]);
         return ( !(this.walls[row][col]) && (this.boxes[row][col] == 0 || this.boxes[row][col]==' ') && this.agents[row][col]==-1 );
     }
 
@@ -251,7 +252,7 @@ public class ArrayLevel implements ILevel {
                     tempCell.toggleOccupied(); //the cell is Occupied
                     cells.put(tempCell.getArrayLevelLocation(), tempCell);
                     agents[levelLines][i] = (int)chr;
-                    System.err.println("int chr" + (int)chr);
+//                    System.err.println("int chr" + (int)chr);
                     System.err.println("Agent location row: "+levelLines+", col: "+i+", value: "+agents[levelLines][i]);
                 } else if ( 'A' <= chr && chr <= 'Z' ) { // Boxes
                     boxesArrayList.add(new Box(chr,colors.get(chr),levelLines,i));
@@ -286,7 +287,7 @@ public class ArrayLevel implements ILevel {
 //        System.err.println("Height and width: " + height + " " +  width);
         for(Map.Entry<Point, Cell> temp_Cell : cells.entrySet()){
            temp_Cell.getValue().setLocation();
-            System.err.println("Cell: " + temp_Cell.toString());
+//            System.err.println("Cell: " + temp_Cell.toString());
         }
     }
 
@@ -327,8 +328,8 @@ public class ArrayLevel implements ILevel {
             agents[currentCell.x][currentCell.y] = -1;
             agents[tarCell.x][tarCell.y] = agentId;
         }
-        System.err.println("moveAgentTo - agentlist after move: "+agents[tarCell.x][tarCell.y]);
-        System.err.println("moveAgentTo - agentID: " + agentId);
+//        System.err.println("moveAgentTo - agentlist after move: "+agents[tarCell.x][tarCell.y]);
+//        System.err.println("moveAgentTo - agentID: " + agentId);
     }
     private void moveBoxTo(char boxLetter, Point boxCell, Point boxTarCell){
         for(Box box : this.getBoxes()){

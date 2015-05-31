@@ -33,7 +33,6 @@ public class Main {
     }
 
     public void run() throws Exception {
-        //arg parser?
         TaskDistributor tasker = new TaskDistributor(); // needs interface?
 
         // agents+colors, boxes+colors, goals
@@ -58,6 +57,8 @@ public class Main {
         StringJoiner strJoiner;
         String act;
         while (true) { // all this is possibly a jason area (along with planning) excluding pathfinding
+            System.err.println(" ");
+            System.err.println("Next iteration in endless while loop(main)");
             strJoiner = new StringJoiner(", ","[","]");
             // find next moves
 
@@ -131,7 +132,7 @@ public class Main {
             // these will be flagged for replanning
             int counter;
             for(Map.Entry<Point,ArrayList<Free>> entry : effectlist.entrySet()){
-                // check add and delete lists against eachother
+                // check add and delete lists against each other
                 // add conflict with affiliated agents all linked to the conflict
                 // conflict will be solved by replanning after other actions have been performed.
                 agentIDs = new ArrayList<Integer>();
@@ -162,7 +163,6 @@ public class Main {
                 else{
                     resolvedGhostFields.put(entry.getKey(),true);
                 }
-                // if
             }
 
             // Agents not flagged will go through a last precondition check in order to check if any stationary boxes are in the way
@@ -179,7 +179,6 @@ public class Main {
                     //TODO: executing actions may need ordering (otherwise execution will fail), maybe make queue list for every action that fails and keep re-attempting?
                     //only if the agent's task is not completed. we only checked in the planning phase
 //                    if(!agent.currentTask.isTaskCompleted()){
-//                        System.err.println("I execute this here inside the main's for");
 //                        agent.executeCurrentAction();
 //                    }
                 }
@@ -233,16 +232,21 @@ public class Main {
             //future planning, avoiding conflicts
 
             //send action
-
             for(Agent agent : level.getAgents()){
 //                System.err.println("Reached Str Joiner step, currentAction for 0 is: " + agent.getCurrentAction().toString());
-                strJoiner.add(agent.getCurrentAction().toString());
+                if (!agent.currentTask.isTaskCompleted()){
+                    System.err.println("Current Task is not completed");
+                    strJoiner.add(agent.getCurrentAction().toString());
+                } else {
+                    System.err.println("Current Task is completed");
+                    agent.planning();
+                }
             }
 
             act = strJoiner.toString();
-//            strJoiner = null;
-//            System.err.println("This is strjoiner's elements:" + act);
-            System.err.println("Agent 0' tasks are: " + "size : " + level.getAgents().get(0).tasks.size() + " " + level.getAgents().get(0).tasks.toString());
+            System.err.println("This is strjoiner's element/s:" + act);
+//            System.err.println("Agent 0' tasks are: " + "size : " + level.getAgents().get(0).tasks.size() + " " + level.getAgents().get(0).tasks.toString());
+
             System.out.println( act );
             String response = serverMessages.readLine();
             if ( response.contains( "false" ) ) {
