@@ -2,30 +2,30 @@ package client.ateam.Level.Models;
 
 public class Goal {
     private char letter;
-    private int y;
-    private int x;
+    private int row;
+    private int column;
 
     public Goal(){
         letter = ' ';
-        y = 0;
-        x = 0;
+        row = 0;
+        column = 0;
     }
-    public Goal(char letter, int y, int x){
+    public Goal(char letter, int row, int column){
         this.letter = letter;
-        // this.position = Level.getIndexFromColoumnAndy(x,y);
-        this.y = y;
-        this.x = x;
+        // this.position = Level.getIndexFromColoumnAndRow(column,row);
+        this.row = row;
+        this.column = column;
 
     }
 
     public char getGoalLetter(){
         return letter;
     }
-    public int gety(){
-        return y;
+    public int getRow(){
+        return row;
     }
-    public int getx(){
-        return x;
+    public int getColumn(){
+        return column;
     }
 }
 

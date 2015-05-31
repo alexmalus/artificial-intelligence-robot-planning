@@ -24,16 +24,16 @@ public class NoAction implements IAction {
     public Direction calculateDirection(Point sourceCell, Point tarCell) {
         if(tarCell.y-sourceCell.y == 1)
         {
-            return Direction.NORTH;
+            return Direction.EAST;
         }
         else if(tarCell.y-sourceCell.y == -1){
-            return Direction.SOUTH;
-        }
-        else if(tarCell.x-sourceCell.x == 1){
             return Direction.WEST;
         }
+        else if(tarCell.x-sourceCell.x == 1){
+            return Direction.NORTH;
+        }
         else if(tarCell.x-sourceCell.x == -1){
-            return Direction.EAST;
+            return Direction.SOUTH;
         }
         else{
             System.err.println("Coordinates do not generate direction");

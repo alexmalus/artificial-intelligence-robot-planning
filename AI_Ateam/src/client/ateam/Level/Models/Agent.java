@@ -20,8 +20,8 @@ import java.util.Collections;
 public class Agent {
     public int id;
     public Color color;
-    public int y;
-    public int x;
+    public int row;
+    public int column;
     //TODO: list of tasks could be priority queue
     public List<Task> tasks = new ArrayList<Task>();
     public Task currentTask;
@@ -32,11 +32,11 @@ public class Agent {
 
     private Astar astar = new Astar(this);
 
-    public Agent(int id, Color color, int y, int x){
+    public Agent(int id, Color color, int row, int column){
         this.color = color;
         this.id = id;
-        this.y = y;
-        this.x = x;
+        this.row = row;
+        this.column = column;
     }
 
     /*
@@ -47,9 +47,8 @@ public class Agent {
         {
             //do planning if list is empty
             //but this should never occur to
-            System.err.println("List is empty now. What'cha gonna do now son?");
+            System.err.println("Action List is empty now");
 //            planning();
-//            currentAction = null;
         }
         else
         {
@@ -115,7 +114,7 @@ public class Agent {
         }
         else
         {
-            Cell agentLocation = new Cell(y, x);
+            Cell agentLocation = new Cell(row, column);
             agentLocation.setLocation();
 
             switch (currentTask.getTaskType()) {
@@ -138,7 +137,7 @@ public class Agent {
                     break;
                 case FindBox:
                     System.err.println("Case FindBox");
-                    Cell goalLocation = new Cell(currentTask.box.gety(), currentTask.box.getx());
+                    Cell goalLocation = new Cell(currentTask.box.getRow(), currentTask.box.getColumn());
                     ArrayList<Cell> goal_neighbours = new ArrayList<>(4);
                     goal_neighbours.add(new Cell(goalLocation.getR()-1, goalLocation.getC()));
                     goal_neighbours.add(new Cell(goalLocation.getR()+1, goalLocation.getC()));
@@ -229,7 +228,7 @@ public class Agent {
         //move the agent next to the box
         {
 //            System.err.println("Before converting path to actions, let's see agent 0 path list: "+ astar.getPath());
-            Point current =  new Point(y, x);
+            Point current =  new Point(row, column);
             Point next = astar_path.remove(0).getCell().getLocation();
             do{
 //                System.err.println("Current R AND C: " + current.getX() + " " + current.getY());

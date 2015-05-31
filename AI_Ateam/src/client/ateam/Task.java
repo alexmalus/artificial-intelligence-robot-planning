@@ -22,14 +22,14 @@ public class Task {
         //this can allow goals to be empty cells (helping other agents or themselves)
         switch (type){
             case MoveBoxToGoal:
-                System.err.println("is MoveBoxToGoal completed? " + (box.getx()==goal.getx()) + " " + (box.gety()==goal.gety()));
-                return (box.getx()==goal.getx())&&(box.gety()==goal.gety());
+                System.err.println("is MoveBoxToGoal completed? " + (box.getColumn()==goal.getColumn()) + " " + (box.getRow()==goal.getRow()));
+                return (box.getColumn()==goal.getColumn())&&(box.getRow()==goal.getRow());
             case FindBox:
                 ArrayLevel level = ArrayLevel.getSingleton();
 //                System.err.println("box: " + box.toString() + agent.assigned_goal_neighbour.toString());
-                System.err.println("is FindBox completed? " + level.isNeighbor(box.gety(), agent.assigned_goal_neighbour.getR(), box.getx(),
+                System.err.println("is FindBox completed? " + level.isNeighbor(box.getRow(), agent.assigned_goal_neighbour.getR(), box.getColumn(),
                         agent.assigned_goal_neighbour.getC()));
-                return (level.isNeighbor(box.gety(), agent.assigned_goal_neighbour.getR(), box.getx(), agent.assigned_goal_neighbour.getC()));
+                return (level.isNeighbor(box.getRow(), agent.assigned_goal_neighbour.getR(), box.getColumn(), agent.assigned_goal_neighbour.getC()));
             case Idle:
                 return true;
             case NonObstructing:
