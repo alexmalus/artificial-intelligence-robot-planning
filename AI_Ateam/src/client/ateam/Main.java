@@ -43,6 +43,7 @@ public class Main {
         //serialize subgoals (we probably cannot do POP)
 
         //task distribution
+//        System.err.println("BoxArr size: " + level.getBoxes().size());
         tasker.distributeTasks(level.getAgents(),level.getBoxes(),level.getGoals());
         //tasks are now located on each agent
 
@@ -52,7 +53,7 @@ public class Main {
             //plan the initial tasks of each agent
             agent.planning();
         }
-//        System.err.println("After converting path to actions, let's see how 0 should move: " + level.getAgents().get(0).actionList);
+        System.err.println("After converting path to actions, let's see how 0 should move: " + level.getAgents().get(0).actionList);
 
         StringJoiner strJoiner;
         String act;

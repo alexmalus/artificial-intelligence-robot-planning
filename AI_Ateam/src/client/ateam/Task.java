@@ -27,7 +27,7 @@ public class Task {
             case FindBox:
                 ArrayLevel level = ArrayLevel.getSingleton();
 //                System.err.println("box: " + box.toString() + " " + "assigned goal neighbor: " + agent.assigned_goal_neighbour.toString());
-                System.err.println("box: " + box.toString() + " " + "agent: " + agent.toString());
+//                System.err.println("box: " + box.toString() + " " + "agent: " + agent.toString());
 //                System.err.println("is FindBox completed? " + level.isNeighbor(box.getRow(), box.getColumn(), agent.assigned_goal_neighbour.getX(),
 //                        agent.assigned_goal_neighbour.getY()));
                 System.err.println("is FindBox completed? " + level.isNeighbor(box.getRow(), box.getColumn(), agent.row,

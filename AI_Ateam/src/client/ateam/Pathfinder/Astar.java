@@ -110,7 +110,7 @@ public class Astar {
         Node currentNode     		= null; // the node we are currently working on
         ArrayList<Node> neighbors 	= null; // currentNode's neighbors
 
-        System.err.println("Openlist" + openList.size());
+//        System.err.println("Openlist" + openList.size());
         // Loop through all possible nodes and find the best path to the goal
         while (openList.size() > 0)
         {

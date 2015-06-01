@@ -41,6 +41,6 @@ public class Box {
     }
     @Override
     public String toString(){
-        return "row: " + row + " column: " + column;
+        return "row: " + row + " column: " + column + ", color: " + color;
     }
 }

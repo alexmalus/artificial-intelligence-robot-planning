@@ -161,29 +161,54 @@ public class Agent {
                 case FindBox:
                     System.err.println("Case FindBox");
                     Cell goalLocation = new Cell(currentTask.box.getRow(), currentTask.box.getColumn());
-                    ArrayList<Cell> goal_neighbours = new ArrayList<>(4);
-                    goal_neighbours.add(new Cell(goalLocation.getR()-1, goalLocation.getC()));
-                    goal_neighbours.add(new Cell(goalLocation.getR()+1, goalLocation.getC()));
-                    goal_neighbours.add(new Cell(goalLocation.getR(), goalLocation.getC()-1));
-                    goal_neighbours.add(new Cell(goalLocation.getR(), goalLocation.getC()+1));
+                    goalLocation.setLocation();
+                    System.err.println("box: " + goalLocation.toString());
+                    ArrayList<Cell> goal_neighbours = new ArrayList<>();
+                    boolean[][] walls = ArrayLevel.getSingleton().walls;
+//                    System.err.println("First neighbor: " + ArrayLevel.cellFromLocation(goalLocation.getR()-1,goalLocation.getC()));
+                    if(!walls[goalLocation.getR()-1][goalLocation.getC()])
+                    {
+                        goal_neighbours.add(new Cell(goalLocation.getR()-1, goalLocation.getC()));
+                    }
+//                    System.err.println("Second neighbor: " + ArrayLevel.cellFromLocation(goalLocation.getR()+1,goalLocation.getC()));
+                    if(!walls[goalLocation.getR()+1][goalLocation.getC()])
+                    {
+                        goal_neighbours.add(new Cell(goalLocation.getR()+1, goalLocation.getC()));
+                    }
+//                    System.err.println("Third neighbor: " + ArrayLevel.cellFromLocation(goalLocation.getR(),goalLocation.getC()-1));
+                    if(!walls[goalLocation.getR()][goalLocation.getC()-1])
+                    {
+                        goal_neighbours.add(new Cell(goalLocation.getR(), goalLocation.getC()-1));
+                    }
+//                    System.err.println("Fourth neighbor: " + ArrayLevel.cellFromLocation(goalLocation.getR(),goalLocation.getC()+1));
+                    if(!walls[goalLocation.getR()][goalLocation.getC()+1])
+                    {
+                        goal_neighbours.add(new Cell(goalLocation.getR(), goalLocation.getC()+1));
+                    }
                     Cell goal_neighbour;
-                    for(int i = 0; i < 4; ++i)
+                    System.err.println("Goal neighbor sizes: " + goal_neighbours.size());
+                    for(int i = 0; i < goal_neighbours.size(); ++i)
                     {
                         goal_neighbour = goal_neighbours.remove(i);
                         goal_neighbour.setLocation();
+                        System.err.println((i + 1) + " neighbor which I'm trying to TRY to get to:" +
+                                goal_neighbour.toString());
                         astar.newPath(agentLocation, goal_neighbour);
                         astar.findPath();
+                        System.err.println("astar path size after find attempt: " + astar.getPath().size());
                         if(astar.pathExists())
                         {
+                            System.err.println("I have a path!");
 //                            assigned_goal_neighbour = goal_neighbour;
 //                            assigned_goal_neighbour.setLocation();
+                            //find plan (first plan or replan)
+                            convert_path_to_actions();
+//                            System.err.println("Just converted the Pathfinding path to actions. Has Box? " + hasBox);
                             break;
                         }
                     }
 //                    hasBox = true;
-                    //find plan (first plan or replan)
-                    convert_path_to_actions();
-                    System.err.println("Just converted the Pathfinding path to actions. Has Box? " + hasBox);
+
                     break;
                 case Idle:
                     System.err.println("Case where agent needs to stay put");

@@ -158,8 +158,8 @@ public class ArrayLevel implements ILevel {
         String line;
         Color color;
         Cell tempCell;
-        // Create our cellList
-        cells = new HashMap<Point, Cell>();
+        cells = new HashMap<Point, Cell>();         // Create our cellList
+        boolean is_multi_agent_system = false;
 
         for(int x=0;x<agents.length;x++)
             for(int y=0;y<agents[x].length;y++)
@@ -215,6 +215,7 @@ public class ArrayLevel implements ILevel {
             colorLines++;
         }
 
+        if (!colors.isEmpty()) is_multi_agent_system = true;
         if ( colorLines > 0 ) {
             //which means that for the moment we are only considering SA cases
             error( "Box colors not supported" );
@@ -224,15 +225,6 @@ public class ArrayLevel implements ILevel {
         for (int i=0; i<70; ++i)
         {
             widths[i] = 0;
-        }
-
-        //it means we are dealing with SA case where we only have on the .lvl file the map and not the declarations red: 0, etc etc
-        //so just add default case for one agent, the color blue
-        //for the moment we're considering the case for the SA to just have one box in the map called A
-        if (colors.isEmpty())
-        {
-            colors.put('0', Color.BLUE);
-            colors.put('A', Color.BLUE);
         }
 
         while ( !line.equals( "" ) ) {
@@ -247,20 +239,35 @@ public class ArrayLevel implements ILevel {
                     if ( agentCol != -1 || agentRow != -1) {
                         error("Not a single agent level" );
                     }
-                    agentsArrayList.add(new Agent((int)chr,colors.get(chr), levelLines, i));
+                    if (is_multi_agent_system)
+                    {
+
+                    }
+                    else{
+                        colors.put(chr, Color.BLUE);
+                        agentsArrayList.add(new Agent((int) chr, colors.get(chr), levelLines, i));
+                    }
                     tempCell = new Cell(levelLines, i);
                     tempCell.toggleOccupied(); //the cell is Occupied
                     cells.put(tempCell.getArrayLevelLocation(), tempCell);
                     agents[levelLines][i] = (int)chr;
 //                    System.err.println("int chr" + (int)chr);
-                    System.err.println("Agent location row: "+levelLines+", col: "+i+", value: "+agents[levelLines][i]);
+//                    System.err.println("Agent location row: "+levelLines+", col: "+i+", value: "+agents[levelLines][i]);
                 } else if ( 'A' <= chr && chr <= 'Z' ) { // Boxes
-                    boxesArrayList.add(new Box(chr,colors.get(chr),levelLines,i));
+                    if (is_multi_agent_system)
+                    {
+
+                    }
+                    else{
+                        colors.put(chr, Color.BLUE);
+                        boxesArrayList.add(new Box(chr, colors.get(chr), levelLines, i));
+//                        System.err.println("Box I am trying to add: " + new Box(chr, colors.get(chr), levelLines, i).toString());
+                    }
                     tempCell = new Cell(levelLines, i);
                     tempCell.toggleOccupied(); //the cell is Occupied
                     cells.put(tempCell.getArrayLevelLocation(), tempCell);
                     boxes[levelLines][i]=chr;
-                    System.err.println("Box coords: "+levelLines+","+i);
+//                    System.err.println("Box coords: "+levelLines+","+i);
                 } else if ( 'a' <= chr && chr <= 'z' ) { // Goal cells
                     goalsArrayList.add(new Goal(chr,levelLines,i));
                     tempCell = new Cell(levelLines, i);
@@ -289,6 +296,7 @@ public class ArrayLevel implements ILevel {
            temp_Cell.getValue().setLocation();
 //            System.err.println("Cell: " + temp_Cell.toString());
         }
+
     }
 
     @Override

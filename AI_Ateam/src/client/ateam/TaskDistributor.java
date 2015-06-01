@@ -52,8 +52,15 @@ public class TaskDistributor {
             boxcolors.put(color, new ArrayList<Box>());
             agentcolors.put(color, new ArrayList<Agent>());
         }
+//        System.err.println("Boxcolors size: " + boxcolors.size());
+//        for(Color key: boxcolors.keySet()){
+//            System.err.println("key part of boxcolors: " + key);
+//            for(Box value: boxcolors.get(key)) {
+//                System.err.println("value/s assigned to key: " + value); //none
+//            }
+//        }
         for(Box box:boxes){
-            System.err.println("task distributor - "+box.getColor());
+//            System.err.println("task distributor - "+box.getColor());
             boxcolors.get(box.getColor()).add(box);
             boxletters.put(box.getBoxLetter(),box); // bad use of hashmap :b
         }
@@ -94,7 +101,11 @@ public class TaskDistributor {
                 level.getTasks().add(new Task(matchingAgent, matchingBox, goal, TaskType.MoveBoxToGoal));
             }
         }
-//        System.err.println(agents.get(0).tasks.get(0).getTaskType());
+        List<Task> temp_tasks = agents.get(0).tasks;
+        for (int i = 0; i < temp_tasks.size(); i++) {
+            System.err.println("A task for agent 0: " + temp_tasks.get(i));
+        }
+        //        System.err.println(agents.get(0).tasks.get(0).getTaskType());
 //        System.err.println(ArrayLevel.getSingleton().getAgents().get(0).tasks.isEmpty());
     }
     void addGoal(Goal goal){
