@@ -131,7 +131,7 @@ public class Agent {
                         break;
                 }
                 currentTask = tasks.remove(0);
-                System.err.println("replanning 1");
+//                System.err.println("replanning 1");
                 planning();
             }
         }
@@ -168,7 +168,7 @@ public class Agent {
                         tasks.add(0, new Task(this, currentTask.box, new Goal(), TaskType.FindBox));
                         tasks.add(1, new Task(this, currentTask.box, currentTask.goal, TaskType.MoveBoxToGoal));
                         currentTask = null;
-                        System.err.println("replanning 2");
+//                        System.err.println("replanning 2");
                         planning();
                     }
                     break;
@@ -286,9 +286,12 @@ public class Agent {
     public void convert_path_to_actions(){
         ArrayList<Node> astar_path = astar.getPath();
         Collections.reverse(astar_path); //to make it ordered
+//        System.err.println("Before converting path to actions, let's see agent 0 path list: "+ astar.getPath());
+//        System.err.println("Same as upp, agent 0 path list: "+ astar_path);
+
         if(!hasBox) //agent needs to move next to the box
         {
-            System.err.println("Before converting path to actions, let's see agent 0 path list: "+ astar.getPath());
+//            System.err.println("Before converting path to actions, let's see agent 0 path list: "+ astar.getPath());
             Point current =  new Point(row, column);
             Point next = astar_path.remove(0).getCell().getLocation();
             do{
@@ -300,10 +303,14 @@ public class Agent {
                 if(astar_path.size() == 0) break;
                 next = astar_path.remove(0).getCell().getLocation();
             }while(astar_path.size() >= 0);
+//            System.err.println("Before converting path to actions, let's see agent 0 path list: " + astar_path);
+//            System.err.println("path list size " + astar_path.size());
+            System.err.println("Finished converting path to actions:" + actionList);
+            System.err.println("action list size:" + actionList.size());
         }
         else //agent has to get the box in the goal
         {
-            System.err.println("Before converting path to actions, let's see agent 0 path list: "+ astar.getPath());
+//            System.err.println("Before converting path to actions, let's see agent 0 path list: "+ astar.getPath());
             IAction new_action;
 
             Point curAgent =  new Point(row, column);
@@ -315,7 +322,7 @@ public class Agent {
                 //    public Pull(int agentId, char boxLetter, Point currentCell, Point tarCell, Point boxCell){
                 new_action = new Push(id, curBox.getBoxLetter(), curAgent,
                         new Point(curBox.getRow(), curBox.getColumn()), new Point((int)tarCell.getX(), (int)tarCell.getY()));
-                System.err.println("c");
+//                System.err.println("c");
                 if (new_action.preconditions()) //try to see if you can push the box
                 {
                     actionList.add(0, new_action);
@@ -334,15 +341,18 @@ public class Agent {
                     curBox.setRow(row);
                     curBox.setColumn(column);
                 }
+                if(astar_path.size() == 0) break;
                 tarCell = astar_path.remove(0).getCell().getLocation();
 //                System.err.println("look at the action list after I've tried adding push or pull to it: " + actionList.get(0));
 
-                if(astar_path.size() == 0) break;
             }while(astar_path.size() >= 0);
 
 
             Collections.reverse(actionList); //to make it ordered
+//            System.err.println("Before converting path to actions, let's see agent 0 path list: " + astar.getPath());
+//            System.err.println("path list size " + astar.getPath().size());
             System.err.println("Finished converting path to actions:" + actionList);
+            System.err.println("action list size:" + actionList.size());
         }
     }
 

@@ -95,13 +95,13 @@ public class TaskDistributor {
         }
         else{
             for(Goal goal : goals) {
-                //if (goal.getGoalLetter() == 'c')
-                //{
+//                if (goal.getGoalLetter() == 'c')
+//                {
                     matchingBox = boxletters.get(Character.toUpperCase(goal.getGoalLetter()));
                     matchingAgent = agentcolors.get(matchingBox.getColor()).get(0);//only one color box per agent
                     matchingAgent.tasks.add(new Task(matchingAgent, matchingBox,goal, TaskType.MoveBoxToGoal));
                     level.getTasks().add(new Task(matchingAgent, matchingBox, goal, TaskType.MoveBoxToGoal));
-                //}
+//                }
 
             }
         }

@@ -70,7 +70,7 @@ public class Astar {
         this.startNode = new Node(start);
 
         // Add it to the nodeList
-        System.err.println("Here's the start node: " + start.toString());
+//        System.err.println("Here's the start node: " + start.toString());
         nodeList.put(start, startNode);
 
         // Add it to the openList
@@ -80,7 +80,7 @@ public class Astar {
     // Store the goal point of the path
     public void setGoal(Cell goal)
     {
-        System.err.println("Here's the goal node: " + goal.toString());
+//        System.err.println("Here's the goal node: " + goal.toString());
         // Create a Node for this Cell
         this.goalNode = new Node(goal);
 
@@ -313,6 +313,7 @@ public class Astar {
         Node current, next;
         ArrayList<Node> tempList = new ArrayList<Node>();
 
+        System.err.println("Listen here, start: " + start.toString());
         // Add the first point to our list
         tempList.add(start);
 //        System.err.println("Start cell: " + start.getCell().toString());
@@ -320,6 +321,7 @@ public class Astar {
         // Grab the next point in line
         current = start.getParent();
         if (current != null){
+            System.err.println("grabbing start node's parent:" + current);
             tempList.add(current);
         }
         // Loop through our generated path and add only the necessary points
@@ -340,6 +342,10 @@ public class Astar {
 //            System.err.println("Next node: " + current.getCell().toString());
         }
 
+        //dirty fix to only have proper path returned(starting location is only passed into the path which is wrong, we remove it here)
+        if (tempList.size() == 2){
+            tempList.remove(1);
+        }
         // Return our smoothed path
         return tempList;
     }
