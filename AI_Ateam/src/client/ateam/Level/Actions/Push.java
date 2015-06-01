@@ -54,10 +54,10 @@ public class Push implements IAction {
         else if(tarCell.y-sourceCell.y == -1){
             return Direction.WEST;
         }
-        else if(tarCell.x-sourceCell.x == 1){
+        else if(tarCell.x-sourceCell.x == -1){
             return Direction.NORTH;
         }
-        else if(tarCell.x-sourceCell.x == -1){
+        else if(tarCell.x-sourceCell.x == 1){
             return Direction.SOUTH;
         }
         else{

@@ -53,6 +53,7 @@ public class TaskDistributor {
             agentcolors.put(color, new ArrayList<Agent>());
         }
         for(Box box:boxes){
+            System.err.println("task distributor - "+box.getColor());
             boxcolors.get(box.getColor()).add(box);
             boxletters.put(box.getBoxLetter(),box); // bad use of hashmap :b
         }
