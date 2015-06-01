@@ -364,6 +364,7 @@ public class ArrayLevel implements ILevel {
 
     @Override
     public void executePushAction(int agentId, char boxLetter, Point currentCell, Point boxCell, Point boxTarCell) {
+
         if(this.isNeighbor(currentCell.x,currentCell.y,boxCell.x,boxCell.y) && this.isNeighbor(boxCell.x,boxCell.y,boxTarCell.x,boxTarCell.y)
                 && this.isFree(boxTarCell.x,boxTarCell.y)) {
             //change boxrow and boxcol for box
@@ -372,6 +373,10 @@ public class ArrayLevel implements ILevel {
             //change agentrow and agentcol for agent
             // move agent on level
             this.moveAgentTo(agentId, currentCell, boxCell);
+            System.err.println("executePushAction success");
+        }
+        else{
+            System.err.println("executePushAction failed");
         }
     }
 

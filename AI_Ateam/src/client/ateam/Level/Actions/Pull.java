@@ -57,7 +57,7 @@ public class Pull implements IAction {
             return Direction.SOUTH;
         }
         else{
-            System.err.println("Coordinates do not generate direction");
+            System.err.println("Coordinates do not generate direction: "+sourceCell.toString()+","+tarCell.toString());
             return Direction.WEST;
         }
     }

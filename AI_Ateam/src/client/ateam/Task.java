@@ -32,6 +32,7 @@ public class Task {
 //                        agent.assigned_goal_neighbour.getY()));
                 System.err.println("is FindBox completed? " + level.isNeighbor(box.getRow(), box.getColumn(), agent.row,
                         agent.column));
+                System.err.println("Agent coords: "+agent.row+","+agent.column);
 //                return (level.isNeighbor(box.getRow(), box.getColumn(), agent.assigned_goal_neighbour.getX(), agent.assigned_goal_neighbour.getY()));
                 return (level.isNeighbor(box.getRow(), box.getColumn(), agent.row, agent.column));
             case Idle:

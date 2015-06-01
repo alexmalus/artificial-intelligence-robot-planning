@@ -70,6 +70,7 @@ public class Astar {
         this.startNode = new Node(start);
 
         // Add it to the nodeList
+        System.err.println("Here's the start node: " + start.toString());
         nodeList.put(start, startNode);
 
         // Add it to the openList
@@ -200,6 +201,7 @@ public class Astar {
         if (needPath && openList.size() == 0)
         {
             System.err.println("Agent #" + owner.id + ": can't move!");
+            pathList = null;
         }
 
         // Path is complete
