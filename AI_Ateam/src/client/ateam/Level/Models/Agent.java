@@ -31,6 +31,9 @@ public class Agent {
     private IAction currentAction;
     public List<IAction> actionList = new ArrayList<IAction>();
     public boolean hasBox;
+    //made so that in task distributor, you can find the path, passing through agents and boxes, but not through walls
+    //in order to order goals
+    public boolean preliminary_build_path = true;
 
     private Astar astar = new Astar(this);
 
@@ -286,14 +289,24 @@ public class Agent {
     public void convert_path_to_actions(){
         ArrayList<Node> astar_path = astar.getPath();
         Collections.reverse(astar_path); //to make it ordered
-//        System.err.println("Before converting path to actions, let's see agent 0 path list: "+ astar.getPath());
-//        System.err.println("Same as upp, agent 0 path list: "+ astar_path);
+        int astar_path_size = astar_path.size();
+        System.err.println("Before converting path to actions, let's see agent 0 path list: "+ astar.getPath());
+        System.err.println("Same as upp, agent 0 path list: "+ astar_path);
 
         if(!hasBox) //agent needs to move next to the box
         {
 //            System.err.println("Before converting path to actions, let's see agent 0 path list: "+ astar.getPath());
             Point current =  new Point(row, column);
             Point next = astar_path.remove(0).getCell().getLocation();
+            //fix in Astar's pathfinding two points path problem, occurs when boxLocation is equal to startLocation of the pathfinder
+            if(astar_path_size == 2)
+            {
+                if(current.getX() == next.getX() && current.getY() == next.getY())
+                {
+                    //remove it from the path, we only need to do one move action
+                    next = astar_path.remove(0).getCell().getLocation();
+                }
+            }
             do{
 //                System.err.println("Current R AND C: " + current.getX() + " " + current.getY());
 //                System.err.println("Next R AND C: " + next.getX() + " " + next.getY());
@@ -315,8 +328,19 @@ public class Agent {
 
             Point curAgent =  new Point(row, column);
             Box curBox = currentTask.box;
+            //fix in Astar's pathfinding two points path problem
+            //it only occurs when boxLocation is equal to startLocation of the pathfinder
             Point tarCell = astar_path.remove(0).getCell().getLocation();
-            System.err.println("tarCell: " + tarCell.toString());
+            if(astar_path_size == 2)
+            {
+                if((curBox.getRow() == tarCell.getX() && curBox.getColumn() == tarCell.getY()) ||
+                        curAgent.getX() == tarCell.getX() && curAgent.getY() == curAgent.getY())
+                {
+                    //remove it from the path, we only need to do one push or pull action
+                    tarCell = astar_path.remove(0).getCell().getLocation();
+                }
+            }
+//            System.err.println("tarCell: " + tarCell.toString());
             do{
                 //    public Push(int agentId, char boxLetter, Point currentCell, Point boxCell, Point boxTarCell){
                 //    public Pull(int agentId, char boxLetter, Point currentCell, Point tarCell, Point boxCell){

@@ -56,6 +56,6 @@ public class Task {
     }
     @Override
     public String toString(){
-        return ("agentID: " + agent.id + ",box: " + box.getBoxLetter() + ",goal: " + goal + ",taskType: " + type);
+        return ("agentID: " + agent.id + ",box: " + box.getRow() + ", " + box.getColumn() + ",goal: " + goal + ",taskType: " + type);
     }
 }

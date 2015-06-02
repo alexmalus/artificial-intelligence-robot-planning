@@ -239,9 +239,8 @@ public class Astar {
                 // Grab the Cell at location (r, c)
                 childCell = ArrayLevel.getCell(r, c);
 
-                //TODO: later on, we can dynamically check in map whatever location is of interest
                 // Make sure this Cell exists and is not occupied
-                if ((childCell != null) && !childCell.isOccupied())
+                if ((childCell != null) && !childCell.isOccupied(owner.preliminary_build_path))
                 {
 //                    System.err.println("child node: " + childCell.toString());
 
@@ -342,10 +341,6 @@ public class Astar {
 //            System.err.println("Next node: " + current.getCell().toString());
         }
 
-        //dirty fix to only have proper path returned(starting location is only passed into the path which is wrong, we remove it here)
-        if (tempList.size() == 2){
-            tempList.remove(1);
-        }
         // Return our smoothed path
         return tempList;
     }

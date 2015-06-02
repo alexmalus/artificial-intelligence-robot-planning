@@ -20,7 +20,8 @@ public interface ILevel {
     boolean isNeighbor(int curRow, int curCol,int neighborRow, int neighborCol);
     boolean isBoxAt(char boxLetter, int row, int col);
     boolean isAgentAt(int agentId, int row, int col);
-    boolean isFree(int row, int col);
+//    boolean isFree(int row, int col);
+    boolean isFree(Point cell);
     boolean isGoalCompleted();
     public char getBoxLetter(int row, int col);
     public Color getBoxColor(int row, int col);

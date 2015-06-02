@@ -4,6 +4,7 @@ import client.ateam.Level.Models.Agent;
 import client.ateam.Level.Models.Box;
 import client.ateam.Level.Models.Goal;
 import client.ateam.Task;
+import client.ateam.projectEnum.CellType;
 import client.ateam.projectEnum.Color;
 
 import java.awt.*;
@@ -86,14 +87,17 @@ public class ArrayLevel implements ILevel {
     }
 
     @Override
-    public boolean isFree( int row, int col ) {
-//        System.err.println("Checking is free variables like..:");
-//        System.err.println("Row: "+row+" Column: "+col);
-//        System.err.println("Walls: "+this.walls[row][col]);
-//        System.err.println("Boxes: "+this.boxes[row][col]);
-        //System.err.println("Boxes inverted: "+this.walls[row][col]);
-//        System.err.println("Agents: "+this.agents[row][col]);
-        return ( !(this.walls[row][col]) && (this.boxes[row][col] == 0 || this.boxes[row][col]==' ') && this.agents[row][col]==-1 );
+//    public boolean isFree( int row, int col ) {
+////        System.err.println("Checking is free variables like..:");
+////        System.err.println("Row: "+row+" Column: "+col);
+////        System.err.println("Walls: "+this.walls[row][col]);
+////        System.err.println("Boxes: "+this.boxes[row][col]);
+//        //System.err.println("Boxes inverted: "+this.walls[row][col]);
+////        System.err.println("Agents: "+this.agents[row][col]);
+//        return ( !(this.walls[row][col]) && (this.boxes[row][col] == 0 || this.boxes[row][col]==' ') && this.agents[row][col]==-1 );
+//    }
+    public boolean isFree(Point cell){
+        return !getCell(cell).isOccupied();
     }
 
     @Override
@@ -230,9 +234,10 @@ public class ArrayLevel implements ILevel {
         while ( !line.equals( "" ) ) {
             for ( int i = 0; i < line.length(); i++ ) {
                 char chr = line.charAt( i );
+//                System.err.println("row: " + levelLines + "column: " + i);
                 if ( '+' == chr ) { // Walls
                     walls[levelLines][i] = true;
-                    tempCell = new Cell(levelLines, i);
+                    tempCell = new Cell(levelLines, i, CellType.WALL);
                     tempCell.toggleOccupied(); //the cell is Occupied
                     cells.put(tempCell.getArrayLevelLocation(), tempCell);
                 } else if ( '0' <= chr && chr <= '9' ) { // Agents
@@ -297,6 +302,12 @@ public class ArrayLevel implements ILevel {
 //            System.err.println("Cell: " + temp_Cell.toString());
         }
 
+//        for (Box box : boxesArrayList)
+//        {
+//            System.err.println("Box location : " + box.getRow() +", " +  box.getColumn());
+//            System.err.println("Is it occupied? : " + getCell(box.getRow(), box.getColumn()).isOccupied());
+//        }
+
     }
 
     @Override
@@ -356,9 +367,11 @@ public class ArrayLevel implements ILevel {
     @Override
     public void executeMoveAction(int agentId, Point currentCell, Point tarCell) {
         System.err.println("executeMoveAction - isNeighor: "+this.isNeighbor(currentCell.x,currentCell.y,tarCell.x,tarCell.y));
-        System.err.println("executeMoveAction - isFree: "+this.isFree(tarCell.x, tarCell.y));
-        if(this.isNeighbor(currentCell.x,currentCell.y,tarCell.x,tarCell.y) && this.isFree(tarCell.x, tarCell.y)){
+        System.err.println("executeMoveAction - isFree: "+this.isFree(new Point(tarCell.x, tarCell.y)));
+        if(this.isNeighbor(currentCell.x,currentCell.y,tarCell.x,tarCell.y) && this.isFree(new Point(tarCell.x, tarCell.y))){
             this.moveAgentTo(agentId,currentCell,tarCell);
+            getCell(currentCell).toggleOccupied();
+            getCell(tarCell).toggleOccupied();
         }
     }
 
@@ -366,7 +379,7 @@ public class ArrayLevel implements ILevel {
     public void executePushAction(int agentId, char boxLetter, Point currentCell, Point boxCell, Point boxTarCell) {
 
         if(this.isNeighbor(currentCell.x,currentCell.y,boxCell.x,boxCell.y) && this.isNeighbor(boxCell.x,boxCell.y,boxTarCell.x,boxTarCell.y)
-                && this.isFree(boxTarCell.x,boxTarCell.y)) {
+                && this.isFree(new Point(boxTarCell.x,boxTarCell.y))) {
             //change boxrow and boxcol for box
             //move box on level
             this.moveBoxTo(boxLetter, boxCell, boxTarCell);
@@ -374,6 +387,8 @@ public class ArrayLevel implements ILevel {
             // move agent on level
             this.moveAgentTo(agentId, currentCell, boxCell);
             System.err.println("executePushAction success");
+            getCell(currentCell).toggleOccupied();
+            getCell(boxTarCell).toggleOccupied();
         }
         else{
             System.err.println("executePushAction failed");
@@ -383,13 +398,14 @@ public class ArrayLevel implements ILevel {
     @Override
     public void executePullAction(int agentId, char boxLetter, Point currentCell, Point boxCell, Point tarCell) {
         if(this.isNeighbor(currentCell.x,currentCell.y,tarCell.x,tarCell.y) && this.isNeighbor(boxCell.x,boxCell.y,currentCell.x,currentCell.y)
-                && this.isFree(tarCell.x,tarCell.y)){
+                && this.isFree(new Point(tarCell.x,tarCell.y))){
             //change agentrow and agentcol for agent
             // move agent on level
             this.moveAgentTo(agentId,currentCell,tarCell);
             //change boxrow and boxcol for box
             //move box on level
             this.moveBoxTo(boxLetter,boxCell,currentCell);
+            getCell(boxCell).toggleOccupied();
         }
     }
 

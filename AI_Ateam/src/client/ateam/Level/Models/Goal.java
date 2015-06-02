@@ -7,8 +7,8 @@ public class Goal {
 
     public Goal(){
         letter = ' ';
-        row = -1;
-        column = -1;
+        row = -200; //such low values in order to make sure their abs values are still less than those of real goals
+        column = -200;
     }
     public Goal(char letter, int row, int column){
         this.letter = letter;

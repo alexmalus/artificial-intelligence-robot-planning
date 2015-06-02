@@ -65,9 +65,9 @@ public class Move implements IAction {
 
     @Override
     public boolean preconditions() {
-        System.err.println("isFree: "+ level.isFree(this.tarCell.x,this.tarCell.y));
+        System.err.println("isFree: "+ level.isFree(new Point(this.tarCell.x,this.tarCell.y)));
         System.err.println("isNeighbor: "+level.isNeighbor(currentCell.x,currentCell.y,tarCell.x,tarCell.y));
-        return (level.isFree(this.tarCell.x,this.tarCell.y) && level.isNeighbor(currentCell.x,currentCell.y,tarCell.x,tarCell.y));
+        return (level.isFree(new Point(this.tarCell.x,this.tarCell.y)) && level.isNeighbor(currentCell.x,currentCell.y,tarCell.x,tarCell.y));
     }
 
     @Override

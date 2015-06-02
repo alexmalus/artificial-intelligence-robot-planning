@@ -1,5 +1,7 @@
 package client.ateam.Level;
 
+import client.ateam.projectEnum.CellType;
+
 import java.awt.Point;
 
 // Grid cell class
@@ -7,7 +9,7 @@ public class Cell
 {
     private Point cell;						// The location of this cell; Point (r, c)
     private Point location;					// The location of this cell; Point (x, y)
-
+    private CellType cell_type;
     private boolean isOccupied 	= false;	// Whether or not agents can enter this cell
 
     public Cell(){
@@ -19,6 +21,13 @@ public class Cell
     {
         // Row and column numbers for this cell
         this.cell = new Point(r, c);
+    }
+
+    public Cell(int r, int c, CellType cell_type)
+    {
+        // Row and column numbers for this cell
+        this.cell = new Point(r, c);
+        this.cell_type = cell_type;
     }
 
     // Returns Point(x, y)
@@ -57,10 +66,25 @@ public class Cell
 
     // Returns whether or not the cell is playable
     public boolean isOccupied() {
-        //TODO: need a way to check if the current location is occupied or not
-        //each agent,wall,box need a cell and we need to mark them as being occupied and then free them up afterwards
-//        return (walls[location.getX()][location.getY()] == true);
         return isOccupied;
+    }
+
+    public boolean isOccupied(boolean preliminary_path_build) {
+        if (preliminary_path_build)
+        {
+            if (cell_type == CellType.WALL)
+            {
+                return isOccupied;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return isOccupied;
+        }
     }
 
     public void toggleOccupied(){

@@ -70,7 +70,8 @@ public class Pull implements IAction {
 
     @Override
     public boolean preconditions() {
-        return (level.isNeighbor(currentCell.x,currentCell.y,boxCell.x,boxCell.y) && level.isNeighbor(currentCell.x,currentCell.y,tarCell.x,tarCell.y) && level.isFree(tarCell.x,tarCell.y));
+        return (level.isNeighbor(currentCell.x,currentCell.y,boxCell.x,boxCell.y) &&
+                level.isNeighbor(currentCell.x,currentCell.y,tarCell.x,tarCell.y) && level.isFree(new Point(tarCell.x,tarCell.y)));
     }
 
     @Override
