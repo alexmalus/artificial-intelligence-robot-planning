@@ -1,10 +1,11 @@
 package client.ateam.Pathfinder;
 
+import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.awt.*;
 
- import client.ateam.Level.ArrayLevel;
+import client.ateam.Level.ArrayLevel;
 import client.ateam.Level.Cell;
 import client.ateam.Level.Models.Agent;
 
@@ -34,6 +35,11 @@ public class Astar {
     public ArrayList<Node> getPath()
     {
         return pathList;
+    }
+
+    public void setPath(ArrayList<Node> pathList)
+    {
+        this.pathList = pathList;
     }
 
     // Return the size of the path
@@ -102,6 +108,7 @@ public class Astar {
     // Calculating the best path based on the start and goal nodes given in the constructor.
     public void findPath()
     {
+        System.err.println("trying to reach the following goal node: "  + goalNode.toString());
         // Make sure we have starting and ending points and that we don't already have a path
         if (!needPath || startNode == null || goalNode == null) return;
 
@@ -115,13 +122,14 @@ public class Astar {
         // Loop through all possible nodes and find the best path to the goal
         while (openList.size() > 0)
         {
+//            System.err.println("Open list size: " + openList.size());
             // Set our currentNode to the node with the lowest totalCost
             currentNode = openList.pop();
 
             // Add currentNode to closedList (since we will be examining it)
             closedList.add(currentNode);
             // If we have found the goal, notify AStar that we no longer need a path
-            System.err.println(currentNode.toString() + " " + goalNode.toString());
+//            System.err.println(currentNode.toString() + " ");
             if (currentNode.getCell().getX() == goalNode.getCell().getX() && currentNode.getCell().getY() == goalNode.getCell().getY())
             {
                 foundGoal();
@@ -132,7 +140,7 @@ public class Astar {
             {
                 // Gather a list of neighbors to the currentNode
                 neighbors = neighbors(currentNode);
-
+//                System.err.println("Neighbors of the current node: " + neighbors.toString());
                 // Loop through neighbors
                 for (Node neighbor : neighbors)
                 {
@@ -218,27 +226,23 @@ public class Astar {
      **/
 
     // Returns a list of Nodes surrounding parentNode
-    private ArrayList<Node> neighbors(Node parentNode)
+    public ArrayList<Node> neighbors(Node parentNode)
     {
-        int r, c;
         Node childNode;
-        Cell childCell;
         Cell parentCell;
         ArrayList<Node> tempList = new ArrayList<Node>(8);
 
         // Cell reference for parentNode
         parentCell = parentNode.getCell();
-//        System.err.println("Parent cell: " + parentCell.toString());
-//        System.err.println("It's r and C are: " + parentCell.getR() + " " + parentCell.getC());
+        ArrayList<Cell> childCells = new ArrayList<>();
+        childCells.add(ArrayLevel.getCell(parentCell.getR() - 1, parentCell.getC()));
+        childCells.add(ArrayLevel.getCell(parentCell.getR() + 1, parentCell.getC()));
+        childCells.add(ArrayLevel.getCell(parentCell.getR(), parentCell.getC() - 1));
+        childCells.add(ArrayLevel.getCell(parentCell.getR(), parentCell.getC() + 1));
 
-        // Search the surrounding 8 nodes for possible places to go
-        for (r = (parentCell.getR() - 1); r <= (parentCell.getR() + 1); r++)
-        {
-            for (c = (parentCell.getC() - 1); c <= (parentCell.getC() + 1); c++)
+        // Search the surrounding 4 neighbour nodes for possible places to go
+            for(Cell childCell : childCells)
             {
-                // Grab the Cell at location (r, c)
-                childCell = ArrayLevel.getCell(r, c);
-
                 // Make sure this Cell exists and is not occupied
                 if ((childCell != null) && !childCell.isOccupied(owner.preliminary_build_path))
                 {
@@ -280,7 +284,6 @@ public class Astar {
                     }
                 }
             }
-        }
 
         // Return a list of neighbor nodes
         return tempList;
@@ -291,16 +294,17 @@ public class Astar {
     {
         int straightCost = 10; // The movement cost for going straight (horizontal/vertical)
         //IT'S OVER 9000! (joke, placed this value as to never choose the ones diagonally, maybe change later the implementation)
-        int diagonalCost = 9001; // The movement cost for going diagonally (approx. sqrt(2) * sc)
+//        int diagonalCost = 9001; // The movement cost for going diagonally
 
         // The Manhattan Distance from the start node to the goal node (horizontal/vertical)
         int straightSteps = (Math.abs(start.getCell().getR() - goal.getCell().getR()) + Math.abs(start.getCell().getC() - goal.getCell().getC()));
 
         // The number of steps we would take going diagonally
-        int diagonalSteps = Math.min(Math.abs(start.getCell().getR() - goal.getCell().getR()), Math.abs(start.getCell().getC() - goal.getCell().getC()));
+//        int diagonalSteps = Math.min(Math.abs(start.getCell().getR() - goal.getCell().getR()), Math.abs(start.getCell().getC() - goal.getCell().getC()));
 
         // The actual heuristic for moving horizontally, vertically, or diagonally
-        int estimate = (diagonalCost * diagonalSteps) + (straightCost * (straightSteps - (2 * diagonalSteps)));
+//        int estimate = (diagonalCost * diagonalSteps) + (straightCost * (straightSteps - (2 * diagonalSteps)));
+        int estimate = straightCost * straightSteps;
 
         // Return our estimate
         return estimate;
@@ -312,7 +316,7 @@ public class Astar {
         Node current, next;
         ArrayList<Node> tempList = new ArrayList<Node>();
 
-        System.err.println("Listen here, start: " + start.toString());
+        System.err.println("Start node when building the path: " + start.toString());
         // Add the first point to our list
         tempList.add(start);
 //        System.err.println("Start cell: " + start.getCell().toString());
@@ -326,12 +330,14 @@ public class Astar {
         // Loop through our generated path and add only the necessary points
         while ((next = current.getParent()) != null)
         {
+            System.err.println("next node when building the path: " + next.toString());
             // If we can't skip the point, add it to our list and
             // set our new starting point to our current location
 
             //means we reached agent's location
             if (!walkable(start.getCell(), next.getCell()))
             {
+//                System.err.println("Not a walkable area..");
 //                tempList.add(start = current);
             }
             if (next != startNode) tempList.add(next);
@@ -357,7 +363,10 @@ public class Astar {
         {
             // Check to see if the unit would overlap into an unplayable cell
             // by checking the four points of its bounding box
-            if (!owner.canMove(p)) return false;
+            //also check if the path overlaps into the agent's position
+            if (!owner.canMove(p)) {
+                return false;
+            }
         }
 
         // No obstructions found

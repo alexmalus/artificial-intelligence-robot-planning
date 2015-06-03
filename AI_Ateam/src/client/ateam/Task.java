@@ -38,7 +38,7 @@ public class Task {
             case Idle:
                 return true;
             case NonObstructing:
-                return true;
+                return false;
             case RemoveBox:
                 return true;
             case AskForHelp:

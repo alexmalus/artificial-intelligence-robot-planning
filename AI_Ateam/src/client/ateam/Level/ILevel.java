@@ -28,7 +28,9 @@ public interface ILevel {
     public char getGoalLetter(int row, int col);
     public void ReadMap() throws Exception;
     public ArrayList<Agent> getAgents();
+    public Agent getSpecificAgent(Cell cell);
     public ArrayList<Box> getBoxes();
+    public Box getSpecificBox(Cell cell);
     public ArrayList<Goal> getGoals();
     public ArrayList<Task> getTasks();
 

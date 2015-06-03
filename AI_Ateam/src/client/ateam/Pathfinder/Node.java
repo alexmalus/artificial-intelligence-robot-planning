@@ -10,6 +10,7 @@ public class Node {
         public int g;
         public int f;
 
+        public Node(){}
         public Node(Cell cell)
         {
             this.cell = cell;

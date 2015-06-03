@@ -11,8 +11,8 @@ public class Box {
 
     public Box(){
         color = null;
-        row = -1;
-        column = -1;
+        row = -200;
+        column = -200;
     }
 
     public Box(char boxLetter,Color color, int row, int column){
@@ -39,6 +39,7 @@ public class Box {
     public void setColor(Color color) {
         this.color = color;
     }
+    public boolean isTaken(){ return isTaken;}
     @Override
     public String toString(){
         return "row: " + row + " column: " + column + ", color: " + color;

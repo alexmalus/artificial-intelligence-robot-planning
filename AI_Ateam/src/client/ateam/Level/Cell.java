@@ -59,6 +59,10 @@ public class Cell
         return cell.x;
     }
 
+    public CellType getCell_type(){
+        return cell_type;
+    }
+
     // Return column from Point(r, c)
     public int getC() {
         return cell.y;
@@ -89,6 +93,19 @@ public class Cell
 
     public void toggleOccupied(){
         isOccupied = !isOccupied;
+    }
+
+    public void setCell_type(CellType cell_type) { this.cell_type = cell_type;}
+
+    public void setRowColumn(int x, int y)
+    {
+        cell.x = x;
+        cell.y = y;
+    }
+
+    public String getRowColumn()
+    {
+        return "row: " + getR() + ", column: " + getC();
     }
 
     // Override toString method
