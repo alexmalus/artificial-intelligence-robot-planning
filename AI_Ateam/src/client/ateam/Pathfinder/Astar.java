@@ -324,7 +324,7 @@ public class Astar {
         // Grab the next point in line
         current = start.getParent();
         if (current != null){
-            System.err.println("grabbing start node's parent:" + current);
+//            System.err.println("grabbing start node's parent:" + current);
             tempList.add(current);
         }
         // Loop through our generated path and add only the necessary points

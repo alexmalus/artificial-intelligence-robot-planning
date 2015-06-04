@@ -1,5 +1,6 @@
 package client.ateam;
 
+import client.ateam.Level.Cell;
 import client.ateam.Level.Models.Box;
 import client.ateam.Level.Models.Goal;
 import client.ateam.Level.Models.Agent;
@@ -22,6 +23,7 @@ public class Task {
         //this can allow goals to be empty cells (helping other agents or themselves)
         switch (type){
             case MoveBoxToGoal:
+                System.err.println("current task box and goal: " + box.toString() + ", " + goal.toString());
                 System.err.println("is MoveBoxToGoal completed? " + (box.getColumn()==goal.getColumn()) + " " + (box.getRow()==goal.getRow()));
                 return (box.getColumn()==goal.getColumn())&&(box.getRow()==goal.getRow());
             case FindBox:
@@ -38,7 +40,17 @@ public class Task {
             case Idle:
                 return true;
             case NonObstructing:
-                return false;
+                System.err.println("Task from which I am seeing stuff: " + agent.tasks.get(0).toString());
+                System.err.println("Trying to add box as startLoc: " + agent.tasks.get(0).box.toString());
+                Cell startLocation = new Cell(agent.tasks.get(0).box.getRow(), agent.tasks.get(0).box.getColumn());
+                startLocation.setLocation();
+                Cell goalLocation = new Cell(agent.tasks.get(0).goal.getRow(), agent.tasks.get(0).goal.getColumn());
+                goalLocation.setLocation();
+                System.err.println("start loc:" + startLocation.toString() + "goal loc: " + goalLocation.toString());
+                agent.preliminary_astar.newPath(startLocation, goalLocation);
+                agent.preliminary_astar.findPath();
+                System.err.println("Is non-obstructing complete? " + agent.preliminary_astar.pathExists());
+                return (agent.preliminary_astar.pathExists());
             case RemoveBox:
                 return true;
             case AskForHelp:
@@ -51,9 +63,14 @@ public class Task {
         }
     }
 
+    public void setBox(Box box){
+        this.box = box;
+    }
+
     public TaskType getTaskType(){
         return type;
     }
+
     @Override
     public String toString(){
         return ("agentID: " + agent.id + ",box: " + box.getRow() + ", " + box.getColumn() + ",goal: " + goal + ",taskType: " + type);

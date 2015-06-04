@@ -14,7 +14,7 @@ public class Pull implements IAction {
     private int agentId;
     private char boxLetter;
     private Direction dirAgent;
-    private Direction dirBox;
+    private Direction curCell;
     private Point currentCell;
     private Point boxCell;
     private Point tarCell;
@@ -29,7 +29,7 @@ public class Pull implements IAction {
         this.boxCell = boxCell;
         this.tarCell = tarCell;
         this.dirAgent = this.calculateDirection(currentCell,tarCell);
-        this.dirBox = this.calculateDirection(boxCell,currentCell);
+        this.curCell = this.calculateDirection(currentCell,boxCell);
 
         effects.add(new Free(boxCell,true,agentId));
         effects.add(new Free(tarCell,false,agentId));
@@ -86,7 +86,7 @@ public class Pull implements IAction {
 
     @Override
     public String toString(){
-        return "Pull("+dirToString(dirAgent)+","+dirToString(dirBox)+")";
+        return "Pull("+dirToString(dirAgent)+","+dirToString(curCell)+")";
     }
 
     private String dirToString(Direction dir)

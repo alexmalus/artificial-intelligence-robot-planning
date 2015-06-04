@@ -14,7 +14,6 @@ import client.ateam.Level.Actions.Push;
 import client.ateam.Level.Actions.Pull;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.awt.*;
 import java.util.Collections;
@@ -37,6 +36,7 @@ public class Agent {
     public boolean preliminary_build_path = true;
 
     private Astar astar = new Astar(this);
+    public Astar preliminary_astar = new Astar(this);
 
     public Agent()
     {
@@ -251,17 +251,20 @@ public class Agent {
                                                 else
                                                 {
                                                     System.err.println("I am blocking the path!");
-                                                    tasks.add(0, new Task(this, new Box(), new Goal(), TaskType.NonObstructing));
+//                                                    System.err.println("Current path: " + astar_path);
+                                                    tasks.add(0, new Task(this, currentTask.box, currentTask.goal, TaskType.NonObstructing));
                                                     tasks.add(1, currentTask);
                                                     currentTask = null;
+                                                    preliminary_build_path = false;
                                                     planning();
                                                 }
                                                 break path_element_for;
                                             }
                                         }
                                     }
-                                    Collections.reverse(astar_path);
-                                    preliminary_build_path = false;
+                                    //TODO: remember to reverse at some points as we do for NonObstructing!!! in below's code
+//                                    Collections.reverse(astar_path);
+//                                    preliminary_build_path = false;
                                 }
                                 else
                                 {
@@ -353,7 +356,7 @@ public class Agent {
                         the_for:
                         for(Node path_element : astar_path)
                         {
-                            System.err.println("Path element which I am about to make neighbors: " + path_element.getCell().getRowColumn());
+//                            System.err.println("Path element which I am about to make neighbors: " + path_element.getCell().getRowColumn());
                             ArrayList<Cell> neighbors = new ArrayList<>();
                             Cell temp_cell = ArrayLevel.getCellFromLocation(path_element.getCell().getR() - 1, path_element.getCell().getC());
                             neighbors.add(temp_cell);
@@ -368,26 +371,45 @@ public class Agent {
                             {
                                 System.err.println("Added neighbor: " + nei.getRowColumn());
                             }
-
                             for(Cell neighbor : neighbors)
                             {
-                                System.err.println("neigbor row: " + neighbor.getR() + ", col: " + neighbor.getC());
-                                System.err.println("Same as element within path?" + (neighbor.getR() == path_element.getCell().getR()));
-                                System.err.println("is it a wall?" + the_walls[neighbor.getR()][neighbor.getC()]);
-                                System.err.println("is it a cell type empty?" + (neighbor.getCell_type() == CellType.EMPTY));
-//                                System.err.println("What cell type are you?" + neighbor.getCell_type() == CellType.EMPTY));
+//                                System.err.println("neigbor row: " + neighbor.getR() + ", col: " + neighbor.getC());
+//                                System.err.println("Same as element within path?" + (neighbor.getR() == path_element.getCell().getR()));
+//                                System.err.println("is it a wall?" + the_walls[neighbor.getR()][neighbor.getC()]);
+//                                System.err.println("is it a cell type empty?" + (neighbor.getCell_type() == CellType.EMPTY));
                                 if (!(neighbor.getR() == path_element.getCell().getR() && neighbor.getC() == path_element.getCell().getC()) &&
                                         !(the_walls[neighbor.getR()][neighbor.getC()]) && (neighbor.getCell_type() == CellType.EMPTY))
                                 {
-                                    Box task_box = tasks.get(0).box;
+                                  Box task_box = currentTask.box;
                                     Point curAgent =  new Point(row, column);
                                     IAction new_action = new Pull(id, task_box.getBoxLetter(), curAgent,
                                             new Point(neighbor.getR(), neighbor.getC()),
                                             new Point(task_box.getRow(), task_box.getColumn()));
+//                                    System.err.println("Agent location: " + curAgent.toString());
+//                                    System.err.println("Box location: " + task_box.toString());
+//                                    System.err.println("Tar cell: " + neighbor.toString());
+//                                    System.err.println("Action trying to perform: " + new_action.toString());
+//                                    }
                                     actionList.add(0, new_action);
                                     path_element_to_remove = path_element;
-                                    System.err.println("Found neighbor for the agent to move in: " + neighbor.getR() + ", " + neighbor.getC());
-                                    System.err.println("Prepared this action for you to execute first: " + new_action.toString());
+                                    Box goal_box = new Box();
+                                    goal_box.setColor(tasks.get(0).box.getColor());
+                                    goal_box.setBoxLetter(tasks.get(0).box.getBoxLetter());
+                                    goal_box.setRow(row);
+                                    goal_box.setColumn(column);
+                                    System.err.println("Goal box: " + goal_box.toString());
+                                    tasks.get(0).setBox(goal_box);
+                                    astar.setPath(new ArrayList<Node>());
+//                                    System.err.println("Will add these to the new box location of moveboxtogoal: " + row + ", " + column);
+//                                    System.err.println("Box before adding from movebox: " + tasks.get(0).box.toString());
+//                                    tasks.get(0).box.setRow(row);
+//                                    System.err.println("Box row after adding from movebox: " + tasks.get(0).box.getRow());
+//                                    tasks.get(0).box.setRow(column);
+//                                    System.err.println("Box column after adding from movebox: " + tasks.get(0).box.getColumn());
+//                                    System.err.println("Box from movebox: " + tasks.get(0).box.toString());
+//                                    System.err.println("The movebox looks as follows: " + tasks.get(0).toString());
+//                                    System.err.println("Found neighbor for the agent to move in: " + neighbor.getR() + ", " + neighbor.getC());
+//                                    System.err.println("Prepared this action for you to execute first: " + new_action.toString());
                                     break the_for;
                                 }
                             }
@@ -398,8 +420,17 @@ public class Agent {
                     {
 
                     }
-                    convert_path_to_actions();
-                    currentAction = actionList.remove(0);
+                    Collections.reverse(astar_path);
+//                    convert_path_to_actions();
+//                    currentAction = actionList.remove(0);
+
+//                    Cell startLocation = new Cell(currentTask.box.getRow(), currentTask.box.getColumn());
+//                    startLocation.setLocation();
+//                    Cell goalLocation = new Cell(currentTask.goal.getRow(), currentTask.goal.getColumn());
+//                    goalLocation.setLocation();
+//                    astar.newPath(startLocation, goalLocation);
+//                    astar.findPath();
+//                    currentTask = null;
                     break;
                 case RemoveBox:
                     //we have previously calculated a preemptive path. we need to move the box out of box in cause of this path
@@ -493,7 +524,7 @@ public class Agent {
             IAction new_action;
 
             Point curAgent =  new Point(row, column);
-            Box curBox = currentTask.box;
+            Box curBox = new Box(currentTask.box.getBoxLetter(), currentTask.box.getColor() ,currentTask.box.getRow(), currentTask.box.getColumn());
             //fix in Astar's pathfinding two points path problem, occurs when curAgent's or box's Location is equal to startLocation of the pathfinder
             Point tarCell = astar_path.remove(0).getCell().getLocation();
             if(astar_path_size == 2)
@@ -538,8 +569,6 @@ public class Agent {
 
 
             Collections.reverse(actionList); //to make it ordered
-//            System.err.println("Before converting path to actions, let's see agent 0 path list: " + astar.getPath());
-//            System.err.println("path list size " + astar.getPath().size());
             System.err.println("Finished converting path to actions:" + actionList);
             System.err.println("action list size:" + actionList.size());
         }

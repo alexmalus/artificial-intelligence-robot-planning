@@ -25,6 +25,8 @@ public class Box {
     public char getBoxLetter(){
         return boxLetter;
     }
+    public void setBoxLetter(char letter){this.boxLetter = letter;
+    }
     public int getRow(){
         return row;
     }
