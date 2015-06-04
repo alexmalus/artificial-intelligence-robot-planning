@@ -151,15 +151,15 @@ public class TaskDistributor {
                     agent_cell.setLocation();
                     Cell goal_cell = new Cell(ordered_goal.getRow(), ordered_goal.getColumn());
                     goal_cell.setLocation();
-                    sole_agent.get_astar().newPath(agent_cell, goal_cell);
-                    sole_agent.get_astar().findPath();
-                    ordered_goal_path_size = sole_agent.get_astar().getPath().size();
+                    sole_agent.preliminary_astar.newPath(agent_cell, goal_cell);
+                    sole_agent.preliminary_astar.findPath();
+                    ordered_goal_path_size = sole_agent.preliminary_astar.getPath().size();
 
                     goal_cell = new Cell(goal.getRow(), goal.getColumn());
                     goal_cell.setLocation();
-                    sole_agent.get_astar().newPath(agent_cell, goal_cell);
-                    sole_agent.get_astar().findPath();
-                    goal_path_size = sole_agent.get_astar().getPath().size();
+                    sole_agent.preliminary_astar.newPath(agent_cell, goal_cell);
+                    sole_agent.preliminary_astar.findPath();
+                    goal_path_size = sole_agent.preliminary_astar.getPath().size();
 //                    System.err.println("ordered goal_path size: " + ordered_goal_path_size + " goal_path_size: " + goal_path_size);
 
                     if (goal_path_size <= ordered_goal_path_size)

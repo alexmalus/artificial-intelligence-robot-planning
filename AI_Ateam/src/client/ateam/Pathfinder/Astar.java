@@ -43,9 +43,13 @@ public class Astar {
     }
 
     // Return the size of the path
-//    public int getPathSize() {
-//        return pathList.size();
-//    }
+    public int getPathSize() {
+        if (pathList == null)
+        {
+            return -1;
+        }
+        return pathList.size();
+    }
 
     // Whether or not we have a path to move along
     public boolean pathExists()

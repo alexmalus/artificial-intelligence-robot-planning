@@ -157,6 +157,8 @@ public class Agent {
                     System.err.println("Case MoveBoxToGoal with hasBox: " + hasBox);
                     if(hasBox)
                     {
+//                        System.err.println("I have a box..");
+//                        System.err.println("Do i have a path? " + astar.pathExists());
                         if (!astar.pathExists())
                         {
                             System.err.println("Current Task box and goal: " + currentTask.box.toString() + " , " + currentTask.goal.toString());
@@ -168,6 +170,7 @@ public class Agent {
                             System.err.println("start: " + startLocation.toString() + ", goal: " + goalLocation.toString());
                             astar.newPath(startLocation, goalLocation);
                             astar.findPath();
+//                            System.err.println("I have a box..tried to make a path from the box to the goal");
                             if(astar.pathExists())
                             {
                                 convert_path_to_actions();
@@ -177,6 +180,7 @@ public class Agent {
                             }
                             else // something either is blocking the way or there is no path available
                             {
+//                                System.err.println("didn't get any path from the box to the goal");
                                 //try to find out if there's a possible path available
                                 preliminary_build_path = true;
                                 astar.newPath(startLocation, goalLocation);
@@ -264,7 +268,6 @@ public class Agent {
                                     }
                                     //TODO: remember to reverse at some points as we do for NonObstructing!!! in below's code
 //                                    Collections.reverse(astar_path);
-//                                    preliminary_build_path = false;
                                 }
                                 else
                                 {
@@ -306,6 +309,7 @@ public class Agent {
                         }
                     }
                     Cell goal_neighbour;
+
                     for(int i = 0; i <= goal_neighbours.size(); ++i)
                     {
                         goal_neighbour = goal_neighbours.remove(0);
@@ -317,6 +321,7 @@ public class Agent {
 //                        System.err.println("astar path size after find attempt: " + astar.pathExists());
                         if(astar.pathExists())
                         {
+                            System.err.println("Managed without having anything blocking my way!");
 //                            System.err.println("I have a path!" + astar.getPath());
                             //find plan (first plan or replan)
                             convert_path_to_actions();
@@ -325,14 +330,38 @@ public class Agent {
                         }
                         else // something either is blocking the way or there is no path available
                         {
-                            //try to find out if there's a possible path available
+                            //trying to get the neighbor which is closest to the agent in the preemptive path which may be generated
+                            //in order to simplify the future computations
+                            int path_size = 300; //just to get at least one neighbour
                             preliminary_build_path = true;
-                            astar.newPath(agentLocation, goal_neighbour);
-                            astar.findPath();
+                            for (i = 0; i < goal_neighbours.size(); i++) {
+                                Cell goal_neighbor_cell = goal_neighbours.get(i);
+                                Cell start_location = new Cell(row, column);
+                                start_location.setLocation();
+                                preliminary_astar.newPath(start_location, goal_neighbor_cell);
+                                preliminary_astar.findPath();
+                                int astar_size = preliminary_astar.getPathSize();
+                                if (astar_size != -1 && astar_size < path_size){
+                                    goal_neighbour = goal_neighbours.remove(goal_neighbours.indexOf(goal_neighbor_cell));
+                                    path_size = astar_size;
+                                    i--; //to avoid skipping of shifted element
+                                }
+                            }
+//                            preliminary_build_path = !preliminary_build_path;
+
+                            System.err.println("Unfortunately just gonna use a preliminary build path!");
+//                            preliminary_build_path = true;
+//                            astar.newPath(agentLocation, goal_neighbour);
+//                            astar.findPath();
                             if(astar.pathExists()) //found a path, then something is blocking us!
                             {
                                 preliminary_build_path = false;
-                                System.err.println("Astar's attempt to see path: " + astar.getPath());
+//                                System.err.println("Astar's attempt to see path: " + astar.getPath());
+                                tasks.add(0, new Task(this, currentTask.box, new Goal(' ', goal_neighbour.getR(), goal_neighbour.getC()), TaskType.NonObstructing));
+                                System.err.println("task which I just added NONOBS: " + tasks.get(0).toString());
+                                tasks.add(1, currentTask);
+                                currentTask = null;
+                                planning();
                             }
                             else
                             {

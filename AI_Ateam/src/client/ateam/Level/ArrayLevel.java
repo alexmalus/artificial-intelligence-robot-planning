@@ -290,6 +290,9 @@ public class ArrayLevel implements ILevel {
 //        System.err.println("Height and width: " + height + " " +  width);
         for(Map.Entry<Point, Cell> temp_Cell : cells.entrySet()){
            temp_Cell.getValue().setLocation();
+//            if(temp_Cell.getValue().getCell_type() == CellType.BOX){
+//                System.err.println("a box within cells: " + temp_Cell.getValue().toString());
+//            }
 //            System.err.println("Cell: " + temp_Cell.toString());
         }
 
@@ -403,6 +406,7 @@ public class ArrayLevel implements ILevel {
             //change agentrow and agentcol for agent
             // move agent on level
             this.moveAgentTo(agentId, currentCell, boxCell);
+            //TODO: make setCell or something like that..
             System.err.println("executePushAction success");
             getCell(currentCell).toggleOccupied();
             getCell(currentCell).setCell_type(CellType.EMPTY);

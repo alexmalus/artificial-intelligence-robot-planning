@@ -36,6 +36,7 @@ public class Cell
     }
 
     public void setLocation(){
+//        System.err.println("trying to set location of this cell: " + cell.toString());
         this.location = ArrayLevel.locationFromCell(cell);
     }
 
