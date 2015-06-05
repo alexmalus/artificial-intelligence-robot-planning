@@ -42,6 +42,7 @@ public class Box {
         this.color = color;
     }
     public boolean isTaken(){ return isTaken;}
+    public void toggleisTaken() { isTaken = !isTaken;}
     @Override
     public String toString(){
         return "row: " + row + " column: " + column + ", color: " + color;

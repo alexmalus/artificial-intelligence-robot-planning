@@ -200,9 +200,6 @@ public class TaskDistributor {
         for (int i = 0; i < temp_tasks.size(); i++) {
             System.err.println("Task for agent 0: " + temp_tasks.get(i));
         }
-        for(Agent agent : agents){
-            agent.preliminary_build_path = false;
-        }
     }
     void addGoal(Goal goal){
 

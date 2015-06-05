@@ -27,8 +27,17 @@ public class Astar {
     private ArrayList<Node> pathList = null;		// The list containing our path
     private HashMap<Cell, Node> nodeList = null;	// The list containing Cell costs
 
+    //made so that passing through agents and boxes is possible, but not through walls
+    public boolean preliminary_build_path = false;
+
     public Astar(Agent owner) {
         this.owner = owner;
+    }
+
+    public Astar(Agent owner, boolean preliminary_build_path)
+    {
+        this.owner = owner;
+        this.preliminary_build_path = preliminary_build_path;
     }
 
     // Return the path
@@ -134,7 +143,8 @@ public class Astar {
             closedList.add(currentNode);
             // If we have found the goal, notify AStar that we no longer need a path
 //            System.err.println(currentNode.toString() + " ");
-            if (currentNode.getCell().getX() == goalNode.getCell().getX() && currentNode.getCell().getY() == goalNode.getCell().getY())
+            if (currentNode.getCell().getX() == goalNode.getCell().getX() &&
+                    currentNode.getCell().getY() == goalNode.getCell().getY())
             {
                 foundGoal();
                 System.err.println("Found Goal");
@@ -248,7 +258,7 @@ public class Astar {
             for(Cell childCell : childCells)
             {
                 // Make sure this Cell exists and is not occupied
-                if ((childCell != null) && !childCell.isOccupied(owner.preliminary_build_path))
+                if ((childCell != null) && !childCell.isOccupied(preliminary_build_path))
                 {
 //                    System.err.println("child node: " + childCell.toString());
 
