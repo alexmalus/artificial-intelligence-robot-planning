@@ -70,7 +70,7 @@ public class ArrayLevel implements ILevel {
 
     @Override
     public boolean isNeighbor(int curRow, int curCol,int neighborRow, int neighborCol) {
-        System.err.println("Cur: " + curRow + " " + curCol + " Neighbor: " + neighborRow + " " + neighborCol);
+//        System.err.println("Cur: " + curRow + " " + curCol + " Neighbor: " + neighborRow + " " + neighborCol);
         if (((curRow-1 == neighborRow) && (curCol == neighborCol)) || ((curRow+1 == neighborRow) && (curCol == neighborCol))||
                 ((curRow==neighborRow)&&(curCol+1==neighborCol)) || ((curRow==neighborRow)&&(curCol-1==neighborCol))) return true;
         return false;

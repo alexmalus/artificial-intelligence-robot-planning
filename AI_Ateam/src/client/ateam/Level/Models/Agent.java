@@ -163,6 +163,9 @@ public class Agent {
         {
             Cell agentLocation = new Cell(row, column);
             agentLocation.setLocation();
+            ArrayList<Node> astar_path;
+            boolean[][] walls = ArrayLevel.getSingleton().walls;
+            Node path_element_to_remove = new Node();
 
             switch (currentTask.getTaskType()) {
                 case MoveBoxToGoal:
@@ -208,13 +211,15 @@ public class Agent {
                 find_box:
                 {
                     System.err.println("Case FindBox");
-                    ArrayList<Node> astar_path;
                     ArrayList<Cell> goal_neighbours = new ArrayList<>();
-                    goal_neighbours.add(new Cell(currentTask.box.getRow() - 1, currentTask.box.getColumn()));
-                    goal_neighbours.add(new Cell(currentTask.box.getRow() + 1, currentTask.box.getColumn()));
-                    goal_neighbours.add(new Cell(currentTask.box.getRow(), currentTask.box.getColumn() - 1));
-                    goal_neighbours.add(new Cell(currentTask.box.getRow(), currentTask.box.getColumn() + 1));
-                    boolean[][] walls = ArrayLevel.getSingleton().walls;
+                    Cell temp_cell = ArrayLevel.getCellFromLocation(currentTask.box.getRow() - 1, currentTask.box.getColumn());
+                    goal_neighbours.add(temp_cell);
+                    temp_cell = ArrayLevel.getCellFromLocation(currentTask.box.getRow() + 1, currentTask.box.getColumn());
+                    goal_neighbours.add(temp_cell);
+                    temp_cell = ArrayLevel.getCellFromLocation(currentTask.box.getRow(), currentTask.box.getColumn()-1);
+                    goal_neighbours.add(temp_cell);
+                    temp_cell = ArrayLevel.getCellFromLocation(currentTask.box.getRow(), currentTask.box.getColumn()-1);
+                    goal_neighbours.add(temp_cell);
 
                     for (int i = 0; i < goal_neighbours.size(); i++) {
                         Cell goal_neighbor_cell = goal_neighbours.get(i);
@@ -234,7 +239,32 @@ public class Agent {
                             break find_box;
                         }
                     }
-
+                    //OBSTACLE AVOIDANCE
+                    ArrayList<Cell> agent_neighbours = new ArrayList<>();
+                    temp_cell = ArrayLevel.getCellFromLocation(row - 1, column);
+                    agent_neighbours.add(temp_cell);
+                    temp_cell = ArrayLevel.getCellFromLocation(row  +1, column);
+                    agent_neighbours.add(temp_cell);
+                    temp_cell = ArrayLevel.getCellFromLocation(row, column -1);
+                    agent_neighbours.add(temp_cell);
+                    temp_cell = ArrayLevel.getCellFromLocation(row, column +1);
+                    agent_neighbours.add(temp_cell);
+                    for (Cell nei : agent_neighbours)
+                    {
+                        System.err.println("agent neighbors: " + nei.getRowColumn());
+                    }
+                    for(Cell agent_neighbor : agent_neighbours)
+                    {
+                        preliminary_astar.newPath(agent_neighbor, ArrayLevel.getCellFromLocation(currentTask.box.getRow(), currentTask.box.getColumn()));
+                        preliminary_astar.findPath();
+                        if (preliminary_astar.pathExists()) {
+                            System.err.println("By moving to this neighbor first, I can findthebox");
+                            IAction new_action = new Move(id, new Point(row, column), new Point(currentTask.box.getRow(), currentTask.box.getColumn()));
+                            actionList.add(new_action);
+//                            System.err.println("Just converted the Pathfinding path to actions. Has Box? " + hasBox);
+                            break find_box;
+                        }
+                    }
                     Cell goal_neighbour = new Cell();
                     System.err.println("houston we have a problem"); // something either is blocking the way or there is no path available
                     //trying to get the neighbor which is closest to the agent in the preemptive path which may be generated
@@ -276,13 +306,9 @@ public class Agent {
                     System.err.println("Case where agent needs to stay put");
                     break;
                 case NonObstructing:
-                    ArrayList<Node> astar_path;
                     astar_path = preliminary_astar.getPath();
-//                    System.err.println("NonObstructing astar_path: " + astar_path.toString());
                     System.err.println("NonObstructing astar_path: " + preliminary_astar.toString());
-                    boolean[][] the_walls = ArrayLevel.getSingleton().walls;
 
-                    Node path_element_to_remove = new Node();
                     if (currentTask.agent.id == id) //pinch case where the agent needs to pull a box from a spot
                     {
                         System.err.println("Trying to remove myself!");
@@ -311,7 +337,7 @@ public class Agent {
 //                                System.err.println("is it a wall?" + the_walls[neighbor.getR()][neighbor.getC()]);
 //                                System.err.println("is it a cell type empty?" + (neighbor.getCell_type() == CellType.EMPTY));
                                 if (!(neighbor.getR() == path_element.getCell().getR() && neighbor.getC() == path_element.getCell().getC()) &&
-                                        !(the_walls[neighbor.getR()][neighbor.getC()]) && (neighbor.getCell_type() == CellType.EMPTY))
+                                        !(walls[neighbor.getR()][neighbor.getC()]) && (neighbor.getCell_type() == CellType.EMPTY))
                                 {
                                   Box task_box = currentTask.box;
                                     Point curAgent =  new Point(row, column);
@@ -367,8 +393,49 @@ public class Agent {
                     break;
                 case RemoveBox:
                     //we have previously calculated a preemptive path. we need to move the box out of box in cause of this path
-//                    astar_path = astar.getPath();
-//                    System.err.println("RemoveBox astar_path: " + astar_path.toString());
+                    System.err.println("This is me, saying HI from RemoveBox");
+                    astar_path = preliminary_astar.getPath();
+                    System.err.println("NonObstructing astar_path: " + preliminary_astar.toString());
+
+                    ArrayList<Cell> neighbors = new ArrayList<>();
+                    Cell temp_cell = ArrayLevel.getCellFromLocation(currentTask.box.getRow() - 1, currentTask.box.getColumn());
+                    neighbors.add(temp_cell);
+                    temp_cell = ArrayLevel.getCellFromLocation(currentTask.box.getRow() +1, currentTask.box.getColumn());
+                    neighbors.add(temp_cell);
+                    temp_cell = ArrayLevel.getCellFromLocation(currentTask.box.getRow(), currentTask.box.getColumn() -1);
+                    neighbors.add(temp_cell);
+                    temp_cell = ArrayLevel.getCellFromLocation(currentTask.box.getRow(), currentTask.box.getColumn()+1);
+                    neighbors.add(temp_cell);
+
+//                    for (Cell nei : neighbors)
+//                    {
+//                        System.err.println("Added neighbor: " + nei.getRowColumn());
+//                    }
+                    for(Cell neighbor : neighbors)
+                    {
+                        if (!(neighbor.getR() == row && neighbor.getC() == column) &&
+                                !(walls[neighbor.getR()][neighbor.getC()]) && (neighbor.getCell_type() == CellType.EMPTY))
+                        {
+                            Box task_box = currentTask.box;
+                            Point curAgent =  new Point(row, column);
+                            //push or pull depending on the situation
+//                            IAction new_action = new Push(id, task_box.getBoxLetter(), curAgent,
+//                                    new Point(task_box.getRow(), task_box.getColumn()),
+//                                    new Point(neighbor.getR(), neighbor.getC()));
+//                            actionList.add(0, new_action);
+//                            Box goal_box = new Box();
+//                            goal_box.setColor(tasks.get(0).box.getColor());
+//                            goal_box.setBoxLetter(tasks.get(0).box.getBoxLetter());
+//                            goal_box.setRow(row);
+//                            goal_box.setColumn(column);
+//                            System.err.println("Goal box: " + goal_box.toString());
+//                            tasks.get(0).setBox(goal_box);
+//                            astar.setPath(new ArrayList<Node>());
+                        }
+                    }
+//                    astar_path.remove(path_element_to_remove);
+
+//                    Collections.reverse(astar_path);
                     break;
                 case AskForHelp:
                     System.err.println("Case where agent asks for help");
@@ -483,7 +550,7 @@ public class Agent {
             for(Node path_element : astar_path)
             {
                 Cell path_cell = ArrayLevel.getCell(path_element.getCell().getR(), path_element.getCell().getC());
-                if (path_cell.isOccupied()) //we found the element which is blocking the way..
+                if (path_cell.isOccupied()) //we found an element which is blocking the way..
                 {
 //                    System.err.println("Element location which is blocking the way: " + path_cell.getR() + ", " + path_cell.getC());
                     ArrayLevel level = ArrayLevel.getSingleton();
@@ -496,6 +563,7 @@ public class Agent {
                             System.err.println("box is taken, gonna wait for it to disappear out of my(current agent) way!");
                             tasks.add(0, new Task(this, new Box(), new Goal(), TaskType.Idle));
                             currentAction = new NoAction(id, new Point(row, column));
+                            currentTask = null;
                         }
                         else
                         {
@@ -503,9 +571,21 @@ public class Agent {
                             if(this.color == path_box.getColor())
                             {
                                 //if yes, try to move it somewhere which is NOT part of the preemptive_path
-                                System.err.println("Box is same color as me; I can remove it!");
-                                tasks.add(0, new Task(this, path_box, new Goal(), TaskType.RemoveBox));
-                                tasks.add(1, currentTask);
+                                System.err.println("Preemptive path: " + preliminary_astar.getPath()); // from moveboxtogoal task
+                                System.err.println("Box is the same color as me; I can remove it!");
+                                System.err.println("The box hero: " + path_box.getRow() + ", " + path_box.getColumn());
+                                Box goal_box = new Box(' ', null, path_box.getRow(), path_box.getColumn());
+                                tasks.add(0, new Task(this, goal_box, currentTask.goal, TaskType.FindBox));
+                                //as goal for removebox is a path element which is part of the path..it needs to be different than it
+                                tasks.add(1, new Task(this, goal_box,
+                                        new Goal(' ', preliminary_astar.getPath().get(1).getCell().getR(), preliminary_astar.getPath().get(1).getCell().getC()),
+                                        TaskType.RemoveBox));
+                                tasks.add(2, currentTask);
+                                System.err.println(tasks.get(0).toString());
+                                System.err.println(tasks.get(1).toString());
+                                System.err.println(tasks.get(2).toString());
+                                currentTask = null;
+                                break path_element_for;
                             }
                             else
                             {
@@ -516,16 +596,13 @@ public class Agent {
                                 {
                                     if (agent.id != id)
                                     {
-                                        agent.tasks.add(0, new Task(agent, path_box, new Goal(), TaskType.RemoveBox));
-                                    }
-                                    else
-                                    {
-                                        System.err.println("hi");
+                                        agent.tasks.add(0, new Task(agent, new Box(' ', null, path_box.getRow(), path_box.getColumn()), new Goal(), TaskType.RemoveBox));
                                     }
                                 }
                                 tasks.add(0, new Task(this, new Box(), new Goal(), TaskType.Idle));
                                 tasks.add(1, currentTask);
                                 currentAction = new NoAction(id, new Point(row, column));
+                                currentTask = null;
                             }
                         }
                         break path_element_for;
@@ -541,6 +618,7 @@ public class Agent {
                                 System.err.println("Gonna wait");
                                 tasks.add(0, new Task(this, new Box(), new Goal(), TaskType.Idle));
                                 currentAction = new NoAction(id, new Point(row, column));
+                                currentTask = null;
                             }
                             else
                             {
@@ -549,6 +627,7 @@ public class Agent {
                                 System.err.println("Gonna wait");
                                 tasks.add(0, new Task(this, new Box(), new Goal(), TaskType.Idle));
                                 currentAction = new NoAction(id, new Point(row, column));
+                                currentTask = null;
                             }
                         }
                         else

@@ -23,7 +23,7 @@ public class Task {
     public Task(Agent agent, Box box, Goal goal, TaskType type){this.agent = agent;this.box=box;this.goal=goal;this.type=type;}
 
     public boolean isTaskCompleted(){
-        //this can allow goals to be empty cells (helping other agents or themselves)
+        Astar temp_path = new Astar(agent);
         switch (type){
             case MoveBoxToGoal:
 //                System.err.println("current task box and goal: " + box.toString() + ", " + goal.toString());
@@ -49,13 +49,22 @@ public class Task {
                 Cell goalLocation = new Cell(agent.tasks.get(0).goal.getRow(), agent.tasks.get(0).goal.getColumn());
                 goalLocation.setLocation();
 //                System.err.println("start loc:" + startLocation.toString() + "goal loc: " + goalLocation.toString());
-                Astar temp_path = new Astar(agent);
                 temp_path.newPath(startLocation, goalLocation);
                 temp_path.findPath();
                 System.err.println("Is non-obstructing complete? " + temp_path.pathExists());
                 return (temp_path.pathExists());
             case RemoveBox:
-                return false;
+                Cell start_Location = new Cell(agent.row, agent.column);
+                start_Location.setLocation();
+                Cell goal_Location = new Cell(agent.tasks.get(0).box.getRow(), agent.tasks.get(0).box.getColumn());
+                goal_Location.setLocation();
+//                System.err.println("start loc:" + startLocation.toString() + "goal loc: " + goalLocation.toString());
+                temp_path.newPath(start_Location, goal_Location);
+                temp_path.findPath();
+                System.err.println("Goal location: " + goal_Location.toString());
+//                System.err.println("temp path size: " + temp_path.getPath().size());
+                System.err.println("Removing the box complete? " + temp_path.pathExists());
+                return (temp_path.pathExists());
             case AskForHelp:
                 return true;
             case HelpOther:
