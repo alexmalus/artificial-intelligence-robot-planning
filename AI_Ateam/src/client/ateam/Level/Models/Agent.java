@@ -164,7 +164,6 @@ public class Agent {
             Cell agentLocation = new Cell(row, column);
             agentLocation.setLocation();
             ArrayList<Node> astar_path;
-            boolean[][] walls = ArrayLevel.getSingleton().walls;
             Node path_element_to_remove = new Node();
 
             switch (currentTask.getTaskType()) {
@@ -214,13 +213,6 @@ public class Agent {
                     ArrayList<Cell> goal_neighbours = new ArrayList<>();
                     goal_neighbours = find_neighbor(new Point(currentTask.box.getRow(), currentTask.box.getColumn()));
 
-                    for (int i = 0; i < goal_neighbours.size(); i++) {
-                        Cell goal_neighbor_cell = goal_neighbours.get(i);
-                        if (walls[goal_neighbor_cell.getR()][goal_neighbor_cell.getC()]) {
-                            goal_neighbours.remove(goal_neighbours.indexOf(goal_neighbor_cell));
-                            i--; //to avoid skipping of shifted element
-                        }
-                    }
                     for (Cell goal_neighbour : goal_neighbours) {
                         goal_neighbour.setLocation();
                         astar.newPath(agentLocation, goal_neighbour);
@@ -317,7 +309,7 @@ public class Agent {
 //                                System.err.println("is it a wall?" + the_walls[neighbor.getR()][neighbor.getC()]);
 //                                System.err.println("is it a cell type empty?" + (neighbor.getCell_type() == CellType.EMPTY));
                                 if (!(neighbor.getR() == path_element.getCell().getR() && neighbor.getC() == path_element.getCell().getC()) &&
-                                        !(walls[neighbor.getR()][neighbor.getC()]) && (neighbor.getCell_type() == CellType.EMPTY))
+                                        (neighbor.getCell_type() == CellType.EMPTY))
                                 {
                                   Box task_box = currentTask.box;
                                     Point curAgent =  new Point(row, column);
@@ -386,8 +378,7 @@ public class Agent {
 //                    }
                     for(Cell neighbor : neighbors)
                     {
-                        if (!(neighbor.getR() == row && neighbor.getC() == column) &&
-                                !(walls[neighbor.getR()][neighbor.getC()]) && (neighbor.getCell_type() == CellType.EMPTY))
+                        if (!(neighbor.getR() == row && neighbor.getC() == column) && (neighbor.getCell_type() == CellType.EMPTY))
                         {
                             Box task_box = currentTask.box;
                             Point curAgent =  new Point(row, column);
@@ -628,10 +619,6 @@ public class Agent {
         }
     }
 
-    public Astar get_astar(){
-        return astar;
-    }
-
     // Convenience method for canMove(int, int)
     public boolean canMove(Point p)
     {
@@ -666,7 +653,9 @@ public class Agent {
 
     public ArrayList<Cell> find_neighbor(Point cell)
     {
+        boolean[][] walls = ArrayLevel.getSingleton().walls;
         ArrayList<Cell> neighbors = new ArrayList<>();
+
         Cell temp_cell = ArrayLevel.getCellFromLocation(cell.x - 1, cell.y);
         neighbors.add(temp_cell);
         temp_cell = ArrayLevel.getCellFromLocation(cell.x + 1, cell.y);
@@ -675,6 +664,15 @@ public class Agent {
         neighbors.add(temp_cell);
         temp_cell = ArrayLevel.getCellFromLocation(cell.x, cell.y -1);
         neighbors.add(temp_cell);
+
+        for (int i = 0; i < neighbors.size(); i++) {
+            Cell goal_neighbor_cell = neighbors.get(i);
+            if (walls[goal_neighbor_cell.getR()][goal_neighbor_cell.getC()]) {
+                neighbors.remove(neighbors.indexOf(goal_neighbor_cell));
+                i--; //to avoid skipping of shifted element
+            }
+        }
+
         return neighbors;
     }
 
