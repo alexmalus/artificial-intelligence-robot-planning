@@ -241,7 +241,7 @@ public class ArrayLevel implements ILevel {
                     }
                     else{
                         colors.put(chr, Color.BLUE);
-                        agentsArrayList.add(new Agent((int) chr, colors.get(chr), levelLines, i));
+                        agentsArrayList.add(new Agent(levelLines*i, colors.get(chr), levelLines, i));
                     }
                     tempCell = new Cell(levelLines, i, CellType.AGENT);
                     tempCell.toggleOccupied(); //the cell is Occupied
@@ -256,7 +256,7 @@ public class ArrayLevel implements ILevel {
                     }
                     else{
                         colors.put(chr, Color.BLUE);
-                        boxesArrayList.add(new Box(chr, colors.get(chr), levelLines, i));
+                        boxesArrayList.add(new Box(levelLines*i, chr, colors.get(chr), levelLines, i));
 //                        System.err.println("Box I am trying to add: " + new Box(chr, colors.get(chr), levelLines, i).toString());
                     }
                     tempCell = new Cell(levelLines, i, CellType.BOX);
@@ -300,7 +300,12 @@ public class ArrayLevel implements ILevel {
 //        {
 //            System.err.println("Box location : " + box.getRow() +", " +  box.getColumn());
 //            System.err.println("Is it occupied? : " + getCell(box.getRow(), box.getColumn()).isOccupied());
+//            System.err.println("Box id: " + box.getId());
 //        }
+        for (Agent agent : agentsArrayList)
+        {
+            System.err.println("Agent id: " + agent.id);
+        }
 
     }
 

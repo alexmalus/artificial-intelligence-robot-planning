@@ -17,10 +17,12 @@ public class Task {
     //TODO:(reminder) tasks can currently be set to non-goal fields, e.g. a task could be to move a box to the free cell (1,1) or likewise.
     public Agent agent;
     public Box box;
+    public int box_id;
     public Goal goal;
     protected TaskType type;
 
     public Task(Agent agent, Box box, Goal goal, TaskType type){this.agent = agent;this.box=box;this.goal=goal;this.type=type;}
+    public Task(Agent agent, int box_id, Goal goal, TaskType type){this.agent = agent;this.box_id=box_id;this.goal=goal;this.type=type;}
 
     public boolean isTaskCompleted(){
         Astar temp_path = new Astar(agent);
@@ -54,18 +56,12 @@ public class Task {
                 System.err.println("Is non-obstructing complete? " + temp_path.pathExists());
                 return (temp_path.pathExists());
             case RemoveBox:
-                Cell start_Location = new Cell(agent.row, agent.column);
-                start_Location.setLocation();
-                Cell goal_Location = new Cell(agent.tasks.get(0).box.getRow(), agent.tasks.get(0).box.getColumn());
-                goal_Location.setLocation();
-//                System.err.println("start loc:" + startLocation.toString() + "goal loc: " + goalLocation.toString());
-                System.err.println("Simple row and column agent:" + agent.row + ", " + agent.column);
-                System.err.println("let' see what's at 4 13:" + ArrayLevel.getCell(4, 13).getCell_type());
-                System.err.println("let' see what's at 5 13:" + ArrayLevel.getCell(agent.row, agent.column).getCell_type());
-                System.err.println("let' see what's at 5 12:" + ArrayLevel.getCell(5, 12).getCell_type());
+                Cell start_Location = ArrayLevel.getCellFromLocation(agent.row, agent.column);
+                Cell goal_Location = ArrayLevel.getCellFromLocation(agent.tasks.get(0).box.getRow(), agent.tasks.get(0).box.getColumn());
+
                 temp_path.newPath(start_Location, goal_Location);
                 temp_path.findPath();
-                System.err.println("Start and Goal location: " + start_Location.toString() + " , " + goal_Location.toString());
+                System.err.println("Agent currently is: " + start_Location.toString() + "Box which you're trying to find " + goal_Location.toString());
 //                System.err.println("temp path size: " + temp_path.getPath().size());
                 System.err.println("Removing the box complete? " + temp_path.pathExists());
                 return (temp_path.pathExists());

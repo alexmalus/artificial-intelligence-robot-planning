@@ -14,7 +14,10 @@ package client.ateam;
 import client.ateam.Level.ArrayLevel;
 import client.ateam.Level.ILevel;
 import client.ateam.Level.Models.Agent;
+import client.ateam.Level.Models.Box;
+import client.ateam.Level.Models.Goal;
 import client.ateam.conflictHandler.Conflict;
+import client.ateam.projectEnum.TaskType;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -235,6 +238,16 @@ public class Main {
             //send action
             for(Agent agent : level.getAgents()){
 //                System.err.println("Reached Str Joiner step, currentAction for 0 is: " + agent.getCurrentAction().toString());
+//                if(agent.currentTask == null && agent.tasks.size() >0)
+//                {
+//                    agent.currentTask = agent.tasks.remove(0);
+//                }
+//                else
+//                {
+//                    agent.currentTask = new Task(agent, new Box(), new Goal(), TaskType.Idle);
+//                    agent.setCurrentAction_ToNoOp();
+//                }
+
                 if (!agent.currentTask.isTaskCompleted()){
                     System.err.println("Current Task is not completed");
                     System.err.println("action list size: " + agent.actionList.size());

@@ -8,14 +8,17 @@ public class Box {
     private int row;
     private int column;
     private boolean isTaken = false;
+    private int id;
 
     public Box(){
         color = null;
         row = -200;
         column = -200;
+        id=-1;
     }
 
-    public Box(char boxLetter,Color color, int row, int column){
+    public Box(int id, char boxLetter,Color color, int row, int column){
+        this.id = id;
         this.boxLetter = boxLetter;
         this.setColor(color);
         this.row = row;
@@ -43,6 +46,8 @@ public class Box {
     }
     public boolean isTaken(){ return isTaken;}
     public void toggleisTaken() { isTaken = !isTaken;}
+    public int getId(){return id;}
+    public void setId(int id){this.id = id;}
     @Override
     public String toString(){
         return "row: " + row + " column: " + column + ", color: " + color;

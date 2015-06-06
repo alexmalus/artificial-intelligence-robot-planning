@@ -78,6 +78,11 @@ public class Agent {
         return currentAction;
     }
 
+//    public void setCurrentAction_ToNoOp()
+//    {
+//        currentAction = new NoAction(id, new Point(row, column));
+//    }
+
     public IAction getFirstAction(){
         if (!actionList.isEmpty())
         {
@@ -399,15 +404,23 @@ public class Agent {
                     break;
                 case RemoveBox:
                     System.err.println("This is me, saying HI from RemoveBox");
-
+                    System.err.println("prel astar: " + preliminary_astar.getPath().toString());
                     ArrayList<Cell> agent_neighbors = find_neighbor(new Point(row, column));
-                    small_for:
+                    bigger_for:
                     {
                         for(Cell neighbor: agent_neighbors)
                         {
-                            if((!(neighbor.getR() == currentTask.goal.getRow() && neighbor.getC() == currentTask.goal.getColumn())) &&
-                                    !(neighbor.getR() == currentTask.box.getRow() && neighbor.getC() == currentTask.box.getColumn()))
+                            small_for:
                             {
+                                //check if agent's neighbor is not on the path
+                                for(Node path_list_member : preliminary_astar.getPath())
+                                {
+                                    if((neighbor.getR() == path_list_member.getCell().getR() && neighbor.getC() == path_list_member.getCell().getC()) &&
+                                            (neighbor.getR() == currentTask.box.getRow() && neighbor.getC() == currentTask.box.getColumn()))
+                                    {
+                                        break small_for;
+                                    }
+                                }
                                 System.err.println("Curr task: " + currentTask.toString());
                                 System.err.println("neighbor R and C: " + neighbor.getR() + ", " + neighbor.getC());
                                 System.err.println("Agent R AND C: " + row + ", " + column);
@@ -423,9 +436,10 @@ public class Agent {
                                             new Point(neighbor.getR(), neighbor.getC()),
                                             new Point(currentTask.box.getRow(), currentTask.box.getColumn()));
                                 }
+                                System.err.println("new Action: " + new_action.toString());
                                 actionList.add(0, new_action);
                                 currentTask.box.toggleisTaken();
-                                break small_for;
+                                break bigger_for;
                             }
                         }
                     }
@@ -482,7 +496,7 @@ public class Agent {
         {
             IAction new_action;
             Point curAgent =  new Point(row, column);
-            Box curBox = new Box(currentTask.box.getBoxLetter(), currentTask.box.getColor() ,currentTask.box.getRow(), currentTask.box.getColumn());
+            Box curBox = new Box(0, currentTask.box.getBoxLetter(), currentTask.box.getColor() ,currentTask.box.getRow(), currentTask.box.getColumn());
             //fix in Astar's pathfinding two points path problem, occurs when curAgent's or box's Location is equal to startLocation of the pathfinder
             Point tarCell = astar_path.remove(0).getCell().getLocation();
             if(astar_path_size == 2)
@@ -567,7 +581,7 @@ public class Agent {
                                 System.err.println("Preemptive path: " + preliminary_astar.getPath()); // from moveboxtogoal task
                                 System.err.println("Box is the same color as me; I can remove it!");
                                 System.err.println("The box hero: " + path_box.getRow() + ", " + path_box.getColumn());
-                                Box goal_box = new Box(' ', null, path_box.getRow(), path_box.getColumn());
+                                Box goal_box = new Box(0, ' ', null, path_box.getRow(), path_box.getColumn());
 
                                 //get legit path to nearest box to remove
                                 ArrayList<Cell> goal_box_neighbors = find_neighbor(new Point(goal_box.getRow(), goal_box.getColumn()));
@@ -611,7 +625,7 @@ public class Agent {
                                 {
                                     if (agent.id != id)
                                     {
-                                        agent.tasks.add(0, new Task(agent, new Box(' ', null, path_box.getRow(), path_box.getColumn()), new Goal(), TaskType.RemoveBox));
+                                        agent.tasks.add(0, new Task(agent, new Box(0, ' ', null, path_box.getRow(), path_box.getColumn()), new Goal(), TaskType.RemoveBox));
                                     }
                                 }
                                 tasks.add(0, new Task(this, new Box(), new Goal(), TaskType.Idle));
