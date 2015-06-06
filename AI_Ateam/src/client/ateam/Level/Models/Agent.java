@@ -212,14 +212,7 @@ public class Agent {
                 {
                     System.err.println("Case FindBox");
                     ArrayList<Cell> goal_neighbours = new ArrayList<>();
-                    Cell temp_cell = ArrayLevel.getCellFromLocation(currentTask.box.getRow() - 1, currentTask.box.getColumn());
-                    goal_neighbours.add(temp_cell);
-                    temp_cell = ArrayLevel.getCellFromLocation(currentTask.box.getRow() + 1, currentTask.box.getColumn());
-                    goal_neighbours.add(temp_cell);
-                    temp_cell = ArrayLevel.getCellFromLocation(currentTask.box.getRow(), currentTask.box.getColumn()-1);
-                    goal_neighbours.add(temp_cell);
-                    temp_cell = ArrayLevel.getCellFromLocation(currentTask.box.getRow(), currentTask.box.getColumn()-1);
-                    goal_neighbours.add(temp_cell);
+                    goal_neighbours = find_neighbor(new Point(currentTask.box.getRow(), currentTask.box.getColumn()));
 
                     for (int i = 0; i < goal_neighbours.size(); i++) {
                         Cell goal_neighbor_cell = goal_neighbours.get(i);
@@ -241,14 +234,8 @@ public class Agent {
                     }
                     //OBSTACLE AVOIDANCE
                     ArrayList<Cell> agent_neighbours = new ArrayList<>();
-                    temp_cell = ArrayLevel.getCellFromLocation(row - 1, column);
-                    agent_neighbours.add(temp_cell);
-                    temp_cell = ArrayLevel.getCellFromLocation(row  +1, column);
-                    agent_neighbours.add(temp_cell);
-                    temp_cell = ArrayLevel.getCellFromLocation(row, column -1);
-                    agent_neighbours.add(temp_cell);
-                    temp_cell = ArrayLevel.getCellFromLocation(row, column +1);
-                    agent_neighbours.add(temp_cell);
+                    agent_neighbours = find_neighbor(new Point(row, column));
+
                     for (Cell nei : agent_neighbours)
                     {
                         System.err.println("agent neighbors: " + nei.getRowColumn());
@@ -317,14 +304,7 @@ public class Agent {
                         {
 //                            System.err.println("Path element which I am about to make neighbors: " + path_element.getCell().getRowColumn());
                             ArrayList<Cell> neighbors = new ArrayList<>();
-                            Cell temp_cell = ArrayLevel.getCellFromLocation(path_element.getCell().getR() - 1, path_element.getCell().getC());
-                            neighbors.add(temp_cell);
-                            temp_cell = ArrayLevel.getCellFromLocation(path_element.getCell().getR() + 1, path_element.getCell().getC());
-                            neighbors.add(temp_cell);
-                            temp_cell = ArrayLevel.getCellFromLocation(path_element.getCell().getR(), path_element.getCell().getC()-1);
-                            neighbors.add(temp_cell);
-                            temp_cell = ArrayLevel.getCellFromLocation(path_element.getCell().getR(), path_element.getCell().getC()+1);
-                            neighbors.add(temp_cell);
+                            neighbors = find_neighbor(new Point(path_element.getCell().getR(), path_element.getCell().getC()));
 
                             for (Cell nei : neighbors)
                             {
@@ -398,14 +378,7 @@ public class Agent {
                     System.err.println("NonObstructing astar_path: " + preliminary_astar.toString());
 
                     ArrayList<Cell> neighbors = new ArrayList<>();
-                    Cell temp_cell = ArrayLevel.getCellFromLocation(currentTask.box.getRow() - 1, currentTask.box.getColumn());
-                    neighbors.add(temp_cell);
-                    temp_cell = ArrayLevel.getCellFromLocation(currentTask.box.getRow() +1, currentTask.box.getColumn());
-                    neighbors.add(temp_cell);
-                    temp_cell = ArrayLevel.getCellFromLocation(currentTask.box.getRow(), currentTask.box.getColumn() -1);
-                    neighbors.add(temp_cell);
-                    temp_cell = ArrayLevel.getCellFromLocation(currentTask.box.getRow(), currentTask.box.getColumn()+1);
-                    neighbors.add(temp_cell);
+                    neighbors = find_neighbor(new Point(currentTask.box.getRow(), currentTask.box.getColumn()));
 
 //                    for (Cell nei : neighbors)
 //                    {
@@ -689,6 +662,20 @@ public class Agent {
 
         // Entity can move
         return true;
+    }
+
+    public ArrayList<Cell> find_neighbor(Point cell)
+    {
+        ArrayList<Cell> neighbors = new ArrayList<>();
+        Cell temp_cell = ArrayLevel.getCellFromLocation(cell.x - 1, cell.y);
+        neighbors.add(temp_cell);
+        temp_cell = ArrayLevel.getCellFromLocation(cell.x + 1, cell.y);
+        neighbors.add(temp_cell);
+        temp_cell = ArrayLevel.getCellFromLocation(cell.x, cell.y -1);
+        neighbors.add(temp_cell);
+        temp_cell = ArrayLevel.getCellFromLocation(cell.x, cell.y -1);
+        neighbors.add(temp_cell);
+        return neighbors;
     }
 
     @Override
