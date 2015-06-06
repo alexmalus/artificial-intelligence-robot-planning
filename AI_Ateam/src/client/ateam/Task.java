@@ -26,7 +26,7 @@ public class Task {
         Astar temp_path = new Astar(agent);
         switch (type){
             case MoveBoxToGoal:
-//                System.err.println("current task box and goal: " + box.toString() + ", " + goal.toString());
+                System.err.println("current task box and goal: " + box.toString() + ", " + goal.toString());
                 System.err.println("is MoveBoxToGoal completed? " + (box.getColumn()==goal.getColumn()) + " " + (box.getRow()==goal.getRow()));
                 return (box.getColumn()==goal.getColumn())&&(box.getRow()==goal.getRow());
             case FindBox:
@@ -59,9 +59,13 @@ public class Task {
                 Cell goal_Location = new Cell(agent.tasks.get(0).box.getRow(), agent.tasks.get(0).box.getColumn());
                 goal_Location.setLocation();
 //                System.err.println("start loc:" + startLocation.toString() + "goal loc: " + goalLocation.toString());
+                System.err.println("Simple row and column agent:" + agent.row + ", " + agent.column);
+                System.err.println("let' see what's at 4 13:" + ArrayLevel.getCell(4, 13).getCell_type());
+                System.err.println("let' see what's at 5 13:" + ArrayLevel.getCell(agent.row, agent.column).getCell_type());
+                System.err.println("let' see what's at 5 12:" + ArrayLevel.getCell(5, 12).getCell_type());
                 temp_path.newPath(start_Location, goal_Location);
                 temp_path.findPath();
-                System.err.println("Goal location: " + goal_Location.toString());
+                System.err.println("Start and Goal location: " + start_Location.toString() + " , " + goal_Location.toString());
 //                System.err.println("temp path size: " + temp_path.getPath().size());
                 System.err.println("Removing the box complete? " + temp_path.pathExists());
                 return (temp_path.pathExists());

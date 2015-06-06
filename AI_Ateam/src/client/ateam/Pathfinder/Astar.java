@@ -329,7 +329,7 @@ public class Astar {
         Node current, next;
         ArrayList<Node> tempList = new ArrayList<Node>();
 
-        System.err.println("Start node when building the path: " + start.toString());
+//        System.err.println("Start node when building the path: " + start.toString());
         // Add the first point to our list
         tempList.add(start);
 //        System.err.println("Start cell: " + start.getCell().toString());
@@ -343,7 +343,7 @@ public class Astar {
         // Loop through our generated path and add only the necessary points
         while ((next = current.getParent()) != null)
         {
-            System.err.println("next node when building the path: " + next.toString());
+//            System.err.println("next node when building the path: " + next.toString());
             // If we can't skip the point, add it to our list and
             // set our new starting point to our current location
 

@@ -368,7 +368,7 @@ public class ArrayLevel implements ILevel {
 //        System.err.println("moveAgentTo - agentlist after move: "+agents[tarCell.x][tarCell.y]);
 //        System.err.println("moveAgentTo - agentID: " + agentId);
     }
-    private void moveBoxTo(char boxLetter, Point boxCell, Point boxTarCell){
+    public void moveBoxTo(char boxLetter, Point boxCell, Point boxTarCell){
         for(Box box : this.getBoxes()){
             if(box.getBoxLetter()==boxLetter){
                 box.setRow(boxTarCell.x);
@@ -402,11 +402,12 @@ public class ArrayLevel implements ILevel {
                 && this.isFree(new Point(boxTarCell.x,boxTarCell.y))) {
             //change boxrow and boxcol for box
             //move box on level
+//            System.err.println("Boxcell:" + boxCell.toString() + " CurrentCell" + currentCell.toString());
             this.moveBoxTo(boxLetter, boxCell, boxTarCell);
+//            System.err.println("Boxcell:" + boxCell.toString() + " CurrentCell" + currentCell.toString());
             //change agentrow and agentcol for agent
             // move agent on level
             this.moveAgentTo(agentId, currentCell, boxCell);
-            //TODO: make setCell or something like that..
             System.err.println("executePushAction success");
             getCell(currentCell).toggleOccupied();
             getCell(currentCell).setCell_type(CellType.EMPTY);
@@ -428,7 +429,9 @@ public class ArrayLevel implements ILevel {
             this.moveAgentTo(agentId,currentCell,tarCell);
             //change boxrow and boxcol for box
             //move box on level
-            this.moveBoxTo(boxLetter,boxCell,currentCell);
+//            System.err.println("Boxcell:" + boxCell.toString() + " CurrentCell" + currentCell.toString());
+            this.moveBoxTo(boxLetter, boxCell, currentCell);
+//            System.err.println("Boxcell:" + boxCell.toString() + " CurrentCell" + currentCell.toString());
             getCell(boxCell).toggleOccupied();
             getCell(currentCell).setCell_type(CellType.BOX);
             getCell(boxCell).setCell_type(CellType.EMPTY);

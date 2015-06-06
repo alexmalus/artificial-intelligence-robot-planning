@@ -108,22 +108,22 @@ public class Main {
                 for(Free deleteEffect : deleteEffects){
                     //add effect to key value set
                 }*/
-                for(Free effect : agent.getCurrentAction().getEffects()){
-                    //add effect to key value set
-
-                    //check if location has already been created in map
-                    if(effectlist.containsKey(effect.location))
-                    {
-                        effectlist.get(effect.location).add(effect);
-                    }
-                    // add new location to map
-                    else
-                    {
-                        effectlist.put(effect.location,new ArrayList<Free>());
-                        effectlist.get(effect.location).add(effect);
-                    }
-
-                }
+//                for(Free effect : agent.getCurrentAction().getEffects()){
+//                    //add effect to key value set
+//
+//                    //check if location has already been created in map
+//                    if(effectlist.containsKey(effect.location))
+//                    {
+//                        effectlist.get(effect.location).add(effect);
+//                    }
+//                    // add new location to map
+//                    else
+//                    {
+//                        effectlist.put(effect.location,new ArrayList<Free>());
+//                        effectlist.get(effect.location).add(effect);
+//                    }
+//
+//                }
             }
             // now we have the current state and the 'ghost' state of the level
 
@@ -167,40 +167,40 @@ public class Main {
             }
 
             // Agents not flagged will go through a last precondition check in order to check if any stationary boxes are in the way
-            for(Agent agent : level.getAgents()){
-
-                /*TODO: this if-loop will not work if an agent is moving out of the field another agent is trying to move into
-                  TODO: since preconditions will fail but resolvedGhostFields will be true. A splitting of checks is needed
-                  */
-                if((agent.getCurrentAction().preconditions() && resolvedGhostFields.getOrDefault(agent.getCurrentAction().getTargetLocation(), true)) ||
-                        (resolvedGhostFields.getOrDefault(agent.getCurrentAction().getTargetLocation(), false)))
-                {
-                    //simulate next moves? or simply perform them
-                    //if no next moves exist, check for goal & create next plan
-                    //TODO: executing actions may need ordering (otherwise execution will fail), maybe make queue list for every action that fails and keep re-attempting?
-                    //only if the agent's task is not completed. we only checked in the planning phase
-//                    if(!agent.currentTask.isTaskCompleted()){
-//                        agent.executeCurrentAction();
-//                    }
-                }
-                else
-                {
-                    //check if agent is noted in conflict list, otherwise add as conflict for replanning
-                    //agent.getNextAction().getConflicts();
-                    //add conflict
-                    conflictList.add(new Conflict(agent.getCurrentAction().getTargetLocation(), agent.id));
-                    // find conflicting objects/agents
-                    System.err.println("Conflict found");
-                    System.err.println("Preconditions:"+agent.getCurrentAction().preconditions());
-                    System.err.println("Resolvedfields: " + resolvedGhostFields.getOrDefault(agent.getCurrentAction().getTargetLocation(), true));
-
-                    //replan (online replanning)
-                    //agent.replanTask();
-                    //if(agent.getNextAction().preconditions()){
-                    //    agent.executeCurrentAction();
-                    //}
-                }
-            }
+//            for(Agent agent : level.getAgents()){
+//
+//                /*TODO: this if-loop will not work if an agent is moving out of the field another agent is trying to move into
+//                  TODO: since preconditions will fail but resolvedGhostFields will be true. A splitting of checks is needed
+//                  */
+//                if((agent.getCurrentAction().preconditions() && resolvedGhostFields.getOrDefault(agent.getCurrentAction().getTargetLocation(), true)) ||
+//                        (resolvedGhostFields.getOrDefault(agent.getCurrentAction().getTargetLocation(), false)))
+//                {
+//                    //simulate next moves? or simply perform them
+//                    //if no next moves exist, check for goal & create next plan
+//                    //TODO: executing actions may need ordering (otherwise execution will fail), maybe make queue list for every action that fails and keep re-attempting?
+//                    //only if the agent's task is not completed. we only checked in the planning phase
+////                    if(!agent.currentTask.isTaskCompleted()){
+////                        agent.executeCurrentAction();
+////                    }
+//                }
+//                else
+//                {
+//                    //check if agent is noted in conflict list, otherwise add as conflict for replanning
+//                    //agent.getNextAction().getConflicts();
+//                    //add conflict
+//                    conflictList.add(new Conflict(agent.getCurrentAction().getTargetLocation(), agent.id));
+//                    // find conflicting objects/agents
+//                    System.err.println("Conflict found");
+//                    System.err.println("Preconditions:"+agent.getCurrentAction().preconditions());
+//                    System.err.println("Resolvedfields: " + resolvedGhostFields.getOrDefault(agent.getCurrentAction().getTargetLocation(), true));
+//
+//                    //replan (online replanning)
+//                    //agent.replanTask();
+//                    //if(agent.getNextAction().preconditions()){
+//                    //    agent.executeCurrentAction();
+//                    //}
+//                }
+//            }
 
             //TODO: resolve conflicts from conflict list -> replan w.r.t. multiple agents
             //TODO: is feasible due to assumption of conflicts being scarce/few.
@@ -238,8 +238,16 @@ public class Main {
                 if (!agent.currentTask.isTaskCompleted()){
                     System.err.println("Current Task is not completed");
                     System.err.println("action list size: " + agent.actionList.size());
-                    System.err.println("Current action: " + agent.getCurrentAction().toString());
-                    strJoiner.add(agent.getCurrentAction().toString());
+                    if (agent.getFirstAction() == null)
+                    {
+                        agent.planning();
+                        strJoiner.add(agent.getCurrentAction().toString());
+                    }
+                    else
+                    {
+                        System.err.println("Current action: " + agent.getCurrentAction().toString());
+                        strJoiner.add(agent.getCurrentAction().toString());
+                    }
                 } else {
                     System.err.println("Current Task is completed");
                     agent.planning();
