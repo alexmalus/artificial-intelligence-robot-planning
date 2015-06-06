@@ -9,6 +9,7 @@ import client.ateam.projectEnum.TaskType;
 import client.ateam.Level.ArrayLevel;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * Created by Lasse on 4/28/15.
@@ -57,14 +58,19 @@ public class Task {
                 return (temp_path.pathExists());
             case RemoveBox:
                 Cell start_Location = ArrayLevel.getCellFromLocation(agent.row, agent.column);
-                Cell goal_Location = ArrayLevel.getCellFromLocation(agent.tasks.get(0).box.getRow(), agent.tasks.get(0).box.getColumn());
-
-                temp_path.newPath(start_Location, goal_Location);
-                temp_path.findPath();
-                System.err.println("Agent currently is: " + start_Location.toString() + "Box which you're trying to find " + goal_Location.toString());
-//                System.err.println("temp path size: " + temp_path.getPath().size());
-                System.err.println("Removing the box complete? " + temp_path.pathExists());
-                return (temp_path.pathExists());
+//                Cell goal_Location = ArrayLevel.getCellFromLocation(agent.tasks.get(0).box.getRow(), agent.tasks.get(0).box.getColumn());
+                ArrayList<Cell> goal_location_neighbors = agent.find_neighbor(new Point(agent.tasks.get(0).box.getRow(), agent.tasks.get(0).box.getColumn()));
+                for(Cell goal_location_neighbor : goal_location_neighbors)
+                {
+                    temp_path.newPath(start_Location, goal_location_neighbor);
+                    temp_path.findPath();
+                    System.err.println("Agent currently is: " + start_Location.toString() + "Box which you're trying to find " + goal_location_neighbor.toString());
+                    if(temp_path.pathExists())
+                    {
+                        return true;
+                    }
+                }
+                return false;
             case AskForHelp:
                 return true;
             case HelpOther:

@@ -168,7 +168,7 @@ public class Agent {
                     case NonObstructing:
                         break;
                     case RemoveBox:
-//                        hasBox = false;
+                        hasBox = false;
                         currentTask.box.toggleisTaken();
                         break;
                     case AskForHelp:
@@ -245,7 +245,13 @@ public class Agent {
                     ArrayList<Cell> goal_neighbours = find_neighbor(new Point(currentTask.box.getRow(), currentTask.box.getColumn()));
                     for (Cell goal_neighbour : goal_neighbours) {
                         goal_neighbour.setLocation();
-                        astar.newPath(agentLocation, goal_neighbour);
+                        ArrayLevel level = ArrayLevel.getSingleton();
+                        Agent our_agent = level.getAgentByID(currentTask.agent.id);
+                        Cell our_agent_cell = ArrayLevel.getCellFromLocation(our_agent.row, our_agent.column);
+                        System.err.println("Tell me the agent: " + our_agent_cell.toString());
+                        System.err.println("What Cell Type do we have at 4 12: " + ArrayLevel.getCellFromLocation(4,12).getCell_type());
+                        System.err.println("At this point of time, do I have a box? " + hasBox);
+                        astar.newPath(our_agent_cell, goal_neighbour);
                         astar.findPath();
                         if (astar.pathExists()) {
                             System.err.println("Managed without having anything blocking my way!");

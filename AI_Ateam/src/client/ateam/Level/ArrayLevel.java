@@ -559,4 +559,16 @@ public class ArrayLevel implements ILevel {
         }
         return box_to_return;
     }
+
+    public Agent getAgentByID(int agent_id) {
+        Agent agent_to_return = new Agent();
+        for(Agent agent : agentsArrayList)
+        {
+            if (agent.id == agent_id)
+            {
+                return agent;
+            }
+        }
+        return agent_to_return;
+    }
 }
