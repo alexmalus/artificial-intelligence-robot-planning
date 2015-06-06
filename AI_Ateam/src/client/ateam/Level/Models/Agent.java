@@ -220,30 +220,51 @@ public class Agent {
                         if (astar.pathExists()) {
                             System.err.println("Managed without having anything blocking my way!");
                             convert_path_to_actions();
-//                            System.err.println("Just converted the Pathfinding path to actions. Has Box? " + hasBox);
                             break find_box;
                         }
                     }
-                    //OBSTACLE AVOIDANCE
-                    ArrayList<Cell> agent_neighbours = new ArrayList<>();
-                    agent_neighbours = find_neighbor(new Point(row, column));
 
-                    for (Cell nei : agent_neighbours)
+                    //OBSTACLE AVOIDANCE
+                    int alternative_path_obstacle_size = 300;
+                    boolean should_move_to_neighbor = false;
+                    int temp_obstacle_size;
+                    IAction new_action = new NoAction(id, new Point(row, column));
+                    find_alternative_path(ArrayLevel.getCellFromLocation(row, column),
+                            ArrayLevel.getCellFromLocation(currentTask.box.getRow(), currentTask.box.getColumn()));
+                    if(preliminary_astar.pathExists())
                     {
-                        System.err.println("agent neighbors: " + nei.getRowColumn());
+                        alternative_path_obstacle_size = count_alternative_path_obstacles();//first I count no. obstacles from agent pos to box which I try to find
                     }
+                    ArrayList<Cell> agent_neighbours = find_neighbor(new Point(row, column));//then obstacles from agent's neighbors
+                    ArrayList<Node> temp_path_list = new ArrayList<>();
                     for(Cell agent_neighbor : agent_neighbours)
                     {
-                        preliminary_astar.newPath(agent_neighbor, ArrayLevel.getCellFromLocation(currentTask.box.getRow(), currentTask.box.getColumn()));
-                        preliminary_astar.findPath();
-                        if (preliminary_astar.pathExists()) {
-                            System.err.println("By moving to this neighbor first, I can findthebox");
-                            IAction new_action = new Move(id, new Point(row, column), new Point(currentTask.box.getRow(), currentTask.box.getColumn()));
-                            actionList.add(new_action);
-//                            System.err.println("Just converted the Pathfinding path to actions. Has Box? " + hasBox);
-                            break find_box;
-                        }
+                        temp_path_list = find_alternative_path(agent_neighbor,
+                                ArrayLevel.getCellFromLocation(currentTask.box.getRow(), currentTask.box.getColumn()));
+                        if (temp_path_list != null && temp_path_list.size() > 0)
+                        if_cond:
+                            {
+                                temp_obstacle_size = count_alternative_path_obstacles();
+                                if (temp_obstacle_size != 0 && temp_obstacle_size <= alternative_path_obstacle_size)
+                                {
+                                    //we already selected a neighbor which has less or equal obstacles than the one we are checking
+                                    if(should_move_to_neighbor && temp_path_list.size() > preliminary_astar.getPath().size()){
+                                        break if_cond; //path bigger than the one we already selected? Neeext..
+                                    }
+                                    alternative_path_obstacle_size = temp_obstacle_size;
+                                    should_move_to_neighbor = true;
+                                    new_action = new Move(id, new Point(row, column), new Point(agent_neighbor.getR(), agent_neighbor.getC()));
+                                    preliminary_astar.setPath(temp_path_list);
+                                }
+                            }
                     }
+                    if(should_move_to_neighbor)
+                    {
+                        actionList.add(new_action);
+                        break find_box;
+                    }
+                    //End of obstacle avoidance
+
                     Cell goal_neighbour = new Cell();
                     System.err.println("houston we have a problem"); // something either is blocking the way or there is no path available
                     //trying to get the neighbor which is closest to the agent in the preemptive path which may be generated
@@ -674,6 +695,29 @@ public class Agent {
         }
 
         return neighbors;
+    }
+
+    //first find the path
+    public ArrayList<Node> find_alternative_path(Cell start_location, Cell goal_location)
+    {
+        preliminary_astar.newPath(start_location, goal_location);
+        preliminary_astar.findPath();
+        return preliminary_astar.getPath();
+    }
+    //second count the obstacles
+    public int count_alternative_path_obstacles()
+    {
+        int no_obstacles = 0;
+        ArrayList<Node> astar_path = preliminary_astar.getPath();
+            for(Node path_element : astar_path)
+            {
+                Cell path_cell = ArrayLevel.getCell(path_element.getCell().getR(), path_element.getCell().getC());
+                if (path_cell.isOccupied()) //we found an element which is blocking the way..
+                {
+                    no_obstacles++;
+                }
+            }
+        return no_obstacles;
     }
 
     @Override

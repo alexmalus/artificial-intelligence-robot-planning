@@ -63,8 +63,7 @@ public class Astar {
     // Whether or not we have a path to move along
     public boolean pathExists()
     {
-        if (pathList == null) return false;
-        else return (pathList.size() > 0);
+        return (pathList != null && pathList.size() > 0);
     }
 
 //    // Whether or not AStar is building a path
