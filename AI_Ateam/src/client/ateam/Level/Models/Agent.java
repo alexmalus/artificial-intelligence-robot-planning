@@ -210,9 +210,7 @@ public class Agent {
                 find_box:
                 {
                     System.err.println("Case FindBox");
-                    ArrayList<Cell> goal_neighbours = new ArrayList<>();
-                    goal_neighbours = find_neighbor(new Point(currentTask.box.getRow(), currentTask.box.getColumn()));
-
+                    ArrayList<Cell> goal_neighbours = find_neighbor(new Point(currentTask.box.getRow(), currentTask.box.getColumn()));
                     for (Cell goal_neighbour : goal_neighbours) {
                         goal_neighbour.setLocation();
                         astar.newPath(agentLocation, goal_neighbour);
@@ -223,7 +221,6 @@ public class Agent {
                             break find_box;
                         }
                     }
-
                     //OBSTACLE AVOIDANCE
                     int alternative_path_obstacle_size = 300;
                     boolean should_move_to_neighbor = false;
@@ -245,9 +242,9 @@ public class Agent {
                         if_cond:
                             {
                                 temp_obstacle_size = count_alternative_path_obstacles();
-                                if (temp_obstacle_size != 0 && temp_obstacle_size <= alternative_path_obstacle_size)
+                                if (temp_obstacle_size != 0 && temp_obstacle_size < alternative_path_obstacle_size)
                                 {
-                                    //we already selected a neighbor which has less or equal obstacles than the one we are checking
+                                    //we already selected a neighbor which has less obstacles than the one we are checking
                                     if(should_move_to_neighbor && temp_path_list.size() > preliminary_astar.getPath().size()){
                                         break if_cond; //path bigger than the one we already selected? Neeext..
                                     }
@@ -265,32 +262,17 @@ public class Agent {
                     }
                     //End of obstacle avoidance
 
-                    Cell goal_neighbour = new Cell();
                     System.err.println("houston we have a problem"); // something either is blocking the way or there is no path available
-                    //trying to get the neighbor which is closest to the agent in the preemptive path which may be generated
-                    int path_size = 300; //just to get at least one neighbour
-                    Cell start_location = new Cell(row, column);
-                    Astar temp_path = new Astar(this, true);
-                    for (int i = 0; i < goal_neighbours.size(); i++) {
-                        Cell goal_neighbor_cell = goal_neighbours.get(i);
-                        goal_neighbor_cell.setLocation();
-                        start_location.setLocation();
-//                        System.err.println("start,goal: " + start_location.toString() + ", " + goal_neighbor_cell.toString());
-                        temp_path.newPath(start_location, goal_neighbor_cell);
-                        temp_path.findPath();
-                        int astar_size = temp_path.getPathSize();
-                        if (astar_size != -1 && astar_size < path_size) {
-                            goal_neighbour = goal_neighbours.remove(goal_neighbours.indexOf(goal_neighbor_cell));
-//                                    System.err.println("we have a new goal_neighbor: " + goal_neighbor_cell.toString());
-                            path_size = astar_size;
-                            preliminary_astar = temp_path;
-                            i--; //to avoid skipping of shifted element
-                        }
-                    }
-                    if (preliminary_astar.pathExists()) //found a path, then something is blocking us!
+                    //at this point, we know that we have the minimum amount of obstacles(if we moved or not previously from our original location)
+                    //remove obstacles, or tell agents to move out of the way, or stay idle until another agent moves a box/themselves
+                    preliminary_astar.newPath(ArrayLevel.getCellFromLocation(row, column),
+                            ArrayLevel.getCellFromLocation(currentTask.box.getRow(), currentTask.box.getColumn()));
+                    preliminary_astar.findPath();
+                    if (preliminary_astar.pathExists())
                     {
                         System.err.println("Preliminary astar path: " + preliminary_astar.getPath());
-                        findAlternative(start_location, goal_neighbour);
+                        findAlternative(ArrayLevel.getCellFromLocation(row, column),
+                                ArrayLevel.getCellFromLocation(currentTask.box.getRow(), currentTask.box.getColumn()));
 //                        System.err.println("task which I just added: " + tasks.get(0).toString());
 //                        currentTask = null;
 //                        planning();
