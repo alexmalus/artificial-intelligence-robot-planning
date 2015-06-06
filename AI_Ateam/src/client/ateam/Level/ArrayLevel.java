@@ -524,4 +524,17 @@ public class ArrayLevel implements ILevel {
         // Return the points on a line
         return result;
     }
+
+    public Box getBoxByID(int box_id)
+    {
+        Box box_to_return = new Box();
+        for(Box box : boxesArrayList)
+        {
+            if (box.getId() == box_id)
+            {
+                return box;
+            }
+        }
+        return box_to_return;
+    }
 }

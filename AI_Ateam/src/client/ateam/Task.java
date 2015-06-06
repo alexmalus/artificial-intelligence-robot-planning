@@ -22,7 +22,7 @@ public class Task {
     protected TaskType type;
 
     public Task(Agent agent, Box box, Goal goal, TaskType type){this.agent = agent;this.box=box;this.goal=goal;this.type=type;}
-    public Task(Agent agent, int box_id, Goal goal, TaskType type){this.agent = agent;this.box_id=box_id;this.goal=goal;this.type=type;}
+    public Task(Agent agent, int box_id, Goal goal, TaskType type){this.agent = agent;this.box_id=box_id;this.goal=goal;this.type=type;this.box = new Box();}
 
     public boolean isTaskCompleted(){
         Astar temp_path = new Astar(agent);
@@ -85,6 +85,13 @@ public class Task {
 
     @Override
     public String toString(){
-        return ("agentID: " + agent.id + ",box: " + box.getRow() + ", " + box.getColumn() + ",goal: " + goal + ",taskType: " + type);
+        if(box.getColor() == null)
+        {
+            return ("agentID: " + agent.id + ",box_id " + box_id + ",goal: " + goal + ",taskType: " + type);
+        }
+        else
+        {
+            return ("agentID: " + agent.id + ",box: " + box.getRow() + ", " + box.getColumn() + ",goal: " + goal + ",taskType: " + type);
+        }
     }
 }

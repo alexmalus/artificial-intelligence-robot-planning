@@ -421,20 +421,23 @@ public class Agent {
                                         break small_for;
                                     }
                                 }
-                                System.err.println("Curr task: " + currentTask.toString());
-                                System.err.println("neighbor R and C: " + neighbor.getR() + ", " + neighbor.getC());
-                                System.err.println("Agent R AND C: " + row + ", " + column);
-                                System.err.println("Goal R AND C: " + currentTask.goal.getRow() + ", " + currentTask.goal.getColumn());
-                                System.err.println("neighbor which is OK: " + neighbor.toString());
                                 IAction new_action;
-                                new_action = new Push(id, currentTask.box.getBoxLetter(), new Point(row, column),
-                                        new Point(currentTask.box.getRow(), currentTask.box.getColumn()),
+
+                                ArrayLevel level = ArrayLevel.getSingleton();
+                                Box using_box = level.getBoxByID(currentTask.box_id);
+                                System.err.println("Curr task: " + currentTask.toString());
+                                System.err.println("Agent R AND C: " + row + ", " + column);
+                                System.err.println("Box R AND C: " + using_box.getRow() + ", " +  using_box.getColumn());
+                                System.err.println("neighbor which is OK: " + neighbor.toString());
+
+                                new_action = new Push(id, using_box.getBoxLetter(), new Point(row, column),
+                                        new Point(using_box.getRow(), using_box.getColumn()),
                                         new Point(neighbor.getR(), neighbor.getC()));
                                 if (!new_action.preconditions())
                                 {
                                     new_action = new Pull(id, currentTask.box.getBoxLetter(), new Point(row, column),
                                             new Point(neighbor.getR(), neighbor.getC()),
-                                            new Point(currentTask.box.getRow(), currentTask.box.getColumn()));
+                                            new Point(using_box.getRow(), using_box.getColumn()));
                                 }
                                 System.err.println("new Action: " + new_action.toString());
                                 actionList.add(0, new_action);
@@ -584,7 +587,7 @@ public class Agent {
                                 Box goal_box = new Box(0, ' ', null, path_box.getRow(), path_box.getColumn());
 
                                 //get legit path to nearest box to remove
-                                ArrayList<Cell> goal_box_neighbors = find_neighbor(new Point(goal_box.getRow(), goal_box.getColumn()));
+                                ArrayList<Cell> goal_box_neighbors = find_neighbor(new Point(path_box.getRow(), path_box.getColumn()));
                                 Cell agent_Location = new Cell(row, column);
                                 agent_Location.setLocation();
                                 small_for:
@@ -604,12 +607,13 @@ public class Agent {
                                 tasks.add(0, new Task(this, goal_box, currentTask.goal, TaskType.FindBox));
                                 //as goal for removebox is a path element which is part of the path..it needs to be different than it
 //                                tasks.add(1, new Task(this, goal_box,
-//                                        new Goal(' ', preliminary_astar.getPath().get(1).getCell().getR(), preliminary_astar.getPath().get(1).getCell().getC()),
+//                                        new Goal(' ', astar.getPath().get(1).getCell().getR(), astar.getPath().get(1).getCell().getC()),
 //                                        TaskType.RemoveBox));
-                                tasks.add(1, new Task(this, goal_box,
+                                tasks.add(1, new Task(this, path_box.getId(),
                                         new Goal(' ', astar.getPath().get(1).getCell().getR(), astar.getPath().get(1).getCell().getC()),
                                         TaskType.RemoveBox));
                                 tasks.add(2, currentTask);
+                                System.err.println("path_box:" + path_box.toString() + " " + path_box.getId());
                                 System.err.println(tasks.get(0).toString());
                                 System.err.println(tasks.get(1).toString());
                                 System.err.println(tasks.get(2).toString());
@@ -625,7 +629,7 @@ public class Agent {
                                 {
                                     if (agent.id != id)
                                     {
-                                        agent.tasks.add(0, new Task(agent, new Box(0, ' ', null, path_box.getRow(), path_box.getColumn()), new Goal(), TaskType.RemoveBox));
+                                        agent.tasks.add(0, new Task(agent, path_box.getId(), new Goal(), TaskType.RemoveBox));
                                     }
                                 }
                                 tasks.add(0, new Task(this, new Box(), new Goal(), TaskType.Idle));
