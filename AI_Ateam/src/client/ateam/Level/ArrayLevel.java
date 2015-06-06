@@ -302,10 +302,10 @@ public class ArrayLevel implements ILevel {
 //            System.err.println("Is it occupied? : " + getCell(box.getRow(), box.getColumn()).isOccupied());
 //            System.err.println("Box id: " + box.getId());
 //        }
-        for (Agent agent : agentsArrayList)
-        {
-            System.err.println("Agent id: " + agent.id);
-        }
+//        for (Agent agent : agentsArrayList)
+//        {
+//            System.err.println("Agent id: " + agent.id);
+//        }
 
     }
 
@@ -373,9 +373,24 @@ public class ArrayLevel implements ILevel {
 //        System.err.println("moveAgentTo - agentlist after move: "+agents[tarCell.x][tarCell.y]);
 //        System.err.println("moveAgentTo - agentID: " + agentId);
     }
-    public void moveBoxTo(char boxLetter, Point boxCell, Point boxTarCell){
+
+//    public void moveBoxTo(char boxLetter, Point boxCell, Point boxTarCell){
+//        for(Box box : this.getBoxes()){
+//            if(box.getBoxLetter()==boxLetter){
+//                box.setRow(boxTarCell.x);
+//                box.setColumn(boxTarCell.y);
+//                break;
+//            }
+//        }
+//        if(boxes[boxCell.x][boxCell.y]==boxLetter) {
+//            boxes[boxCell.x][boxCell.y] = ' ';
+//            boxes[boxTarCell.x][boxTarCell.y] = boxLetter;
+//        }
+//    }
+
+    public void moveBoxTo_withID(char boxLetter, int box_id, Point boxCell, Point boxTarCell){
         for(Box box : this.getBoxes()){
-            if(box.getBoxLetter()==boxLetter){
+            if(box.getBoxLetter()== boxLetter && box.getId() == box_id){
                 box.setRow(boxTarCell.x);
                 box.setColumn(boxTarCell.y);
                 break;
@@ -408,7 +423,12 @@ public class ArrayLevel implements ILevel {
             //change boxrow and boxcol for box
             //move box on level
 //            System.err.println("Boxcell:" + boxCell.toString() + " CurrentCell" + currentCell.toString());
-            this.moveBoxTo(boxLetter, boxCell, boxTarCell);
+//            this.moveBoxTo(boxLetter, boxCell, boxTarCell);
+            Box box_which_is_moved = getSpecificBox(getCell(boxCell));
+            System.err.println("Box before it is moved: " + box_which_is_moved.toString());
+            this.moveBoxTo_withID(box_which_is_moved.getBoxLetter(), box_which_is_moved.getId(), boxCell, boxTarCell);
+            System.err.println("Box after it is moved: " + getBoxByID(box_which_is_moved.getId()).toString());
+
 //            System.err.println("Boxcell:" + boxCell.toString() + " CurrentCell" + currentCell.toString());
             //change agentrow and agentcol for agent
             // move agent on level
@@ -435,7 +455,9 @@ public class ArrayLevel implements ILevel {
             //change boxrow and boxcol for box
             //move box on level
 //            System.err.println("Boxcell:" + boxCell.toString() + " CurrentCell" + currentCell.toString());
-            this.moveBoxTo(boxLetter, boxCell, currentCell);
+//            this.moveBoxTo(boxLetter, boxCell, currentCell);
+            Box box_which_is_moved = getSpecificBox(getCell(boxCell));
+            this.moveBoxTo_withID(box_which_is_moved.getBoxLetter(), box_which_is_moved.getId(), boxCell, currentCell);
 //            System.err.println("Boxcell:" + boxCell.toString() + " CurrentCell" + currentCell.toString());
             getCell(boxCell).toggleOccupied();
             getCell(currentCell).setCell_type(CellType.BOX);
