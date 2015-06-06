@@ -88,7 +88,7 @@ public class Cell
         }
         else
         {
-            return isOccupied;
+            return(cell_type == CellType.AGENT || cell_type == CellType.BOX || cell_type == CellType.WALL);
         }
     }
 

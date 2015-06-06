@@ -249,7 +249,7 @@ public class Agent {
                         Agent our_agent = level.getAgentByID(currentTask.agent.id);
                         Cell our_agent_cell = ArrayLevel.getCellFromLocation(our_agent.row, our_agent.column);
                         System.err.println("Tell me the agent: " + our_agent_cell.toString());
-                        System.err.println("What Cell Type do we have at 4 12: " + ArrayLevel.getCellFromLocation(4,12).getCell_type());
+//                        System.err.println("What Cell Type do we have at 4 12: " + ArrayLevel.getCellFromLocation(4,12).getCell_type());
                         System.err.println("At this point of time, do I have a box? " + hasBox);
                         astar.newPath(our_agent_cell, goal_neighbour);
                         astar.findPath();
