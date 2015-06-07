@@ -288,32 +288,31 @@ public class Main {
             System.out.println( act );
             String response = serverMessages.readLine();
             if ( response.contains( "false" ) ) {
-                System.err.println("Server responded with false");
-//                System.err.format( "Server responded with %s to the inapplicable action: %s\n", response, act );
-                //System.err.format( "%s was attempted in \n%s\n", act );
-
-                //only considering one agent for the moment
-                System.err.println("retry or something..");
-                Agent agent_0 = level.getAgents().get(0);
-                agent_0.tasks.add(0, agent_0.currentTask);
-                agent_0.currentTask = null;
-                agent_0.planning();
+                String line = response.replaceAll("\\[", "").replaceAll("\\]", "");
+                String[] colonSplit = line.split(",");
+                int the_agent = 0;
+                for(Agent agent : level.getAgents())
+                {
+                    if(colonSplit[the_agent].equals("false"))
+                    {
+                        System.err.println("Server responded with false for agent: " + agent.id);
+                        System.err.println("retry the agent's plan");
+                        agent.tasks.add(0, agent.currentTask);
+                        agent.currentTask = null;
+                        agent.planning();
+                    }
+                    the_agent++;
+                }
             }
-            //TODO: check the response for every agent, not just "contains"
-            else if(response.contains("true"))
+            else //every response is true
             {
-                System.err.println("Server responded with true");
+                System.err.println("Server responded with true for all agents");
                 for(Agent agent : level.getAgents()){
                     // execute actions on local level, if empty do next plan
                     agent.executeCurrentAction();
                     System.err.println("New position for agent: " + agent.row + ", " + agent.column);
                 }
             }
-            else{
-                System.err.println("Server responded with true, let's try to execute action");
-
-            }
-
         }
     }
 }
