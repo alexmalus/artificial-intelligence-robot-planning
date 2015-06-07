@@ -167,7 +167,7 @@ public class ArrayLevel implements ILevel {
             for(int y=0;y<goals[x].length;y++)
                 goals[x][y] = ' ';
 
-        int colorLines = 0, levelLines = 0;
+        int levelLines = 0;
 
         // Read lines specifying colors
         while ( ( line = serverMessages.readLine() ).matches( "^[a-z]+:\\s*[0-9A-Z](,\\s*[0-9A-Z])*\\s*$" ) ) {
@@ -205,10 +205,8 @@ public class ArrayLevel implements ILevel {
             }
 
             for ( String id : colonSplit[1].split( "," ) ) {
-                System.err.println("ColonSplit id:" + id);
                 colors.put(id.trim().charAt(0), color);
             }
-            colorLines++;
         }
 
         if (!colors.isEmpty()) is_multi_agent_system = true;

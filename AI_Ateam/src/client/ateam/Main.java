@@ -81,8 +81,8 @@ public class Main {
             //check both preconditions from level and preconditions from key-value maps
 
             //TODO: alternative approach is just to keep an ordering of who gets to go first (simpler)
-            //ArrayList<Free> addEffects = new ArrayList<Free>();
-            //ArrayList<Free> deleteEffects = new ArrayList<Free>();
+            ArrayList<Free> addEffects = new ArrayList<Free>();
+            ArrayList<Free> deleteEffects = new ArrayList<Free>();
             ArrayList<Free> effects;// = new ArrayList<Free>();
             ArrayList<Integer> agentIDs;
             ArrayList<Conflict> conflictList = new ArrayList<Conflict>();
@@ -101,8 +101,8 @@ public class Main {
 
                 // boxes in the way may have to be checked
 
-                //addEffects = agent.getNextAction().getAddEffects();
-                //deleteEffects = agent.getNextAction().getDeleteEffects();
+//                addEffects = agent.getNextAction().getAddEffects();
+//                deleteEffects = agent.getNextAction().getDeleteEffects();
 
 
                 /*for(Free addEffect : addEffects){
@@ -134,42 +134,42 @@ public class Main {
 
             // First we match preconditions and effects, adding conflicts to a conflict list - everything concerns the isFree() literal
             // these will be flagged for replanning
-            int counter;
-            for(Map.Entry<Point,ArrayList<Free>> entry : effectlist.entrySet()){
-                // check add and delete lists against each other
-                // add conflict with affiliated agents all linked to the conflict
-                // conflict will be solved by replanning after other actions have been performed.
-                agentIDs = new ArrayList<Integer>();
-                counter = 0;
-                for(Free effect : entry.getValue()){
-                    if(!effect.truthvalue)
-                    {
-                        counter+=1;
-
-                        //add list of effects containing the agent IDs
-                        agentIDs.add(effect.agentID);
-                    }
-                    else
-                    {
-                        counter-=1;
-                    }
-                }
-
-                // if counter is greater than zero then a conflict will exist (more agents accessing field than leaving)
-                if(counter>1)
-                {
-                    // create conflict
-                    // add affiliated agents
-                    conflictList.add(new Conflict(entry.getKey(),agentIDs));
-
-                    resolvedGhostFields.put(entry.getKey(),false);
-                }
-                else{
-                    resolvedGhostFields.put(entry.getKey(),true);
-                }
-            }
-
-            // Agents not flagged will go through a last precondition check in order to check if any stationary boxes are in the way
+//            int counter;
+//            for(Map.Entry<Point,ArrayList<Free>> entry : effectlist.entrySet()){
+//                // check add and delete lists against each other
+//                // add conflict with affiliated agents all linked to the conflict
+//                // conflict will be solved by replanning after other actions have been performed.
+//                agentIDs = new ArrayList<Integer>();
+//                counter = 0;
+//                for(Free effect : entry.getValue()){
+//                    if(!effect.truthvalue)
+//                    {
+//                        counter+=1;
+//
+//                        //add list of effects containing the agent IDs
+//                        agentIDs.add(effect.agentID);
+//                    }
+//                    else
+//                    {
+//                        counter-=1;
+//                    }
+//                }
+//
+//                // if counter is greater than zero then a conflict will exist (more agents accessing field than leaving)
+//                if(counter>1)
+//                {
+//                    // create conflict
+//                    // add affiliated agents
+//                    conflictList.add(new Conflict(entry.getKey(),agentIDs));
+//
+//                    resolvedGhostFields.put(entry.getKey(),false);
+//                }
+//                else{
+//                    resolvedGhostFields.put(entry.getKey(),true);
+//                }
+//            }
+//
+//            // Agents not flagged will go through a last precondition check in order to check if any stationary boxes are in the way
 //            for(Agent agent : level.getAgents()){
 //
 //                /*TODO: this if-loop will not work if an agent is moving out of the field another agent is trying to move into
