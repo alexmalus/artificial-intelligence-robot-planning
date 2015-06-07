@@ -26,9 +26,6 @@ public class TaskDistributor {
     private ArrayLevel level = ArrayLevel.getSingleton();
 
     void distributeTasks(ArrayList<Agent> agents, ArrayList<Box> boxes, ArrayList<Goal> goals){
-//        Character letter;
-//        Box selectedBox;
-//        Agent selectedAgent;
         List<Agent> matchingAgents;
         List<Color> colors = new ArrayList<Color>();
         boolean identicalColorAgents = false;
@@ -92,7 +89,7 @@ public class TaskDistributor {
                 matchingBoxes = new_boxletters.get(Character.toUpperCase(goal.getGoalLetter()));
                 matchingAgents = agentcolors.get(matchingBoxes.get(0).getColor());
                 //gonna select only free agents though even though they fulfill the same color as the boxes which have the same letter as the goal
-                boolean is_a_match = false; //sees if a free
+                boolean is_a_match = false; //sees if the agent is free
                 for(Agent matching_agent: matchingAgents)
                 {
                     for (Agent free_agent : freeAgents)
@@ -102,7 +99,7 @@ public class TaskDistributor {
                             is_a_match = true;
                         }
                     }
-                    if (!is_a_match) //if he already has a task assigned to it
+                    if (!is_a_match) //if the agent already has a task assigned to it
                     {
                         matchingAgents.remove(matching_agent);
                     }
@@ -114,8 +111,6 @@ public class TaskDistributor {
                 }
 
                 //find best matching agent
-                //TODO:Round robin implementation
-                // otherwise an implementation where agents ask for next may be more feasible.
                 for (Box box : matchingBoxes) {
                     for (Agent agent : matchingAgents) { // manhattan distance is used
                         dist1 = Math.abs(agent.row - box.getRow()) + Math.abs(agent.column - box.getColumn());
@@ -124,12 +119,12 @@ public class TaskDistributor {
                         if (smallest_dist == 0 || dist1 < smallest_dist) {
                             smallest_dist = dist1;
                             matchingAgent = agent;
-                            matchingBox = box;
+                            matchingBox = level.getBoxByID(box.getId());
                         }
                     }
                 }
-                matchingAgent.tasks.add(new Task(matchingAgent, matchingBox, goal, TaskType.MoveBoxToGoal));
-                level.getTasks().add(new Task(matchingAgent, matchingBox, goal, TaskType.MoveBoxToGoal));
+                matchingAgent.tasks.add(new Task(matchingAgent, matchingBox.getId(), matchingBox, goal, TaskType.MoveBoxToGoal));
+                level.getTasks().add(new Task(matchingAgent, matchingBox.getId(), matchingBox, goal, TaskType.MoveBoxToGoal));
                 smallest_dist = 0;
                 matchingAgents.remove(matchingAgent);
             }
@@ -140,7 +135,6 @@ public class TaskDistributor {
             Agent sole_agent = agents.get(0);
             boolean is_set = false;
             int goal_path_size, ordered_goal_path_size;
-//            System.err.println("Initially ordered_goals size and look:" + ordered_goals.size() + " , " + ordered_goals);
             for (Goal goal: goals)
             {
                 inner_for:
@@ -160,7 +154,6 @@ public class TaskDistributor {
                     sole_agent.preliminary_astar.newPath(agent_cell, goal_cell);
                     sole_agent.preliminary_astar.findPath();
                     goal_path_size = sole_agent.preliminary_astar.getPath().size();
-//                    System.err.println("ordered goal_path size: " + ordered_goal_path_size + " goal_path_size: " + goal_path_size);
 
                     if (goal_path_size <= ordered_goal_path_size)
                     {
@@ -174,10 +167,7 @@ public class TaskDistributor {
                     ordered_goals.add(goal);
                 }
                 is_set = false;
-//                System.err.println("After adding a goal, it looks: " + ordered_goals.size() + " , " + ordered_goals);
             }
-
-//            System.err.println("ordered goals related, size: " + ordered_goals.size() + " , " +ordered_goals);
 
             for(Goal goal : ordered_goals) {
                 matchingBoxes = new_boxletters.get(Character.toUpperCase(goal.getGoalLetter()));
@@ -187,12 +177,13 @@ public class TaskDistributor {
                     dist1 = Math.abs(goal.getRow() - box.getRow()) + Math.abs(goal.getColumn() - box.getColumn());
                     if (smallest_dist == 0 || dist1 < smallest_dist) {
                         smallest_dist = dist1;
-                        matchingBox = box;
+                        matchingBox = level.getBoxByID(box.getId());
                     }
                 }
 
-                matchingAgent.tasks.add(new Task(matchingAgent, matchingBox, goal, TaskType.MoveBoxToGoal));
-                level.getTasks().add(new Task(matchingAgent, matchingBox, goal, TaskType.MoveBoxToGoal));
+//                System.err.println("TAsk Distr. MoveBOX box's id:" + matchingBox.getId()); //all of them have correct id's
+                matchingAgent.tasks.add(new Task(matchingAgent, matchingBox.getId(),matchingBox, goal, TaskType.MoveBoxToGoal));
+                level.getTasks().add(new Task(matchingAgent, matchingBox.getId(), matchingBox, goal, TaskType.MoveBoxToGoal));
                 smallest_dist = 0;
             }
         }
@@ -201,16 +192,14 @@ public class TaskDistributor {
             System.err.println("Task for agent 0: " + temp_tasks.get(i));
         }
     }
-    void addGoal(Goal goal){
+    void addGoal(Goal goal){}
 
-    }
+    void removeGoal(Goal goal){}
 
-    void removeGoal(Goal goal){
-
-    }
     private Box selectBox(List<Box> boxes){
         return boxes.get(0);
     }
+
     private Agent selectAgent(List<Agent> agents){
         return agents.get(0);
     }

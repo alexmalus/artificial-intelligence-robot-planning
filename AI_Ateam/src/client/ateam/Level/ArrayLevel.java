@@ -22,11 +22,6 @@ public class ArrayLevel implements ILevel {
     public static int MAX_ROW = 70;
     public static int MAX_COLUMN = 70;
 
-
-//    public ArrayList<ArrayList<Integer>> agentLocation = new ArrayList<>()
-    public int agentRow;
-    public int agentCol;
-
     public boolean[][] walls = new boolean[MAX_ROW][MAX_COLUMN];
     private char[][] boxes = new char[MAX_ROW][MAX_COLUMN];
     private char[][] goals = new char[MAX_ROW][MAX_COLUMN];
@@ -366,20 +361,6 @@ public class ArrayLevel implements ILevel {
 //        System.err.println("moveAgentTo - agentID: " + agentId);
     }
 
-//    public void moveBoxTo(char boxLetter, Point boxCell, Point boxTarCell){
-//        for(Box box : this.getBoxes()){
-//            if(box.getBoxLetter()==boxLetter){
-//                box.setRow(boxTarCell.x);
-//                box.setColumn(boxTarCell.y);
-//                break;
-//            }
-//        }
-//        if(boxes[boxCell.x][boxCell.y]==boxLetter) {
-//            boxes[boxCell.x][boxCell.y] = ' ';
-//            boxes[boxTarCell.x][boxTarCell.y] = boxLetter;
-//        }
-//    }
-
     public void moveBoxTo_withID(char boxLetter, int box_id, Point boxCell, Point boxTarCell){
         for(Box box : this.getBoxes()){
             if(box.getBoxLetter()== boxLetter && box.getId() == box_id){
@@ -412,20 +393,14 @@ public class ArrayLevel implements ILevel {
 
         if(this.isNeighbor(currentCell.x,currentCell.y,boxCell.x,boxCell.y) && this.isNeighbor(boxCell.x,boxCell.y,boxTarCell.x,boxTarCell.y)
                 && this.isFree(new Point(boxTarCell.x,boxTarCell.y))) {
-            //change boxrow and boxcol for box
+            // move agent on level
+            this.moveAgentTo(agentId, currentCell, boxCell);
             //move box on level
-//            System.err.println("Boxcell:" + boxCell.toString() + " CurrentCell" + currentCell.toString());
-//            this.moveBoxTo(boxLetter, boxCell, boxTarCell);
             Box box_which_is_moved = getSpecificBox(getCell(boxCell));
             System.err.println("Box before it is moved: " + box_which_is_moved.toString());
             this.moveBoxTo_withID(box_which_is_moved.getBoxLetter(), box_which_is_moved.getId(), boxCell, boxTarCell);
             System.err.println("Box after it is moved: " + getBoxByID(box_which_is_moved.getId()).toString());
 
-//            System.err.println("Boxcell:" + boxCell.toString() + " CurrentCell" + currentCell.toString());
-            //change agentrow and agentcol for agent
-            // move agent on level
-            this.moveAgentTo(agentId, currentCell, boxCell);
-            System.err.println("executePushAction success");
             getCell(currentCell).toggleOccupied();
             getCell(currentCell).setCell_type(CellType.EMPTY);
             getCell(boxTarCell).toggleOccupied();
@@ -441,16 +416,14 @@ public class ArrayLevel implements ILevel {
     public void executePullAction(int agentId, char boxLetter, Point currentCell, Point boxCell, Point tarCell) {
         if(this.isNeighbor(currentCell.x,currentCell.y,tarCell.x,tarCell.y) && this.isNeighbor(boxCell.x,boxCell.y,currentCell.x,currentCell.y)
                 && this.isFree(new Point(tarCell.x,tarCell.y))){
-            //change agentrow and agentcol for agent
             // move agent on level
             this.moveAgentTo(agentId,currentCell,tarCell);
-            //change boxrow and boxcol for box
             //move box on level
-//            System.err.println("Boxcell:" + boxCell.toString() + " CurrentCell" + currentCell.toString());
-//            this.moveBoxTo(boxLetter, boxCell, currentCell);
             Box box_which_is_moved = getSpecificBox(getCell(boxCell));
+            System.err.println("Box before it is moved: " + box_which_is_moved.toString());
             this.moveBoxTo_withID(box_which_is_moved.getBoxLetter(), box_which_is_moved.getId(), boxCell, currentCell);
-//            System.err.println("Boxcell:" + boxCell.toString() + " CurrentCell" + currentCell.toString());
+            System.err.println("Box after it is moved: " + getBoxByID(box_which_is_moved.getId()).toString());
+
             getCell(boxCell).toggleOccupied();
             getCell(currentCell).setCell_type(CellType.BOX);
             getCell(boxCell).setCell_type(CellType.EMPTY);

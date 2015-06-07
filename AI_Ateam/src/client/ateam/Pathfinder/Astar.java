@@ -120,7 +120,7 @@ public class Astar {
     // Calculating the best path based on the start and goal nodes given in the constructor.
     public void findPath()
     {
-        System.err.println("trying to reach the following goal node: "  + goalNode.toString());
+//        System.err.println("trying to reach the following goal node: "  + goalNode.toString());
         // Make sure we have starting and ending points and that we don't already have a path
         if (!needPath || startNode == null || goalNode == null) return;
 

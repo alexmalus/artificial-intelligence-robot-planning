@@ -22,31 +22,34 @@ public class Task {
     public Goal goal;
     protected TaskType type;
 
+    //TODO: change so that we have just 1 constructor for all task types!
     public Task(Agent agent, Box box, Goal goal, TaskType type){this.agent = agent;this.box=box;this.goal=goal;this.type=type;}
     public Task(Agent agent, int box_id, Goal goal, TaskType type){this.agent = agent;this.box_id=box_id;this.goal=goal;this.type=type;this.box = new Box();}
+    public Task(Agent agent, int box_id, Box box, Goal goal, TaskType type){this.agent = agent;this.box_id=box_id;this.goal=goal;this.type=type;this.box = box;}
 
     public boolean isTaskCompleted(){
         Astar temp_path = new Astar(agent);
+        ArrayLevel level = ArrayLevel.getSingleton();
+        Box the_box = level.getBoxByID(box_id);
+//        System.err.println("What do we have at cell pos 2 9? " + ArrayLevel.getCellFromLocation(2, 9).getCell_type());
+//        if(the_box.getId() == -1)
+//        {
+//            System.err.println("Lost the box..");
+//        }
+        Agent the_agent = level.getAgentByID(agent.id);
         switch (type){
             case MoveBoxToGoal:
-                System.err.println("current task box and goal: " + box.toString() + ", " + goal.toString());
-                System.err.println("is MoveBoxToGoal completed? " + (box.getColumn()==goal.getColumn()) + " " + (box.getRow()==goal.getRow()));
-                return (box.getColumn()==goal.getColumn())&&(box.getRow()==goal.getRow());
+                System.err.println("Box in cause: " + the_box.toString());
+                System.err.println("is MoveBoxToGoal completed? " + (the_box.getColumn() == goal.getColumn()) + " " + (the_box.getRow() == goal.getRow()));
+                return (the_box.getColumn()==goal.getColumn()&& the_box.getRow()==goal.getRow());
             case FindBox:
-                ArrayLevel level = ArrayLevel.getSingleton();
-//                System.err.println("box: " + box.toString() + " " + "assigned goal neighbor: " + agent.assigned_goal_neighbour.toString());
-//                System.err.println("box: " + box.toString() + " " + "agent: " + agent.toString());
-//                System.err.println("is FindBox completed? " + level.isNeighbor(box.getRow(), box.getColumn(), agent.assigned_goal_neighbour.getX(),
-//                        agent.assigned_goal_neighbour.getY()));
-                System.err.println("is FindBox completed? " + level.isNeighbor(box.getRow(), box.getColumn(), agent.row,
-                        agent.column));
-                System.err.println("Agent coords: "+agent.row+","+agent.column);
-                return (level.isNeighbor(box.getRow(), box.getColumn(), agent.row, agent.column));
+                System.err.println("is FindBox completed? " + level.isNeighbor(the_box.getRow(), the_box.getColumn(), the_agent.row,
+                        the_agent.column));
+                return (level.isNeighbor(box.getRow(), box.getColumn(), the_agent.row, the_agent.column));
             case Idle:
                 return true;
             case NonObstructing:
-//                System.err.println("Task from which I am seeing stuff: " + agent.tasks.get(0).toString());
-//                System.err.println("Trying to add box as startLoc: " + agent.tasks.get(0).box.toString());
+                if(agent.tasks.get(0).isTaskCompleted()) {return true;}
                 Cell startLocation = new Cell(agent.tasks.get(0).box.getRow(), agent.tasks.get(0).box.getColumn());
                 startLocation.setLocation();
                 Cell goalLocation = new Cell(agent.tasks.get(0).goal.getRow(), agent.tasks.get(0).goal.getColumn());
@@ -55,9 +58,10 @@ public class Task {
                 temp_path.newPath(startLocation, goalLocation);
                 temp_path.findPath();
                 System.err.println("Is non-obstructing complete? " + temp_path.pathExists());
+//                System.err.println("Show me task 0:" + agent.tasks.get(0).toString());
                 return (temp_path.pathExists());
             case RemoveBox:
-                Cell start_Location = ArrayLevel.getCellFromLocation(agent.row, agent.column);
+                Cell start_Location = ArrayLevel.getCellFromLocation(the_agent.row, the_agent.column);
 //                Cell goal_Location = ArrayLevel.getCellFromLocation(agent.tasks.get(0).box.getRow(), agent.tasks.get(0).box.getColumn());
                 ArrayList<Cell> goal_location_neighbors = agent.find_neighbor(new Point(agent.tasks.get(0).box.getRow(), agent.tasks.get(0).box.getColumn()));
                 for(Cell goal_location_neighbor : goal_location_neighbors)

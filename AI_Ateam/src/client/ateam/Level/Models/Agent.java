@@ -234,7 +234,7 @@ public class Agent {
                     {
 //                        tasks.add(0, new Task(this, currentTask.box, new Goal(), TaskType.FindBox));
                         tasks.add(0, currentTask);
-                        currentTask = new Task(this, currentTask.box, new Goal(), TaskType.FindBox);
+                        currentTask = new Task(this, currentTask.box.getId(), currentTask.box, new Goal(), TaskType.FindBox);
                         planning();
                     }
                     break;
@@ -340,10 +340,10 @@ public class Agent {
                             ArrayList<Cell> neighbors = new ArrayList<>();
                             neighbors = find_neighbor(new Point(path_element.getCell().getR(), path_element.getCell().getC()));
 
-                            for (Cell nei : neighbors)
-                            {
-                                System.err.println("Added neighbor: " + nei.getRowColumn());
-                            }
+//                            for (Cell nei : neighbors)
+//                            {
+//                                System.err.println("Added neighbor: " + nei.getRowColumn());
+//                            }
                             for(Cell neighbor : neighbors)
                             {
 //                                System.err.println("neigbor row: " + neighbor.getR() + ", col: " + neighbor.getC());
@@ -431,10 +431,10 @@ public class Agent {
 
                                 ArrayLevel level = ArrayLevel.getSingleton();
                                 Box using_box = level.getBoxByID(currentTask.box_id);
-                                System.err.println("Curr task: " + currentTask.toString());
-                                System.err.println("Agent R AND C: " + row + ", " + column);
-                                System.err.println("Box R AND C: " + using_box.getRow() + ", " +  using_box.getColumn());
-                                System.err.println("neighbor which is OK: " + neighbor.toString());
+//                                System.err.println("Curr task: " + currentTask.toString());
+//                                System.err.println("Agent R AND C: " + row + ", " + column);
+//                                System.err.println("Box R AND C: " + using_box.getRow() + ", " +  using_box.getColumn());
+//                                System.err.println("neighbor which is OK: " + neighbor.toString());
 
                                 new_action = new Push(id, using_box.getBoxLetter(), new Point(row, column),
                                         new Point(using_box.getRow(), using_box.getColumn()),
@@ -463,6 +463,140 @@ public class Agent {
                     System.err.println("No Task Type assigned..be careful!");
                     break;
             }
+        }
+    }
+
+    public void findAlternative(Cell startLocation, Cell goalLocation)
+    {
+        preliminary_astar.newPath(startLocation, goalLocation);
+        preliminary_astar.findPath();
+        if(preliminary_astar.pathExists())
+        {
+//            System.err.println("Unfortunately just gonna use a preliminary build path!");
+            System.err.println("Something is blocking me, but I found a temporary path!");
+            ArrayList<Node> astar_path = preliminary_astar.getPath();
+            Collections.reverse(astar_path);
+            path_element_for:
+            for(Node path_element : astar_path)
+            {
+                Cell path_cell = ArrayLevel.getCell(path_element.getCell().getR(), path_element.getCell().getC());
+                if (path_cell.isOccupied()) //we found an element which is blocking the way..
+                {
+//                    System.err.println("Element location which is blocking the way: " + path_cell.getR() + ", " + path_cell.getC());
+                    ArrayLevel level = ArrayLevel.getSingleton();
+                    if (path_cell.getCell_type() == CellType.BOX)
+                    {
+                        System.err.println("A box is blocking the path");
+                        Box path_box = level.getSpecificBox(path_cell);
+                        if (path_box.isTaken())
+                        {
+                            System.err.println("box is taken, gonna wait for it to disappear out of my(current agent) way!");
+                            tasks.add(0, new Task(this, new Box(), new Goal(), TaskType.Idle));
+                            currentAction = new NoAction(id, new Point(row, column));
+                            currentTask = null;
+                        }
+                        else
+                        {
+                            System.err.println("box is not taken, it may be removed!");
+                            if(this.color == path_box.getColor())
+                            {
+                                //if yes, try to move it somewhere which is NOT part of the preemptive_path
+                                System.err.println("Preemptive path: " + preliminary_astar.getPath()); // from moveboxtogoal task
+                                System.err.println("Box is the same color as me; I can remove it!");
+                                System.err.println("The box hero: " + path_box.getRow() + ", " + path_box.getColumn());
+
+                                //get legit path to nearest box to remove
+                                ArrayList<Cell> goal_box_neighbors = find_neighbor(new Point(path_box.getRow(), path_box.getColumn()));
+                                Cell agent_Location = new Cell(row, column);
+                                agent_Location.setLocation();
+                                small_for:
+                                {
+                                    for (Cell goal_box_neighbor : goal_box_neighbors) {
+                                        System.err.println("start: " + startLocation.toString() + ", goal: " + goal_box_neighbor.toString());
+                                        astar.newPath(startLocation, goal_box_neighbor);
+                                        astar.findPath();
+                                        if (astar.pathExists()) {
+                                            break small_for;
+                                        }
+                                    }
+                                }
+
+                                System.err.println("Prior to RemoveBox, box ID: " + path_box.getId());
+                                tasks.add(0, new Task(this, path_box, currentTask.goal, TaskType.FindBox));
+                                //as goal for removebox is a path element which is part of the path..it needs to be different than it
+                                tasks.add(1, new Task(this, path_box.getId(),
+                                        new Goal(' ', astar.getPath().get(1).getCell().getR(), astar.getPath().get(1).getCell().getC()),
+                                        TaskType.RemoveBox));
+                                tasks.add(2, currentTask);
+                                currentTask = null;
+                                break path_element_for;
+                            }
+                            else
+                            {
+                                ArrayList<Agent> agents = level.getAgents();
+                                //just gonna assume that the box has a color identical to at least one of the agents
+                                System.err.println("Box is not the same color as me; Somebody else can remove it!");
+                                for(Agent agent : agents)
+                                {
+                                    if (agent.id != id)
+                                    {
+                                        agent.tasks.add(0, new Task(agent, path_box.getId(), new Goal(), TaskType.RemoveBox));
+                                    }
+                                }
+                                tasks.add(0, new Task(this, new Box(), new Goal(), TaskType.Idle));
+                                tasks.add(1, currentTask);
+                                currentAction = new NoAction(id, new Point(row, column));
+                                currentTask = null;
+                            }
+                        }
+                        break path_element_for;
+                    }
+                    else //it's an agent
+                    {
+                        System.err.println("An agent is blocking the path");
+                        Agent path_agent = level.getSpecificAgent(path_cell);
+                        if (path_agent.id != id)
+                        {
+                            if(path_agent.currentTask != null)
+                            {
+                                System.err.println("Gonna wait");
+                                tasks.add(0, new Task(this, new Box(), new Goal(), TaskType.Idle));
+                                currentAction = new NoAction(id, new Point(row, column));
+                                currentTask = null;
+                            }
+                            else
+                            {
+                                System.err.println("Move out of the way!");
+                                path_agent.tasks.add(0, new Task(this, new Box(), new Goal(), TaskType.NonObstructing));
+                                System.err.println("Gonna wait");
+                                tasks.add(0, new Task(this, new Box(), new Goal(), TaskType.Idle));
+                                currentAction = new NoAction(id, new Point(row, column));
+                                currentTask = null;
+                            }
+                        }
+                        else
+                        {
+                            System.err.println("I am blocking the path!");
+                            System.err.println("Current task: " + currentTask.toString());
+                            System.err.println("Prior to adding NonObs, box's id: " + currentTask.box.getId());
+                            tasks.add(0, new Task(this, currentTask.box.getId(), currentTask.box, currentTask.goal, TaskType.NonObstructing));
+                            tasks.add(1, currentTask);
+                            currentTask = null;
+                        }
+                        break path_element_for;
+                    }
+                }
+            }
+            planning();
+            //TODO: remember to reverse at some points as we do for NonObstructing!!! in below's code
+//            Collections.reverse(astar_path);
+        }
+        else
+        {
+            System.err.println("Unsolvable Task, gonna chicken out for a while..maybe another agent may do a miracle");
+            tasks.add(0, new Task(this, new Box(), new Goal(), TaskType.Idle));
+            tasks.add(1, currentTask);
+            currentAction = new NoAction(id, new Point(row, column));
         }
     }
 
@@ -549,148 +683,6 @@ public class Agent {
             Collections.reverse(actionList); //to make it ordered
             System.err.println("Finished converting path to actions:" + actionList);
             System.err.println("action list size:" + actionList.size());
-        }
-    }
-
-    public void findAlternative(Cell startLocation, Cell goalLocation)
-    {
-        preliminary_astar.newPath(startLocation, goalLocation);
-        preliminary_astar.findPath();
-        if(preliminary_astar.pathExists())
-        {
-            System.err.println("Unfortunately just gonna use a preliminary build path!");
-            System.err.println("Something is blocking me, but I found a temporary path!");
-            ArrayList<Node> astar_path = preliminary_astar.getPath();
-            Collections.reverse(astar_path);
-            path_element_for:
-            for(Node path_element : astar_path)
-            {
-                Cell path_cell = ArrayLevel.getCell(path_element.getCell().getR(), path_element.getCell().getC());
-                if (path_cell.isOccupied()) //we found an element which is blocking the way..
-                {
-//                    System.err.println("Element location which is blocking the way: " + path_cell.getR() + ", " + path_cell.getC());
-                    ArrayLevel level = ArrayLevel.getSingleton();
-                    if (path_cell.getCell_type() == CellType.BOX)
-                    {
-                        System.err.println("A box is blocking the path");
-                        Box path_box = level.getSpecificBox(path_cell);
-                        if (path_box.isTaken())
-                        {
-                            System.err.println("box is taken, gonna wait for it to disappear out of my(current agent) way!");
-                            tasks.add(0, new Task(this, new Box(), new Goal(), TaskType.Idle));
-                            currentAction = new NoAction(id, new Point(row, column));
-                            currentTask = null;
-                        }
-                        else
-                        {
-                            System.err.println("box is not taken, it may be removed!");
-                            if(this.color == path_box.getColor())
-                            {
-                                //if yes, try to move it somewhere which is NOT part of the preemptive_path
-                                System.err.println("Preemptive path: " + preliminary_astar.getPath()); // from moveboxtogoal task
-                                System.err.println("Box is the same color as me; I can remove it!");
-                                System.err.println("The box hero: " + path_box.getRow() + ", " + path_box.getColumn());
-                                Box goal_box = new Box(0, ' ', null, path_box.getRow(), path_box.getColumn());
-
-                                //get legit path to nearest box to remove
-                                ArrayList<Cell> goal_box_neighbors = find_neighbor(new Point(path_box.getRow(), path_box.getColumn()));
-                                Cell agent_Location = new Cell(row, column);
-                                agent_Location.setLocation();
-                                small_for:
-                                {
-                                    for (Cell goal_box_neighbor : goal_box_neighbors) {
-                                        System.err.println("start: " + startLocation.toString() + ", goal: " + goal_box_neighbor.toString());
-                                        astar.newPath(startLocation, goal_box_neighbor);
-                                        astar.findPath();
-                                        if (astar.pathExists()) {
-//                                        System.err.println("Found path mofo!");
-//                                        System.err.println("Path: " + astar.getPath().toString());
-                                            break small_for;
-                                        }
-                                    }
-                                }
-
-                                tasks.add(0, new Task(this, goal_box, currentTask.goal, TaskType.FindBox));
-                                //as goal for removebox is a path element which is part of the path..it needs to be different than it
-//                                tasks.add(1, new Task(this, goal_box,
-//                                        new Goal(' ', astar.getPath().get(1).getCell().getR(), astar.getPath().get(1).getCell().getC()),
-//                                        TaskType.RemoveBox));
-                                tasks.add(1, new Task(this, path_box.getId(),
-                                        new Goal(' ', astar.getPath().get(1).getCell().getR(), astar.getPath().get(1).getCell().getC()),
-                                        TaskType.RemoveBox));
-                                tasks.add(2, currentTask);
-                                System.err.println("path_box:" + path_box.toString() + " " + path_box.getId());
-                                System.err.println(tasks.get(0).toString());
-                                System.err.println(tasks.get(1).toString());
-                                System.err.println(tasks.get(2).toString());
-                                currentTask = null;
-                                break path_element_for;
-                            }
-                            else
-                            {
-                                ArrayList<Agent> agents = level.getAgents();
-                                //just gonna assume that the box has a color identical to at least one of the agents
-                                System.err.println("Box is not the same color as me; Somebody else can remove it!");
-                                for(Agent agent : agents)
-                                {
-                                    if (agent.id != id)
-                                    {
-                                        agent.tasks.add(0, new Task(agent, path_box.getId(), new Goal(), TaskType.RemoveBox));
-                                    }
-                                }
-                                tasks.add(0, new Task(this, new Box(), new Goal(), TaskType.Idle));
-                                tasks.add(1, currentTask);
-                                currentAction = new NoAction(id, new Point(row, column));
-                                currentTask = null;
-                            }
-                        }
-                        break path_element_for;
-                    }
-                    else //it's an agent
-                    {
-                        System.err.println("An agent is blocking the path");
-                        Agent path_agent = level.getSpecificAgent(path_cell);
-                        if (path_agent.id != id)
-                        {
-                            if(path_agent.currentTask != null)
-                            {
-                                System.err.println("Gonna wait");
-                                tasks.add(0, new Task(this, new Box(), new Goal(), TaskType.Idle));
-                                currentAction = new NoAction(id, new Point(row, column));
-                                currentTask = null;
-                            }
-                            else
-                            {
-                                System.err.println("Move out of the way!");
-                                path_agent.tasks.add(0, new Task(this, new Box(), new Goal(), TaskType.NonObstructing));
-                                System.err.println("Gonna wait");
-                                tasks.add(0, new Task(this, new Box(), new Goal(), TaskType.Idle));
-                                currentAction = new NoAction(id, new Point(row, column));
-                                currentTask = null;
-                            }
-                        }
-                        else
-                        {
-                            System.err.println("I am blocking the path!");
-//                            System.err.println("Current path: " + astar_path);
-                            tasks.add(0, new Task(this, currentTask.box, currentTask.goal, TaskType.NonObstructing));
-                            tasks.add(1, currentTask);
-                            currentTask = null;
-                        }
-                        break path_element_for;
-                    }
-                }
-            }
-            planning();
-            //TODO: remember to reverse at some points as we do for NonObstructing!!! in below's code
-//            Collections.reverse(astar_path);
-        }
-        else
-        {
-            System.err.println("Unsolvable Task, gonna chicken out for a while..maybe another agent may do a miracle");
-            tasks.add(0, new Task(this, new Box(), new Goal(), TaskType.Idle));
-            tasks.add(1, currentTask);
-            currentAction = new NoAction(id, new Point(row, column));
         }
     }
 

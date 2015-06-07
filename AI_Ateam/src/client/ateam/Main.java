@@ -235,6 +235,17 @@ public class Main {
             //TODO: think about future online planning
             //future planning, avoiding conflicts
 
+//            for(Agent agent : level.getAgents())
+//            {
+//                System.err.println("Box's id of the current task: " + agent.currentTask.box.getId());
+//                int xx = 0;
+//                for(Task task : agent.tasks)
+//                {
+//                    System.err.println("Box's id of task " + xx + " is: " + agent.tasks.get(xx).box.getId());
+//                    xx++;
+//                }
+//            }
+
             //send action
             for(Agent agent : level.getAgents()){
 //                System.err.println("Reached Str Joiner step, currentAction for 0 is: " + agent.getCurrentAction().toString());
@@ -248,6 +259,8 @@ public class Main {
 //                    agent.setCurrentAction_ToNoOp();
 //                }
 
+                System.err.println("Current task before seeing if it's completed or not: " + agent.currentTask.toString());
+                System.err.println("Box's id of the current task: " + agent.currentTask.box.getId());
                 if (!agent.currentTask.isTaskCompleted()){
                     System.err.println("Current Task is not completed");
                     System.err.println("action list size: " + agent.actionList.size());

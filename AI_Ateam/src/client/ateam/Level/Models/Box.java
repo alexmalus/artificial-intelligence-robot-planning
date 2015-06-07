@@ -20,7 +20,7 @@ public class Box {
     public Box(int id, char boxLetter,Color color, int row, int column){
         this.id = id;
         this.boxLetter = boxLetter;
-        this.setColor(color);
+        this.color = color;
         this.row = row;
         this.column = column;
     }
