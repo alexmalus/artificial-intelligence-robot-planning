@@ -19,8 +19,8 @@ public class ArrayLevel implements ILevel {
 
     private BufferedReader serverMessages = new BufferedReader( new InputStreamReader( System.in ) );
 
-    public static int MAX_ROW = 70;
-    public static int MAX_COLUMN = 70;
+    public static int MAX_ROW = 80;
+    public static int MAX_COLUMN = 80;
 
 
 //    public ArrayList<ArrayList<Integer>> agentLocation = new ArrayList<>()
@@ -154,6 +154,7 @@ public class ArrayLevel implements ILevel {
         Color color;
         Cell tempCell;
         cells = new HashMap<Point, Cell>();         // Create our cellList
+        int cell_id = 0; //unique id for every agent & box. will get incremented every time we find one of them
         boolean is_multi_agent_system = false;
 
         for(int x=0;x<agents.length;x++)
@@ -241,7 +242,8 @@ public class ArrayLevel implements ILevel {
                     }
                     else{
                         colors.put(chr, Color.BLUE);
-                        agentsArrayList.add(new Agent(levelLines*i, colors.get(chr), levelLines, i));
+                        agentsArrayList.add(new Agent(cell_id, colors.get(chr), levelLines, i));
+                        cell_id++;
                     }
                     tempCell = new Cell(levelLines, i, CellType.AGENT);
                     tempCell.toggleOccupied(); //the cell is Occupied
@@ -256,7 +258,8 @@ public class ArrayLevel implements ILevel {
                     }
                     else{
                         colors.put(chr, Color.BLUE);
-                        boxesArrayList.add(new Box(levelLines*i, chr, colors.get(chr), levelLines, i));
+                        boxesArrayList.add(new Box(cell_id, chr, colors.get(chr), levelLines, i));
+                        cell_id++;
 //                        System.err.println("Box I am trying to add: " + new Box(chr, colors.get(chr), levelLines, i).toString());
                     }
                     tempCell = new Cell(levelLines, i, CellType.BOX);
