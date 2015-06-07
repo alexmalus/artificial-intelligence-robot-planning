@@ -43,6 +43,7 @@ public class Task {
                 System.err.println("is MoveBoxToGoal completed? " + (the_box.getColumn() == goal.getColumn()) + " " + (the_box.getRow() == goal.getRow()));
                 return (the_box.getColumn()==goal.getColumn()&& the_box.getRow()==goal.getRow());
             case FindBox:
+                System.err.println("The box, The agent: " + the_box.toString() + ", " + the_agent.toString());
                 System.err.println("is FindBox completed? " + level.isNeighbor(the_box.getRow(), the_box.getColumn(), the_agent.row,
                         the_agent.column));
                 return (level.isNeighbor(box.getRow(), box.getColumn(), the_agent.row, the_agent.column));

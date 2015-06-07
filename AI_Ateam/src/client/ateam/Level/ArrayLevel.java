@@ -339,10 +339,9 @@ public class ArrayLevel implements ILevel {
     public ArrayList<Task> getTasks() {return taskList;}
 
     private void moveAgentTo(int agentId, Point currentCell, Point tarCell){
-        //change agentrow and agentcol for agent
-        System.err.println("Curr Cell: " + currentCell.toString());
-        System.err.println("Target Cell: " + tarCell.toString());
-        System.err.println("Current location agents array: "+agents[currentCell.x][currentCell.y]);
+//        System.err.println("Curr Cell: " + currentCell.toString());
+//        System.err.println("Target Cell: " + tarCell.toString());
+//        System.err.println("Current location agents array: "+agents[currentCell.x][currentCell.y]);
         for(Agent agent : this.getAgents()){
             if(agent.id == agentId)
             {
@@ -350,6 +349,7 @@ public class ArrayLevel implements ILevel {
 //                agent.column = tarCell.x;
                 agent.row = tarCell.x;
                 agent.column = tarCell.y;
+//                System.err.println("New position for agent: " + agent.row + ", " + agent.column);
                 break;
             }
         }
@@ -378,7 +378,7 @@ public class ArrayLevel implements ILevel {
     @Override
     public void executeMoveAction(int agentId, Point currentCell, Point tarCell) {
         System.err.println("executeMoveAction - isNeighor: "+this.isNeighbor(currentCell.x,currentCell.y,tarCell.x,tarCell.y));
-        System.err.println("executeMoveAction - isFree: "+this.isFree(new Point(tarCell.x, tarCell.y)));
+        System.err.println("executeMoveAction - isFree: "+this.isFree(new Point(tarCell.x, tarCell.y))); //fails here
         if(this.isNeighbor(currentCell.x,currentCell.y,tarCell.x,tarCell.y) && this.isFree(new Point(tarCell.x, tarCell.y))){
             this.moveAgentTo(agentId, currentCell, tarCell);
             getCell(currentCell).toggleOccupied();
@@ -397,9 +397,9 @@ public class ArrayLevel implements ILevel {
             this.moveAgentTo(agentId, currentCell, boxCell);
             //move box on level
             Box box_which_is_moved = getSpecificBox(getCell(boxCell));
-            System.err.println("Box before it is moved: " + box_which_is_moved.toString());
+//            System.err.println("Box before it is moved: " + box_which_is_moved.toString());
             this.moveBoxTo_withID(box_which_is_moved.getBoxLetter(), box_which_is_moved.getId(), boxCell, boxTarCell);
-            System.err.println("Box after it is moved: " + getBoxByID(box_which_is_moved.getId()).toString());
+//            System.err.println("Box after it is moved: " + getBoxByID(box_which_is_moved.getId()).toString());
 
             getCell(currentCell).toggleOccupied();
             getCell(currentCell).setCell_type(CellType.EMPTY);
@@ -420,14 +420,15 @@ public class ArrayLevel implements ILevel {
             this.moveAgentTo(agentId,currentCell,tarCell);
             //move box on level
             Box box_which_is_moved = getSpecificBox(getCell(boxCell));
-            System.err.println("Box before it is moved: " + box_which_is_moved.toString());
+//            System.err.println("Box before it is moved: " + box_which_is_moved.toString());
             this.moveBoxTo_withID(box_which_is_moved.getBoxLetter(), box_which_is_moved.getId(), boxCell, currentCell);
-            System.err.println("Box after it is moved: " + getBoxByID(box_which_is_moved.getId()).toString());
+//            System.err.println("Box after it is moved: " + getBoxByID(box_which_is_moved.getId()).toString());
 
             getCell(boxCell).toggleOccupied();
             getCell(currentCell).setCell_type(CellType.BOX);
             getCell(boxCell).setCell_type(CellType.EMPTY);
             getCell(tarCell).setCell_type(CellType.AGENT);
+            getCell(tarCell).toggleOccupied();
         }
     }
 

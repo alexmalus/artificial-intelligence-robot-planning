@@ -260,7 +260,7 @@ public class Main {
 //                }
 
                 System.err.println("Current task before seeing if it's completed or not: " + agent.currentTask.toString());
-                System.err.println("Box's id of the current task: " + agent.currentTask.box.getId());
+//                System.err.println("Box's id of the current task: " + agent.currentTask.box.getId());
                 if (!agent.currentTask.isTaskCompleted()){
                     System.err.println("Current Task is not completed");
                     System.err.println("action list size: " + agent.actionList.size());
@@ -294,12 +294,14 @@ public class Main {
 
                 //retry or something...
             }
+            //TODO: check the response for every agent, not just "contains"
             else if(response.contains("true"))
             {
                 System.err.println("Server responded with true");
                 for(Agent agent : level.getAgents()){
                     // execute actions on local level, if empty do next plan
                     agent.executeCurrentAction();
+                    System.err.println("New position for agent: " + agent.row + ", " + agent.column);
                 }
             }
             else{
