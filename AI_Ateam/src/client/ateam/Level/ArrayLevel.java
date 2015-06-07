@@ -19,8 +19,8 @@ public class ArrayLevel implements ILevel {
 
     private BufferedReader serverMessages = new BufferedReader( new InputStreamReader( System.in ) );
 
-    public static int MAX_ROW = 80;
-    public static int MAX_COLUMN = 80;
+    public static int MAX_ROW = 70;
+    public static int MAX_COLUMN = 70;
 
 
 //    public ArrayList<ArrayList<Integer>> agentLocation = new ArrayList<>()
@@ -167,7 +167,6 @@ public class ArrayLevel implements ILevel {
             for(int y=0;y<goals[x].length;y++)
                 goals[x][y] = ' ';
 
-        int agentCol = -1, agentRow = -1;
         int colorLines = 0, levelLines = 0;
 
         // Read lines specifying colors
@@ -206,16 +205,13 @@ public class ArrayLevel implements ILevel {
             }
 
             for ( String id : colonSplit[1].split( "," ) ) {
-                colors.put( id.trim().charAt( 0 ), color );
+                System.err.println("ColonSplit id:" + id);
+                colors.put(id.trim().charAt(0), color);
             }
             colorLines++;
         }
 
         if (!colors.isEmpty()) is_multi_agent_system = true;
-        if ( colorLines > 0 ) {
-            //which means that for the moment we are only considering SA cases
-            error( "Box colors not supported" );
-        }
 
         int[] widths = new int[70];
         for (int i=0; i<70; ++i)
@@ -233,18 +229,14 @@ public class ArrayLevel implements ILevel {
                     tempCell.toggleOccupied(); //the cell is Occupied
                     cells.put(tempCell.getArrayLevelLocation(), tempCell);
                 } else if ( '0' <= chr && chr <= '9' ) { // Agents
-                    if ( agentCol != -1 || agentRow != -1) {
-                        error("Not a single agent level" );
-                    }
                     if (is_multi_agent_system)
                     {
-
+                        agentsArrayList.add(new Agent(cell_id, colors.get(chr), levelLines, i));
                     }
                     else{
-                        colors.put(chr, Color.BLUE);
-                        agentsArrayList.add(new Agent(cell_id, colors.get(chr), levelLines, i));
-                        cell_id++;
+                        agentsArrayList.add(new Agent(cell_id, Color.BLUE, levelLines, i));
                     }
+                    cell_id++;
                     tempCell = new Cell(levelLines, i, CellType.AGENT);
                     tempCell.toggleOccupied(); //the cell is Occupied
                     cells.put(tempCell.getArrayLevelLocation(), tempCell);
@@ -254,14 +246,13 @@ public class ArrayLevel implements ILevel {
                 } else if ( 'A' <= chr && chr <= 'Z' ) { // Boxes
                     if (is_multi_agent_system)
                     {
-
+                        boxesArrayList.add(new Box(cell_id, chr, colors.get(chr), levelLines, i));
                     }
                     else{
-                        colors.put(chr, Color.BLUE);
-                        boxesArrayList.add(new Box(cell_id, chr, colors.get(chr), levelLines, i));
-                        cell_id++;
+                        boxesArrayList.add(new Box(cell_id, chr, Color.BLUE, levelLines, i));
 //                        System.err.println("Box I am trying to add: " + new Box(chr, colors.get(chr), levelLines, i).toString());
                     }
+                    cell_id++;
                     tempCell = new Cell(levelLines, i, CellType.BOX);
                     tempCell.toggleOccupied(); //the cell is Occupied
                     cells.put(tempCell.getArrayLevelLocation(), tempCell);
