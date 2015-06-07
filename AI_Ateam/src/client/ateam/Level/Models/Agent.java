@@ -123,6 +123,7 @@ public class Agent {
 
         if(currentTask.isTaskCompleted())
         {
+            System.err.println("current task: " + currentTask.toString() + " is completed");
             if(tasks.isEmpty())
             {
                 completed_tasks_check = true;
@@ -396,7 +397,8 @@ public class Agent {
                     {
 
                     }
-                    Collections.reverse(astar_path);
+//                    Collections.reverse(astar_path);
+
 //                    convert_path_to_actions();
 //                    currentAction = actionList.remove(0);
 
@@ -476,13 +478,14 @@ public class Agent {
             System.err.println("Something is blocking me, but I found a temporary path!");
             ArrayList<Node> astar_path = preliminary_astar.getPath();
             Collections.reverse(astar_path);
+            System.err.println("Astar_preliminary path: " + astar_path);
             path_element_for:
             for(Node path_element : astar_path)
             {
                 Cell path_cell = ArrayLevel.getCell(path_element.getCell().getR(), path_element.getCell().getC());
                 if (path_cell.isOccupied()) //we found an element which is blocking the way..
                 {
-//                    System.err.println("Element location which is blocking the way: " + path_cell.getR() + ", " + path_cell.getC());
+                    System.err.println("Element location which is blocking the way: " + path_cell.getR() + ", " + path_cell.getC());
                     ArrayLevel level = ArrayLevel.getSingleton();
                     if (path_cell.getCell_type() == CellType.BOX)
                     {
@@ -642,10 +645,11 @@ public class Agent {
             Box curBox = new Box(0, currentTask.box.getBoxLetter(), currentTask.box.getColor() ,currentTask.box.getRow(), currentTask.box.getColumn());
             //fix in Astar's pathfinding two points path problem, occurs when curAgent's or box's Location is equal to startLocation of the pathfinder
             Point tarCell = astar_path.remove(0).getCell().getLocation();
+//            System.err.println("Show me curAgent, curBox, tarCell: " + curAgent.toString() + ", " + curBox.toString() + ", " + tarCell.toString());
             if(astar_path_size == 2)
             {
                 if((curBox.getRow() == tarCell.getX() && curBox.getColumn() == tarCell.getY()) ||
-                        curAgent.getX() == tarCell.getX() && curAgent.getY() == curAgent.getY())
+                        curAgent.getX() == tarCell.getX() && curAgent.getY() == tarCell.getY())
                 {
                     //remove it from the path, we only need to do one push or pull action
                     tarCell = astar_path.remove(0).getCell().getLocation();

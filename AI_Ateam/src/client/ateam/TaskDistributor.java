@@ -181,10 +181,13 @@ public class TaskDistributor {
                     }
                 }
 
-//                System.err.println("TAsk Distr. MoveBOX box's id:" + matchingBox.getId()); //all of them have correct id's
-                matchingAgent.tasks.add(new Task(matchingAgent, matchingBox.getId(),matchingBox, goal, TaskType.MoveBoxToGoal));
+                matchingAgent.tasks.add(new Task(matchingAgent, matchingBox.getId(), matchingBox, goal, TaskType.MoveBoxToGoal));
                 level.getTasks().add(new Task(matchingAgent, matchingBox.getId(), matchingBox, goal, TaskType.MoveBoxToGoal));
                 smallest_dist = 0;
+                //remove from the list once you assign it..
+                matchingBoxes.remove(matchingBox);
+                Character goal_letter = Character.toUpperCase(goal.getGoalLetter());
+                new_boxletters.put(goal_letter, matchingBoxes);
             }
         }
         List<Task> temp_tasks = agents.get(0).tasks;

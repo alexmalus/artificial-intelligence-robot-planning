@@ -292,7 +292,12 @@ public class Main {
 //                System.err.format( "Server responded with %s to the inapplicable action: %s\n", response, act );
                 //System.err.format( "%s was attempted in \n%s\n", act );
 
-                //retry or something...
+                //only considering one agent for the moment
+                System.err.println("retry or something..");
+                Agent agent_0 = level.getAgents().get(0);
+                agent_0.tasks.add(0, agent_0.currentTask);
+                agent_0.currentTask = null;
+                agent_0.planning();
             }
             //TODO: check the response for every agent, not just "contains"
             else if(response.contains("true"))

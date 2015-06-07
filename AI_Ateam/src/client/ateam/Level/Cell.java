@@ -75,6 +75,7 @@ public class Cell
     }
 
     public boolean isOccupied(boolean preliminary_path_build) {
+//        System.err.println("cell type(preliminary path build): " + cell_type);
         if (preliminary_path_build)
         {
             if (cell_type == CellType.WALL)

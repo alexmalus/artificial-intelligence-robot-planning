@@ -68,6 +68,10 @@ public class Push implements IAction {
     @Override
     public boolean preconditions() {
         System.err.println("Push preconditions");
+//        System.err.println("Cur cell, Boxcell, Tarcell: " + currentCell.toString() + ", " + boxCell.toString() + ", " + boxTarCell.toString());
+//        System.err.println("Neighbors1? " + level.isNeighbor(currentCell.x,currentCell.y,boxCell.x,boxCell.y));
+//        System.err.println("Neighbors2?" + level.isNeighbor(boxCell.x, boxCell.y,boxTarCell.x,boxTarCell.y));
+//        System.err.println("BoxTarCell free?" + level.isFree(new Point(boxTarCell.x,boxTarCell.y)));
         return (level.isNeighbor(currentCell.x,currentCell.y,boxCell.x,boxCell.y) && level.isNeighbor(boxCell.x, boxCell.y,boxTarCell.x,boxTarCell.y) && level.isFree(new Point(boxTarCell.x,boxTarCell.y)));
     }
 
