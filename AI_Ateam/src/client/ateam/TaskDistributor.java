@@ -10,19 +10,7 @@ import client.ateam.projectEnum.TaskType;
 
 import java.util.*;
 
-/*
-* This is supposed to handle
-* Find Tasks
-* Find Boxes
-* Find Agents
-* Combine the 3 objectives above.
-* */
-
 public class TaskDistributor {
-	/*
-    Break down tasks and create high level tasks, which boxes to move where - this can be changed to be computed dynamically as well,
-    but currently working with static tasks is favorable
-     */
     private ArrayLevel level = ArrayLevel.getSingleton();
 
     void distributeTasks(ArrayList<Agent> agents, ArrayList<Box> boxes, ArrayList<Goal> goals){
@@ -52,7 +40,6 @@ public class TaskDistributor {
 
         for(Box box:boxes){
             boxcolors.get(box.getColor()).add(box);
-//            boxletters.put(box.getBoxLetter(),box); // bad use of hashmap :b
 
             valSet = new_boxletters.remove(box.getBoxLetter());
             if (valSet == null){
@@ -60,19 +47,11 @@ public class TaskDistributor {
             }
             valSet.add(box);
             new_boxletters.put(box.getBoxLetter(), valSet);
-//            new_boxletters.get(box.getBoxLetter()).add(box);
         }
-
-//        for(Character key: new_boxletters.keySet()){
-//            System.err.println("key part of boxcolors: " + key);
-//            for(Box value: new_boxletters.get(key)) {
-//                System.err.println("value/s assigned to key: " + value); //none
-//            }
-//        }
 
         for(Agent agent:agents){
             agentcolors.get(agent.color).add(agent);
-            freeAgents.add(agent); //filling up agents who do not have any tasks assigned to them yet
+            freeAgents.add(agent);
         }
         for(Goal goal:goals){
             goalletters.put(goal.getGoalLetter(),goal);
@@ -88,7 +67,6 @@ public class TaskDistributor {
             for (Goal goal : goals) {
                 matchingBoxes = new_boxletters.get(Character.toUpperCase(goal.getGoalLetter()));
                 matchingAgents = agentcolors.get(matchingBoxes.get(0).getColor());
-                //gonna select only free agents though even though they fulfill the same color as the boxes which have the same letter as the goal
                 boolean is_a_match = false; //sees if the agent is free
                 for(Agent matching_agent: matchingAgents)
                 {
@@ -184,26 +162,10 @@ public class TaskDistributor {
                 matchingAgent.tasks.add(new Task(matchingAgent, matchingBox.getId(), matchingBox, goal, TaskType.MoveBoxToGoal));
                 level.getTasks().add(new Task(matchingAgent, matchingBox.getId(), matchingBox, goal, TaskType.MoveBoxToGoal));
                 smallest_dist = 0;
-                //remove from the list once you assign it..
-                matchingBoxes.remove(matchingBox);
+                matchingBoxes.remove(matchingBox); //remove from the list once you assign it..
                 Character goal_letter = Character.toUpperCase(goal.getGoalLetter());
                 new_boxletters.put(goal_letter, matchingBoxes);
             }
         }
-        List<Task> temp_tasks = agents.get(0).tasks;
-        for (int i = 0; i < temp_tasks.size(); i++) {
-            System.err.println("Task for agent 0: " + temp_tasks.get(i));
-        }
-    }
-    void addGoal(Goal goal){}
-
-    void removeGoal(Goal goal){}
-
-    private Box selectBox(List<Box> boxes){
-        return boxes.get(0);
-    }
-
-    private Agent selectAgent(List<Agent> agents){
-        return agents.get(0);
     }
 }

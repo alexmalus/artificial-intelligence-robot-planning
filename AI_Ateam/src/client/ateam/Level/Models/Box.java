@@ -28,26 +28,20 @@ public class Box {
     public char getBoxLetter(){
         return boxLetter;
     }
-    public void setBoxLetter(char letter){this.boxLetter = letter;
-    }
+    public void setBoxLetter(char letter){this.boxLetter = letter;}
     public int getRow(){
         return row;
     }
-    public int getColumn(){
-        return column;
-    }
+    public int getColumn(){return column;}
     public void setRow(int row) {this.row=row;}
     public void setColumn(int column){this.column=column;}
     public Color getColor() {
         return color;
     }
-    public void setColor(Color color) {
-        this.color = color;
-    }
+    public void setColor(Color color) {this.color = color;}
     public boolean isTaken(){ return isTaken;}
     public void toggleisTaken() { isTaken = !isTaken;}
     public int getId(){return id;}
-    public void setId(int id){this.id = id;}
     @Override
     public String toString(){
         return "row: " + row + " column: " + column + ", color: " + color;

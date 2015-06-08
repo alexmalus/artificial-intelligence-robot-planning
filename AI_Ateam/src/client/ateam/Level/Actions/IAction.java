@@ -6,9 +6,6 @@ import client.ateam.projectEnum.Direction;
 import java.awt.*;
 import java.util.ArrayList;
 
-/**
- * Created by Lasse on 5/27/15.
- */
 public interface IAction {
 
     public Point getTargetLocation();

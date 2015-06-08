@@ -16,7 +16,6 @@ public class Node {
             this.cell = cell;
         }
 
-        // Sets the parent Cell
         public void setParent(Node parent) {
             this.parent = parent;
         }
@@ -55,7 +54,6 @@ public class Node {
 
         @Override
         public String toString(){
-//            return "this node has the following cell: " + cell;
             return " " + cell;
         }
 }

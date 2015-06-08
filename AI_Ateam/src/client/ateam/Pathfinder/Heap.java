@@ -7,51 +7,30 @@ public final class Heap
 {
     ArrayList<Node> heapList;
 
-    // Constructor
     public Heap() {
         heapList = new ArrayList<Node>();
     }
 
-    public int indexOf(Node node) {
-        return heapList.indexOf(node);
-    }
-
-    // Grab the last element
     public int lastElement() {
         return heapList.size() - 1;
     }
 
-    // The current size of the list
     public int size() {
         return heapList.size();
     }
 
-    // Grab the Node as (int) pos
-    public Node get(int pos) {
-        return heapList.get(pos);
-    }
-
-    // See if Node is in the list
     public boolean contains(Node node) {
         return heapList.contains(node);
     }
 
-    // Add an item to the end of the list
     public void add(Node node) {
         heapList.add(node);
     }
 
-    // Add an item to pos in list
-    public void add(int pos, Node node) {
-        heapList.add(pos, node);
-    }
-
-    // Remove an item from the list
     public void remove(Node node) {
         this.remove(heapList.indexOf(node));
     }
 
-    // Remove the top item from the list
     public void remove(int pos)
     {
         Node node;
@@ -95,7 +74,6 @@ public final class Heap
         }
     }
 
-    // Add an item to the list in it's correct, sorted location
     public void push(Node node)
     {
         int n;
@@ -126,7 +104,6 @@ public final class Heap
         }
     }
 
-    // Return the item at the top of the list and remove it
     public Node pop()
     {
         Node node = heapList.get(0);

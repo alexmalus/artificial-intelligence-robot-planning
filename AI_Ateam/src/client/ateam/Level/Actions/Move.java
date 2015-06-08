@@ -7,9 +7,6 @@ import client.ateam.projectEnum.Direction;
 import java.awt.*;
 import java.util.ArrayList;
 
-/**
- * Created by Lasse on 5/27/15.
- */
 public class Move implements IAction {
     private int agentId;
     private Direction dirAgent;
@@ -36,8 +33,6 @@ public class Move implements IAction {
 
     @Override
     public Direction calculateDirection(Point sourceCell, Point tarCell) {
-        //TODO: shouldn't x represent column..and y the row according to math's x and y axis?
-        //modified accordingly, remove these comments after approval/changing back the code based on the case
         if(tarCell.y-sourceCell.y == 1)
         {
             return Direction.EAST;
@@ -65,8 +60,6 @@ public class Move implements IAction {
 
     @Override
     public boolean preconditions() {
-        System.err.println("isFree: "+ level.isFree(new Point(this.tarCell.x,this.tarCell.y)));
-        System.err.println("isNeighbor: "+level.isNeighbor(currentCell.x,currentCell.y,tarCell.x,tarCell.y));
         return (level.isFree(new Point(this.tarCell.x,this.tarCell.y)) && level.isNeighbor(currentCell.x,currentCell.y,tarCell.x,tarCell.y));
     }
 

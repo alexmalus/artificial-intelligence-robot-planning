@@ -7,9 +7,6 @@ import client.ateam.projectEnum.Direction;
 import java.awt.*;
 import java.util.ArrayList;
 
-/**
- * Created by Lasse on 5/27/15.
- */
 public class Pull implements IAction {
     private int agentId;
     private char boxLetter;
@@ -35,7 +32,7 @@ public class Pull implements IAction {
         effects.add(new Free(tarCell,false,agentId));
 
     }
-    //TODO: naming might be bad here, adding extra methods may be needed.
+
     @Override
     public Point getTargetLocation() {
         return tarCell;
@@ -57,12 +54,11 @@ public class Pull implements IAction {
             return Direction.SOUTH;
         }
         else{
-            System.err.println("Coordinates do not generate direction: "+sourceCell.toString()+","+tarCell.toString());
+            System.err.println("Coordinates do not generate direction!");
             return Direction.WEST;
         }
     }
 
-    //TODO: again, technically this one should return the box location as origin....
     @Override
     public Point getOriginLocation() {
         return currentCell;

@@ -6,9 +6,6 @@ import client.ateam.projectEnum.Direction;
 import java.awt.*;
 import java.util.ArrayList;
 
-/**
- * Created by Lasse on 5/27/15.
- */
 public class NoAction implements IAction {
 
     private int agentId;
